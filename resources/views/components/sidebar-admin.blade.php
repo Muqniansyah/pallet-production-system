@@ -1,24 +1,64 @@
-<div class="w-64 min-h-[calc(100vh-64px)] bg-gray-800 text-white p-5">
-    <h2 class="text-xl font-bold mb-6">Admin Panel</h2>
+<div x-data="{ open: true }" class="flex">
+    <div :class="open ? 'w-72' : 'w-20'" class="min-h-screen bg-[#1e293b] text-slate-300 p-5 transition-all duration-300 ease-in-out relative flex flex-col shadow-2xl">
 
-    <ul class="space-y-3">
-        <li>
-            <a href="/admin/dashboard"
-                class="block {{ request()->is('admin/dashboard') ? 'text-blue-400 font-bold' : '' }}">
-                Dashboard
+        <button @click="open = !open" class="absolute -right-3 top-10 bg-blue-600 text-white rounded-full p-1 shadow-lg hover:bg-blue-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" :class="open ? 'rotate-0' : 'rotate-180'" class="h-4 w-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+
+        <div class="flex items-center mb-10 overflow-hidden">
+            <div class="h-10 w-10 flex-shrink-0 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <span class="text-white font-black text-xl">A</span>
+            </div>
+            <h2 x-show="open" x-transition.opacity class="ml-4 text-xl font-black tracking-tighter text-white italic truncate">ADMIN PANEL</h2>
+        </div>
+
+        <nav class="flex-1 space-y-2">
+            @php
+            $menus = [
+            ['route' => 'admin/dashboard', 'label' => 'Beranda', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
+            ['route' => 'admin/meeting', 'label' => 'Manajemen Meeting', 'icon' => 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z'],
+            ['route' => 'admin/client', 'label' => 'Manajemen Klien', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'],
+            ['route' => 'admin/hpp', 'label' => 'Data HPP', 'icon' => 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z'],
+            ['route' => 'admin/pallet-request', 'label' => 'Kelola Pesanan', 'icon' => 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
+            ];
+            @endphp
+
+            @foreach($menus as $menu)
+            <a href="/{{ $menu['route'] }}"
+                class="group flex items-center p-3 rounded-xl transition-all duration-200 
+                   {{ request()->is($menu['route']) ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40' : 'hover:bg-slate-800 hover:text-white' }}">
+
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 {{ request()->is($menu['route']) ? 'text-white' : 'text-slate-400 group-hover:text-blue-400' }} transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $menu['icon'] }}" />
+                    </svg>
+                </div>
+
+                <span x-show="open" x-transition.opacity class="ml-4 font-bold text-sm tracking-wide whitespace-nowrap">
+                    {{ $menu['label'] }}
+                </span>
+
+                <div x-show="!open" class="absolute left-20 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    {{ $menu['label'] }}
+                </div>
             </a>
-        </li>
-        <li>
-            <a href="/admin/pallet"
-                class="block {{ request()->is('admin/pallet') ? 'text-blue-400 font-bold' : '' }}">
-                Kelola Pallet
-            </a>
-        </li>
-        <li>
-            <a href="/admin/client"
-                class="block {{ request()->is('admin/client') ? 'text-blue-400 font-bold' : '' }}">
-                Data Client
-            </a>
-        </li>
-    </ul>
+            @endforeach
+        </nav>
+
+        <div class="pt-5 border-t border-slate-700/50 mt-5">
+            <div class="flex items-center overflow-hidden">
+                <div class="h-8 w-8 rounded-full bg-slate-600 flex-shrink-0 border-2 border-slate-500"></div>
+                <div x-show="open" x-transition.opacity class="ml-3 truncate">
+                    <p class="text-xs font-bold text-white leading-none">Admin</p>
+                    <p class="text-[10px] text-slate-500 mt-1">Administrator</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-1 bg-gray-50">
+        {{ $slot ?? '' }}
+    </div>
 </div>
