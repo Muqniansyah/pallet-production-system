@@ -14,7 +14,9 @@ class MeetingRequest extends Model
         'start_time',
         'duration',
         'status',
+        'note',
         'zoom_meeting_id',
+        'start_url',
         'join_url',
     ];
 

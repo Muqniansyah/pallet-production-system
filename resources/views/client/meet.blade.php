@@ -61,6 +61,7 @@
                                     <th class="px-6 py-3 font-semibold">Waktu</th>
                                     <th class="px-6 py-3 font-semibold">Status</th>
                                     <th class="px-6 py-3 font-semibold text-center">Aksi</th>
+                                    <th class="px-6 py-3 font-semibold">Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -96,10 +97,17 @@
                                         <span class="text-gray-400 text-xs italic">Menunggu Link</span>
                                         @endif
                                     </td>
+                                    <td class="px-6 py-4 text-sm">
+                                        @if($meeting->status === 'rejected')
+                                        {{ $meeting->note }}
+                                        @else
+                                        -
+                                        @endif
+                                    </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">
+                                    <td colspan="5" class="px-6 py-10 text-center text-gray-400 italic">
                                         Belum ada data request.
                                     </td>
                                 </tr>

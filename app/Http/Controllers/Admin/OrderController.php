@@ -23,7 +23,6 @@ class OrderController extends Controller
         $request->validate([
             'pallet_request_id' => 'required|exists:pallet_requests,id',
             'nama_project' => 'required|string|max:255',
-            'qty' => 'required|integer|min:1',
         ]);
 
         $palletRequest = PalletRequest::findOrFail($request->pallet_request_id);
@@ -32,7 +31,7 @@ class OrderController extends Controller
             'client_id' => $palletRequest->client_id, // otomatis
             'pallet_request_id' => $palletRequest->id,
             'nama_project' => $request->nama_project,
-            'qty' => $request->qty,
+            'qty' => $palletRequest->qty,
             'status' => 'pending'
         ]);
 

@@ -37,12 +37,12 @@
                         {{-- PILIH REQUEST PALET --}}
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-2">Pilih Request Palet</label>
-                            <select name="pallet_request_id" required class="w-full rounded-xl border-gray-200 py-3">
+                            <select id="requestSelect" name="pallet_request_id" required class="w-full rounded-xl border-gray-200 py-3">
 
                                 <option value="" disabled selected>Pilih Request...</option>
 
                                 @foreach($requests as $req)
-                                <option value="{{ $req->id }}">
+                                <option value="{{ $req->id }}" data-qty="{{ $req->qty }}">
                                     {{ $req->client->name }} - {{ $req->jenis_palet }} ({{ $req->qty }})
                                 </option>
                                 @endforeach
@@ -61,7 +61,7 @@
                         {{-- QTY --}}
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-2">Jumlah (Qty)</label>
-                            <input type="number" name="qty" required
+                            <input id="qtyInput" type="number" readonly
                                 class="w-full rounded-xl border-gray-200 py-3"
                                 placeholder="Masukkan jumlah pallet">
                         </div>
@@ -102,23 +102,31 @@
                             </select>
                         </div>
 
-                        {{-- upload --}}
+                        {{-- Upload Section --}}
                         <div class="relative group">
-                            <input name="file_hpp" type="file"
-                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" required>
+                            <input name="file_hpp" type="file" id="hppFileInput"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" required>
 
-                            <div class="border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center">
-                                <p class="text-sm font-semibold text-indigo-600">
-                                    Klik untuk upload file HPP
-                                </p>
-                                <p class="text-xs text-indigo-400 mt-1">
-                                    PDF atau Excel (Maks. 5MB)
-                                </p>
+                            <div id="hppDropzone" class="border-2 border-dashed border-slate-200 rounded-[2rem] p-10 text-center transition-all bg-white">
+                                <div id="hppIcon" class="mb-3 flex justify-center text-slate-300">
+                                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                </div>
+
+                                <div id="hppContent">
+                                    <p id="hppPrimaryText" class="text-xs font-black text-slate-600 uppercase italic tracking-tight">
+                                        Klik untuk upload file HPP
+                                    </p>
+                                    <p id="hppSecondaryText" class="text-[10px] text-slate-400 mt-1">
+                                        PDF atau Excel (Maks. 5MB)
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
                         <button type="submit"
-                            class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg">
+                            class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-3 rounded-xl shadow-lg shadow-indigo-100 transition transform hover:scale-[1.02] uppercase tracking-widest">
                             Upload HPP
                         </button>
                     </form>
@@ -172,4 +180,51 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // script order
+        const select = document.getElementById('requestSelect');
+        const qtyInput = document.getElementById('qtyInput');
+
+        select.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const qty = selectedOption.getAttribute('data-qty');
+
+            qtyInput.value = qty;
+        });
+
+        // script upload hpp
+        const hppFileInput = document.getElementById('hppFileInput');
+        const hppDropzone = document.getElementById('hppDropzone');
+        const hppIcon = document.getElementById('hppIcon');
+        const hppPrimaryText = document.getElementById('hppPrimaryText');
+        const hppSecondaryText = document.getElementById('hppSecondaryText');
+
+        hppFileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                const fileName = this.files[0].name;
+
+                // Ubah Tampilan Menjadi "Active/Success"
+                hppDropzone.classList.remove('border-slate-200');
+                hppDropzone.classList.add('border-indigo-500', 'bg-indigo-50/50');
+
+                hppIcon.classList.remove('text-slate-300');
+                hppIcon.classList.add('text-indigo-600');
+
+                // Tampilkan Nama File yang dipilih
+                hppPrimaryText.innerHTML = `<span class="text-indigo-600">FILE TERPILIH:</span>`;
+                hppSecondaryText.innerHTML = `<span class="text-slate-800 font-bold text-sm">${fileName}</span>`;
+            } else {
+                // Reset Jika Batal
+                hppDropzone.classList.add('border-slate-200');
+                hppDropzone.classList.remove('border-indigo-500', 'bg-indigo-50/50');
+
+                hppIcon.classList.add('text-slate-300');
+                hppIcon.classList.remove('text-indigo-600');
+
+                hppPrimaryText.innerText = "Klik untuk upload file HPP";
+                hppSecondaryText.innerText = "PDF atau Excel (Maks. 5MB)";
+            }
+        });
+    </script>
 </x-app-layout>

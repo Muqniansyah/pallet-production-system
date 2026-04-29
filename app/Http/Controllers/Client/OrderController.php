@@ -17,4 +17,16 @@ class OrderController extends Controller
 
         return view('client.orders', compact('orders'));
     }
+
+    public function setDeal($id)
+    {
+        $order = Order::where('client_id', auth()->id())
+            ->findOrFail($id);
+
+        $order->update([
+            'status' => 'deal'
+        ]);
+
+        return back()->with('success', 'Order siap diproses HPP');
+    }
 }

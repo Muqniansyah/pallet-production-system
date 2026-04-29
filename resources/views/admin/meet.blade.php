@@ -75,14 +75,30 @@
                                     </button>
                                 </form>
 
-                                <form action="/admin/meeting/{{ $meeting->id }}/reject" method="POST">
+                                <form action="/admin/meeting/{{ $meeting->id }}/reject" method="POST" class="flex flex-col sm:flex-row gap-3 items-center">
                                     @csrf
-                                    <button type="submit" class="bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-xs font-bold px-4 py-2 rounded shadow-sm transition transform hover:scale-105">
+                                    <div class="relative w-full sm:w-64">
+                                        <input
+                                            type="text"
+                                            name="note"
+                                            placeholder="Alasan penolakan..."
+                                            required
+                                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2.5 transition-all duration-200 outline-none placeholder:text-slate-400">
+                                    </div>
+
+                                    <button type="submit" class="w-full sm:w-auto bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black px-5 py-2.5 rounded-lg shadow-sm transition transform hover:scale-105 uppercase tracking-wider">
                                         REJECT
                                     </button>
                                 </form>
                                 @else
+                                @if($meeting->start_url)
+                                <a href="{{ $meeting->start_url }}" target="_blank"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded shadow-sm transition">
+                                    Start Meeting
+                                </a>
+                                @else
                                 <span class="text-xs text-gray-400 italic font-medium">No action needed</span>
+                                @endif
                                 @endif
                             </div>
                         </td>

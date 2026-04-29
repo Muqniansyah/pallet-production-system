@@ -33,17 +33,24 @@ class AdminMeetingController extends Controller
             'status' => 'approved',
             'zoom_meeting_id' => $zoom['id'] ?? null,
             'join_url' => $zoom['join_url'] ?? null,
+            'start_url' => $zoom['start_url'] ?? null,
         ]);
 
         return back()->with('success', 'Meeting berhasil dibuat di Zoom');
     }
 
-    public function reject($id)
+    // admin reject
+    public function reject(Request $request, $id)
     {
+        $request->validate([
+            'note' => 'required|string'
+        ]);
+
         $meeting = MeetingRequest::findOrFail($id);
 
         $meeting->update([
             'status' => 'rejected',
+            'note' => $request->note,
         ]);
 
         return back()->with('success', 'Meeting ditolak');

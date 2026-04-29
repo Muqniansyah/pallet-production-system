@@ -19,7 +19,9 @@ return new class extends Migration
             $table->dateTime('start_time');
             $table->integer('duration'); // menit
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->text('note')->nullable();
             $table->string('zoom_meeting_id')->nullable();
+            $table->text('start_url')->nullable();
             $table->text('join_url')->nullable();
             $table->timestamps();
         });

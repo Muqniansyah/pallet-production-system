@@ -48,14 +48,23 @@
                         </div>
 
                         <div class="group">
-                            <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Upload Desain <span class="text-gray-300 font-normal italic">(Opsional)</span></label>
-                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl hover:border-blue-400 transition-all cursor-pointer relative">
-                                <input type="file" name="file_desain" class="absolute inset-0 opacity-0 cursor-pointer">
-                                <div class="space-y-1 text-center">
-                                    <svg class="mx-auto h-10 w-10 text-gray-300" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                            <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
+                                Upload Desain <span class="text-gray-300 font-normal italic">(Opsional)</span>
+                            </label>
+
+                            <div id="dropzone" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl hover:border-blue-400 transition-all cursor-pointer relative bg-white">
+
+                                <input type="file" name="file_desain" id="fileInput" class="absolute inset-0 opacity-0 cursor-pointer z-20">
+
+                                <div class="space-y-2 text-center">
+                                    <svg id="uploadIcon" class="mx-auto h-10 w-10 text-gray-300 transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                         <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
-                                    <p class="text-xs text-gray-400">PDF, JPG, PNG up to 10MB</p>
+
+                                    <div id="fileStatus" class="flex flex-col items-center">
+                                        <p id="statusText" class="text-xs text-gray-400 font-medium italic">Klik atau drag file ke sini</p>
+                                        <p id="subText" class="text-[9px] text-gray-300 mt-1">PDF, JPG, PNG up to 10MB</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -230,7 +239,7 @@
                     </thead>
                     <tbody id="pv-table-body" class="divide-y divide-gray-100">
                         <tr>
-                            <td colspan="8" class="px-4 py-8 text-center text-gray-400 text-sm">
+                            <td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm">
                                 <div class="flex flex-col items-center gap-2">
                                     <span style="font-size:24px;">📭</span>
                                     <span>Belum ada data — mulai input di PaletView di atas</span>
@@ -415,8 +424,8 @@
             }
 
             var TRUSTED_ORIGIN = 'https://courageous-rolypoly-532571.netlify.app';
-            var API_SYNC = '/api/palet/sync';
-            var API_LIST = '/api/palet/designs';
+            var API_SYNC = '/client/palet/sync';
+            var API_LIST = '/client/palet/designs';
 
             /* ─── DOM refs ──────────────────────────────────── */
             var _bar = document.getElementById('pv-bar');
@@ -628,7 +637,7 @@
                     })
                     .catch(function(err) {
                         var tbody = document.getElementById('pv-table-body');
-                        if (tbody) tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-6 text-center text-red-400 text-sm">Gagal memuat data: ' + err.message + '</td></tr>';
+                        if (tbody) tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-6 text-center text-red-400 text-sm">Gagal memuat data: ' + err.message + '</td></tr>';
                     })
                     .finally(function() {
                         if (icon) {
@@ -952,5 +961,43 @@
             window.pvRefreshTable = pvRefreshTable;
 
         })();
+
+        // upload gambar
+        const fileInput = document.getElementById('fileInput');
+        const dropzone = document.getElementById('dropzone');
+        const uploadIcon = document.getElementById('uploadIcon');
+        const statusText = document.getElementById('statusText');
+        const subText = document.getElementById('subText');
+
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                const fileName = this.files[0].name;
+
+                // Ubah Tampilan saat file terpilih
+                dropzone.classList.remove('border-gray-200');
+                dropzone.classList.add('border-blue-400', 'bg-blue-50/50');
+
+                uploadIcon.classList.remove('text-gray-300');
+                uploadIcon.classList.add('text-blue-500');
+
+                // Tampilkan Nama File
+                statusText.innerHTML = `<span class="text-blue-600 font-black uppercase text-[10px] italic">File Terpilih:</span><br><span class="text-slate-800 font-bold">${fileName}</span>`;
+                statusText.classList.remove('text-gray-400', 'italic');
+
+                subText.innerText = "Klik kembali jika ingin mengganti file";
+            } else {
+                // Reset ke tampilan awal jika batal pilih
+                dropzone.classList.add('border-gray-200');
+                dropzone.classList.remove('border-blue-400', 'bg-blue-50/50');
+
+                uploadIcon.classList.add('text-gray-300');
+                uploadIcon.classList.remove('text-blue-500');
+
+                statusText.innerText = "Klik atau drag file ke sini";
+                statusText.classList.add('text-gray-400', 'italic');
+
+                subText.innerText = "PDF, JPG, PNG up to 10MB";
+            }
+        });
     </script>
 </x-app-layout>

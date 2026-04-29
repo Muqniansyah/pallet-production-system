@@ -5,16 +5,24 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PalletRequest;
+use App\Models\MeetingRequest;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        // riwayat ajukan palet
         $requests = PalletRequest::where('client_id', auth()->id())
             ->latest()
             ->take(5) // ambil 5 terbaru
             ->get();
 
-        return view('client.dashboard', compact('requests'));
+        // riwayat ajukan meet
+        $meetings = MeetingRequest::where('client_id', auth()->id())
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('client.dashboard', compact('requests', 'meetings'));
     }
 }

@@ -1,34 +1,17 @@
 <?php
 
-// FILE: app/Http/Controllers/PaletDesignController.php
-
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
 
 use App\Models\PaletDesign;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class PaletDesignController extends Controller
 {
-    /**
-     * Terima data real-time dari PaletView (Netlify) via postMessage bridge.
-     * Upsert berdasarkan session_id — satu sesi = satu record yang terus diupdate.
-     */
     public function sync(Request $request): JsonResponse
     {
-        // // Validasi origin — hanya izinkan dari netlify milik kamu
-        // $allowedOrigins = [
-        //     'https://courageous-rolypoly-532571.netlify.app',
-        //     'http://localhost:8000',   // untuk development
-        //     'http://127.0.0.1:8000',  // untuk development
-        // ];
-
-        // $origin = $request->headers->get('Origin') ?? '';
-        // if (!in_array($origin, $allowedOrigins)) {
-        //     return response()->json(['error' => 'Origin tidak diizinkan'], 403);
-        // }
-
         $origin = $request->headers->get('Origin') ?? '';
         $allowedOrigins = [
             'https://courageous-rolypoly-532571.netlify.app',
@@ -110,31 +93,8 @@ class PaletDesignController extends Controller
         ], 200);
     }
 
-    /**
-     * Ambil semua desain palet milik user yang login (untuk ditampilkan di dashboard).
-     */
-    // public function index(): JsonResponse
-    // {
-    //     $designs = PaletDesign::where('user_id', Auth::id())
-    //         ->orderBy('last_updated_at', 'desc')
-    //         ->get();
-
-    //     return response()->json($designs);
-    // }
     public function index(): JsonResponse
     {
-        // Jika tidak login, kembalikan array kosong (bukan 401)
-        // supaya dashboard tidak error, hanya tampil tabel kosong
-        // if (!Auth::check()) {
-        //     return response()->json([]);
-        // }
-
-        // $designs = PaletDesign::where('user_id', Auth::id())
-        //     ->orderBy('last_updated_at', 'desc')
-        //     ->get();
-
-        // return response()->json($designs);
-
         $designs = PaletDesign::orderBy('last_updated_at', 'desc')
             ->limit(100)
             ->get();

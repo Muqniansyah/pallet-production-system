@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
 
         <div class="mb-8">
             <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
@@ -102,7 +102,7 @@
 
             </div>
         </div>
-
+        <!-- card -->
         <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="p-6 bg-blue-50 rounded-[1.5rem] border border-blue-100">
                 <h3 class="font-bold text-blue-900 text-sm">Produksi Modern</h3>
@@ -117,7 +117,106 @@
                 <p class="text-slate-700 text-xs mt-2">Bahan baku kayu berkelanjutan dan legal.</p>
             </div>
         </div>
+        <!-- alur -->
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
+                <div class="mt-20 border-t border-slate-100 pt-16">
+                    <div class="mb-10 text-center">
+                        <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-3">Workflow System</h2>
+                        <h3 class="text-2xl font-black text-slate-800 italic uppercase tracking-tighter">Alur Layanan <span class="text-blue-600">SIPALET</span></h3>
+                    </div>
+
+                    <div class="mb-12 bg-white p-4 rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+                        <div class="bg-slate-50 rounded-[2rem] border border-slate-100 p-8 flex items-center justify-center min-h-[300px] md:min-h-[400px]">
+                            <img
+                                src="{{ asset('storage/sipalet.png') }}"
+                                alt="SIPALET Full Workflow"
+                                class="max-w-full max-h-full object-contain hover:scale-[1.02] transition-transform duration-700 ease-in-out">
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="hidden lg:block absolute top-10 left-10 right-10 h-0.5 bg-slate-100 z-0"></div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-8 relative z-10">
+
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke-width="2" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-[10px] font-black uppercase tracking-tighter text-slate-800 italic">1. Referensi</h4>
+                                <p class="text-[9px] text-slate-400 mt-1 leading-tight">Melihat katalog produk palet.</p>
+                            </div>
+
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-[10px] font-black uppercase tracking-tighter text-slate-800 italic">2. Pengajuan</h4>
+                                <p class="text-[9px] text-slate-400 mt-1 leading-tight">Input detail pengajuan palet.</p>
+                            </div>
+
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="2" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-[10px] font-black uppercase tracking-tighter text-slate-800 italic">3. Desain</h4>
+                                <p class="text-[9px] text-slate-400 mt-1 leading-tight">Pembuatan desain teknis palet.</p>
+                            </div>
+
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-width="2" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-[10px] font-black uppercase tracking-tighter text-slate-800 italic">4. Request</h4>
+                                <p class="text-[9px] text-slate-400 mt-1 leading-tight">Kirim request palet final.</p>
+                            </div>
+
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-[10px] font-black uppercase tracking-tighter text-slate-800 italic">5. Review Admin</h4>
+                                <p class="text-[9px] text-slate-400 mt-1 leading-tight">Menunggu pembuatan order admin.</p>
+                            </div>
+
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-[10px] font-black uppercase tracking-tighter text-slate-800 italic">6. Jadwal Meet</h4>
+                                <p class="text-[9px] text-slate-400 mt-1 leading-tight">Diskusi harga & negosiasi.</p>
+                            </div>
+
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="w-16 h-16 bg-slate-800 border-2 border-slate-800 rounded-2xl flex items-center justify-center shadow-lg group-hover:bg-blue-600 group-hover:border-blue-600 transition-all mb-4">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-[10px] font-black uppercase tracking-tighter text-slate-800 italic">7. Final HPP</h4>
+                                <p class="text-[9px] text-slate-400 mt-1 leading-tight">Admin mengirim HPP deal.</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
 </x-app-layout>
