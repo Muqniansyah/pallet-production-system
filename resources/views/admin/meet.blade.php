@@ -3,8 +3,10 @@
 
         <div class="flex justify-between items-center mb-8">
             <div>
-                <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Admin - Meeting Requests</h1>
-                <p class="text-sm text-gray-500 mt-1">Kelola dan tinjau semua permintaan meeting dari client.</p>
+                <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
+                    Pengajuan <span class="text-slate-400 font-light">Meeting</span>
+                </h1>
+                <p class="text-sm text-slate-500 mt-1">Kelola dan tinjau semua permintaan meeting dari client.</p>
             </div>
         </div>
 

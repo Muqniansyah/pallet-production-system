@@ -2,9 +2,17 @@
     <div class="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
 
         <div class="mb-8">
-            <h1 class="text-3xl font-extrabold text-gray-900">Halaman Meet</h1>
-            <p class="text-gray-600">Ajukan jadwal meeting dan pantau status request Anda.</p>
+            <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
+                Jadwal <span class="text-slate-400 font-light">Meeting</span>
+            </h1>
+            <p class="text-slate-500 mt-1">Pilih jadwal temu Anda (maks. 3 sesi/hari). Diskusi intensif selama 40 menit untuk memastikan setiap detail palet Anda terencana dengan presisi.</p>
         </div>
+
+        @if(session('error'))
+        <div class="bg-red-100 text-red-600 text-sm p-2 rounded mb-3">
+            {{ session('error') }}
+        </div>
+        @endif
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
@@ -14,7 +22,7 @@
                         <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
-                        Request Meeting
+                        Atur Jadwal Meet
                     </h3>
 
                     <form method="POST" action="/client/meeting-request" class="space-y-4">
@@ -36,12 +44,17 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Durasi (Menit)</label>
-                                <input type="number" name="duration" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="60">
+                                <select name="duration" required
+                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    <option value="15">15 menit</option>
+                                    <option value="30">30 menit</option>
+                                    <option value="40">40 menit</option>
+                                </select>
                             </div>
                         </div>
 
                         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 shadow-md">
-                            Kirim Request
+                            Ajukan Pertemuan
                         </button>
                     </form>
                 </div>
@@ -50,7 +63,7 @@
             <div class="md:col-span-2">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                        <h3 class="font-bold text-gray-800">Daftar Request Meeting</h3>
+                        <h3 class="font-bold text-gray-800">Daftar Pengajuan Meeting</h3>
                     </div>
 
                     <div class="overflow-x-auto">

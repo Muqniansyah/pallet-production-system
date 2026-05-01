@@ -1,70 +1,130 @@
 <x-guest-layout>
+    <div class="relative min-h-screen overflow-hidden flex items-center justify-center bg-[#1E0F05]">
 
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-600 to-indigo-700">
+        <canvas id="woodCanvas" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="absolute inset-0 z-[1]" style="background:radial-gradient(ellipse at center,transparent 40%,rgba(10,4,1,0.75) 100%)"></div>
+        <div class="absolute inset-0 z-[2] bg-black/50"></div>
 
-        <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <div class="relative z-10 w-full max-w-sm mx-auto px-4 py-10">
 
-            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">
-                Daftar Akun SIPALET
-            </h2>
+            <div class="flex flex-col items-center mb-7">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg font-extrabold text-[#FDF0E0] mb-3"
+                    style="background:linear-gradient(135deg,#C87941,#7B3A10);box-shadow:0 4px 16px rgba(200,121,65,0.4)">S</div>
+                <h2 class="text-2xl font-extrabold text-[#FDF0E0] tracking-tight">Daftar Akun SIPALET</h2>
+                <p class="text-sm text-[#A07850] mt-1">Buat akun baru Anda</p>
+            </div>
 
-            <form method="POST" action="{{ route('register') }}">
-                @csrf
+            <div class="rounded-2xl p-6 border border-[#C87941]/15 bg-white/[0.04] backdrop-blur-sm">
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
 
-                <!-- Name -->
-                <div>
-                    <x-input-label for="name" :value="__('Name')" />
-                    <x-text-input id="name" class="block mt-1 w-full"
-                        type="text" name="name"
-                        :value="old('name')" required autofocus />
-                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                </div>
+                    <div class="mb-4">
+                        <x-input-label for="name" :value="__('Nama')"
+                            class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
+                        <x-text-input id="name"
+                            class="block w-full bg-white/5 border border-[#C87941]/20 text-[#FDF0E0] rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#C87941]/60 focus:ring-1 focus:ring-[#C87941]/40 transition"
+                            type="text" name="name" :value="old('name')" required autofocus />
+                        <x-input-error :messages="$errors->get('name')" class="mt-1.5 text-xs text-red-400" />
+                    </div>
 
-                <!-- Email -->
-                <div class="mt-4">
-                    <x-input-label for="email" :value="__('Email')" />
-                    <x-text-input id="email" class="block mt-1 w-full"
-                        type="email" name="email"
-                        :value="old('email')" required />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                </div>
+                    <div class="mb-4">
+                        <x-input-label for="email" :value="__('Email')"
+                            class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
+                        <x-text-input id="email"
+                            class="block w-full bg-white/5 border border-[#C87941]/20 text-[#FDF0E0] rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#C87941]/60 focus:ring-1 focus:ring-[#C87941]/40 transition"
+                            type="email" name="email" :value="old('email')" required />
+                        <x-input-error :messages="$errors->get('email')" class="mt-1.5 text-xs text-red-400" />
+                    </div>
 
-                <!-- Password -->
-                <div class="mt-4">
-                    <x-input-label for="password" :value="__('Password')" />
-                    <x-text-input id="password" class="block mt-1 w-full"
-                        type="password" name="password" required />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
+                    <div class="mb-4">
+                        <x-input-label for="password" :value="__('Password')"
+                            class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
+                        <x-text-input id="password"
+                            class="block w-full bg-white/5 border border-[#C87941]/20 text-[#FDF0E0] rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#C87941]/60 focus:ring-1 focus:ring-[#C87941]/40 transition"
+                            type="password" name="password" required />
+                        <x-input-error :messages="$errors->get('password')" class="mt-1.5 text-xs text-red-400" />
+                    </div>
 
-                <!-- Confirm Password -->
-                <div class="mt-4">
-                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-                    <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                        type="password" name="password_confirmation" required />
-                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                </div>
+                    <div class="mb-6">
+                        <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')"
+                            class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
+                        <x-text-input id="password_confirmation"
+                            class="block w-full bg-white/5 border border-[#C87941]/20 text-[#FDF0E0] rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-[#C87941]/60 focus:ring-1 focus:ring-[#C87941]/40 transition"
+                            type="password" name="password_confirmation" required />
+                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1.5 text-xs text-red-400" />
+                    </div>
 
-                <!-- Button -->
-                <div class="mt-6">
                     <button type="submit"
-                        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-                        Daftar
+                        class="w-full text-[#FDF0E0] font-bold text-sm py-2.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+                        style="background:linear-gradient(135deg,#A0522D,#7B3A10);box-shadow:0 4px 16px rgba(120,50,10,0.5)">
+                        Daftar Sekarang
                     </button>
-                </div>
+                </form>
+            </div>
 
-            </form>
-
-            <!-- Login link -->
-            <p class="text-center text-sm text-gray-600 mt-6">
+            <p class="text-center text-sm text-[#7A5C3A] mt-5">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-blue-500 hover:underline">
-                    Masuk
-                </a>
+                <a href="{{ route('login') }}" class="text-[#C87941] hover:text-[#D4956A] font-semibold">Masuk</a>
             </p>
-
         </div>
-
     </div>
 
+    <style>
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script>
+        /* canvas wood grain sama seperti login */
+        (function() {
+            const canvas = document.getElementById('woodCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function rand(a, b) {
+                return Math.random() * (b - a) + a;
+            }
+
+            function draw() {
+                const W = canvas.width = canvas.parentElement.offsetWidth;
+                const H = canvas.height = canvas.parentElement.offsetHeight;
+                const g = ctx.createLinearGradient(0, 0, W, H);
+                g.addColorStop(0, '#2A1206');
+                g.addColorStop(0.3, '#1E0D04');
+                g.addColorStop(0.6, '#2C1508');
+                g.addColorStop(1, '#180A02');
+                ctx.fillStyle = g;
+                ctx.fillRect(0, 0, W, H);
+                for (let i = 0; i < 120; i++) {
+                    const x = rand(0, W),
+                        amp = rand(2, 18),
+                        freq = rand(0.003, 0.012),
+                        ph = rand(0, Math.PI * 2),
+                        a = rand(0.04, 0.22);
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    for (let y = 0; y <= H; y += 2) ctx.lineTo(x + amp * Math.sin(freq * y + ph) + (amp * 0.4) * Math.sin(freq * 2.3 * y + ph * 1.7), y);
+                    ctx.strokeStyle = `rgba(130,65,15,${a})`;
+                    ctx.lineWidth = rand(0.4, 2.8);
+                    ctx.stroke();
+                }
+                for (let i = 0; i < 18; i++) {
+                    const cx = rand(W * 0.1, W * 0.9),
+                        cy = rand(-H * 0.3, H * 0.5),
+                        mr = rand(30, 120);
+                    for (let r = mr; r > 2; r -= rand(3, 8)) {
+                        ctx.beginPath();
+                        ctx.ellipse(cx, cy, r * rand(1.8, 3.5), r, rand(-0.2, 0.2), 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(160,80,20,${rand(0.015,0.07)})`;
+                        ctx.lineWidth = rand(0.5, 1.5);
+                        ctx.stroke();
+                    }
+                }
+            }
+            draw();
+            window.addEventListener('resize', draw);
+        })();
+    </script>
 </x-guest-layout>

@@ -33,7 +33,7 @@
 
             <!-- card data -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <!-- card -->
+                <!-- card pesanan aktif -->
                 <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all group">
                     <div class="flex justify-between items-start mb-4">
                         <div class="bg-blue-50 p-3 rounded-xl group-hover:bg-blue-600 transition-colors">
@@ -44,10 +44,10 @@
                         <span class="text-[10px] font-black text-slate-300 uppercase italic">Active</span>
                     </div>
                     <h3 class="text-slate-500 text-[10px] font-black uppercase tracking-widest">Pesanan Aktif</h3>
-                    <p class="text-3xl font-black text-slate-800 mt-1">1,200</p>
+                    <p class="text-3xl font-black text-slate-800 mt-1"> {{ number_format($activeOrders) }}</p>
                 </div>
 
-                <!-- card -->
+                <!-- card total project -->
                 <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all group">
                     <div class="flex justify-between items-start mb-4">
                         <div class="bg-purple-50 p-3 rounded-xl group-hover:bg-purple-600 transition-colors">
@@ -58,10 +58,10 @@
                         <span class="text-[10px] font-black text-slate-300 uppercase italic">Lifetime</span>
                     </div>
                     <h3 class="text-slate-500 text-[10px] font-black uppercase tracking-widest">Total Project</h3>
-                    <p class="text-3xl font-black text-slate-800 mt-1">530</p>
+                    <p class="text-3xl font-black text-slate-800 mt-1">{{ number_format($totalProject) }}</p>
                 </div>
 
-                <!-- card -->
+                <!-- card hpp terunggah -->
                 <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all group">
                     <div class="flex justify-between items-start mb-4">
                         <div class="bg-amber-50 p-3 rounded-xl group-hover:bg-amber-600 transition-colors">
@@ -72,7 +72,7 @@
                         <span class="text-[10px] font-black text-slate-300 uppercase italic">Verified</span>
                     </div>
                     <h3 class="text-slate-500 text-[10px] font-black uppercase tracking-widest">HPP Terunggah</h3>
-                    <p class="text-3xl font-black text-slate-800 mt-1">25</p>
+                    <p class="text-3xl font-black text-slate-800 mt-1">{{ $hppCount }}</p>
                 </div>
             </div>
 

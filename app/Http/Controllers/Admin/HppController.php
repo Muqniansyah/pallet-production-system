@@ -15,12 +15,17 @@ class HppController extends Controller
     public function index()
     {
         $clients = User::where('role', 'client')->get();
-        $orders = Order::with('client')->latest()->get();
+        $orders = Order::with('client')
+            ->where('status', 'deal') // hanya yang siap HPP
+            ->whereDoesntHave('hpp') // belum punya HPP
+            ->latest()
+            ->get();
         $hpps = Hpp::with('order.client')->latest()->get();
 
         // ambil request palet yang SUDAH DISETUJUI CLIENT
         $requests = PalletRequest::with('client')
             ->where('status', 'approved')
+            ->whereDoesntHave('order')
             ->get();
 
         return view('admin.hpp', compact('clients', 'orders', 'hpps', 'requests'));
@@ -36,9 +41,14 @@ class HppController extends Controller
 
         $order = Order::findOrFail($request->order_id);
 
-        // 🔥 hanya boleh upload kalau deal
+        // hanya boleh upload kalau deal
         if ($order->status !== 'deal') {
             return back()->with('error', 'Order belum deal!');
+        }
+
+        // anti double HPP
+        if (Hpp::where('order_id', $request->order_id)->exists()) {
+            return back()->with('error', 'HPP sudah pernah diupload!');
         }
 
         $file = $request->file('file_hpp')->store('hpp_files', 'public');

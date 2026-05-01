@@ -2,8 +2,10 @@
     <div class="py-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 space-y-4 md:space-y-0">
             <div>
-                <h1 class="text-2xl font-black text-gray-800 tracking-tight">Referensi Produk</h1>
-                <p class="text-sm text-gray-500 mt-1">Katalog standar palet kayu kualitas ekspor PT. Kemas Kayu Indonesia.</p>
+                <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
+                    Referensi <span class="text-slate-400 font-light">Produk</span>
+                </h1>
+                <p class="text-sm text-slate-500 mt-1">Katalog standar palet kayu kualitas ekspor PT. Kemas Kayu Indonesia.</p>
             </div>
         </div>
 

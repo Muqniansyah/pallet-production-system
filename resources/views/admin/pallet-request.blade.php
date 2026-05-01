@@ -3,8 +3,10 @@
 
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h1 class="text-3xl font-black text-gray-800 tracking-tighter uppercase">Data Request Palet</h1>
-                <p class="text-sm text-gray-500 mt-1">Manajemen persetujuan pesanan palet dari client secara real-time.</p>
+                <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
+                    Data Pengajuan <span class="text-slate-400 font-light">Palet</span>
+                </h1>
+                <p class="text-sm text-slate-500 mt-1">Manajemen persetujuan pengajuan palet dari client secara real-time.</p>
             </div>
         </div>
 

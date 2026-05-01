@@ -2,8 +2,10 @@
     <div class="max-w-4xl mx-auto py-10 px-4">
 
         <div class="mb-8">
-            <h1 class="text-3xl font-black text-gray-800 tracking-tighter">REQUEST PALET</h1>
-            <p class="text-gray-500 text-sm">Silakan lengkapi detail pesanan palet Anda di bawah ini.</p>
+            <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
+                Pengajuan <span class="text-slate-400 font-light">Palet</span>
+            </h1>
+            <p class="text-slate-500 text-sm mt-1">Silakan lengkapi detail pesanan palet Anda di bawah ini.</p>
         </div>
 
         @if(session('success'))

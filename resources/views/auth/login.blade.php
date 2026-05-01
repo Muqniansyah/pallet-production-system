@@ -53,7 +53,7 @@
                     <button type="submit"
                         class="w-full text-[#FDF0E0] font-bold text-sm py-2.5 rounded-xl transition-all hover:-translate-y-0.5"
                         style="background:linear-gradient(135deg,#A0522D,#7B3A10);box-shadow:0 4px 16px rgba(120,50,10,0.5)">
-                        &#9654; Masuk
+                        Masuk
                     </button>
                 </form>
             </div>

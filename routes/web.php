@@ -16,10 +16,15 @@
         use App\Http\Controllers\Client\InformasiController;
         use App\Http\Controllers\Client\ReferensiController;
         use App\Http\Controllers\Client\PaletDesignController;
+        use App\Http\Controllers\Admin\AdminDashboardController;
 
         Route::get('/', function () {
+            return view('splash');
+        })->name('splash');
+
+        Route::get('/home', function () {
             return view('sipalet');
-        });
+        })->name('home');
 
         // WAJIB: dashboard fallback (biar Breeze tidak error) - redirect dashboard
         Route::get('/dashboard', function () {
@@ -32,10 +37,8 @@
 
         // ADMIN dashboard
         Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
-
-            Route::get('/dashboard', function () {
-                return view('admin.dashboard');
-            });
+            // dashboard
+            Route::get('/dashboard', [AdminDashboardController::class, 'index']);
 
             // client
             Route::get('/client', [ClientController::class, 'index']);
@@ -68,7 +71,6 @@
 
         // CLIENT dashboard
         Route::middleware(['auth'])->prefix('client')->group(function () {
-
             // dashboard
             Route::get('/dashboard', [DashboardController::class, 'index']);
 

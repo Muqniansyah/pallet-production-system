@@ -22,4 +22,9 @@ class PalletRequest extends Model
     {
         return $this->belongsTo(User::class, 'client_id');
     }
+
+    public function order()
+    {
+        return $this->hasOne(Order::class);
+    }
 }

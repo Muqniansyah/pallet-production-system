@@ -3,8 +3,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             <div class="mb-10">
-                <h1 class="text-3xl font-black text-slate-800 italic uppercase tracking-tighter">
-                    Manajemen <span class="text-slate-400 font-light">Order & HPP</span>
+                <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
+                    Manajemen <span class="text-slate-400 font-light">Pesanan & HPP</span>
                 </h1>
                 <p class="text-slate-500 mt-1 text-sm">Pantau status produksi dan unduh dokumen kalkulasi HPP Anda.</p>
             </div>

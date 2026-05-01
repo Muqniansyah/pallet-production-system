@@ -25,6 +25,11 @@ class OrderController extends Controller
             'nama_project' => 'required|string|max:255',
         ]);
 
+        // cegah double order
+        if (Order::where('pallet_request_id', $request->pallet_request_id)->exists()) {
+            return back()->with('error', 'Request ini sudah dibuat order!');
+        }
+
         $palletRequest = PalletRequest::findOrFail($request->pallet_request_id);
 
         Order::create([

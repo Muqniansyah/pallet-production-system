@@ -2,10 +2,10 @@
     <div class="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
 
         <div class="mb-8">
-            <h1 class="text-3xl font-extrabold text-gray-900">Data HPP & Management Order</h1>
-            <p class="text-gray-500 mt-1">
-                Kelola pembuatan order dan unggah dokumen Harga Pokok Produksi (HPP) dalam satu tempat.
-            </p>
+            <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
+                Data HPP & <span class="text-slate-400 font-light">Management Pesanan</span>
+            </h1>
+            <p class="text-slate-500 mt-1">Kelola pembuatan pesanan dan unggah dokumen Harga Pokok Produksi (HPP) dalam satu tempat.</p>
         </div>
 
         {{-- NOTIFIKASI --}}
@@ -22,13 +22,12 @@
         @endif
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-            {{-- ==================== BUAT ORDER ==================== --}}
+            {{-- ==================== BUAT ORDER / PESANAN ==================== --}}
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                     <h3 class="text-lg font-bold text-gray-800 mb-5 flex items-center">
                         <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm">1</span>
-                        Buat Order
+                        Buat Pesanan
                     </h3>
 
                     <form action="{{ route('admin.orders.store') }}" method="POST" class="space-y-5">
@@ -36,10 +35,10 @@
 
                         {{-- PILIH REQUEST PALET --}}
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-2">Pilih Request Palet</label>
+                            <label class="block text-xs font-bold text-gray-500 mb-2">Pilih Pengajuan Palet</label>
                             <select id="requestSelect" name="pallet_request_id" required class="w-full rounded-xl border-gray-200 py-3">
 
-                                <option value="" disabled selected>Pilih Request...</option>
+                                <option value="" disabled selected>Pilih Pengajuan...</option>
 
                                 @foreach($requests as $req)
                                 <option value="{{ $req->id }}" data-qty="{{ $req->qty }}">
@@ -68,7 +67,7 @@
 
                         <button type="submit"
                             class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">
-                            Buat Order
+                            Buat Pesanan
                         </button>
                     </form>
                 </div>
@@ -87,14 +86,16 @@
                     <form action="{{ route('admin.hpp.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
-                        {{-- pilih order --}}
+                        {{-- pilih order / pesanan --}}
                         <div class="mb-4">
                             <label class="text-xs font-bold text-gray-500 uppercase">
-                                Pilih Order (Status Deal)
+                                Pilih Pesanan (Status Deal) 'Nama Klien - Nama Project'
                             </label>
 
                             <select name="order_id" required class="w-full mt-2 rounded-xl border-gray-200">
-                                @foreach($orders->where('status', 'deal') as $order)
+                                <option value="" disabled selected>Pilih Order...</option>
+
+                                @foreach($orders as $order)
                                 <option value="{{ $order->id }}">
                                     {{ $order->client->name }} - {{ $order->nama_project }}
                                 </option>
@@ -141,7 +142,7 @@
                     <table class="w-full text-left">
                         <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-bold">
                             <tr>
-                                <th class="px-6 py-4">Client</th>
+                                <th class="px-6 py-4">Klien</th>
                                 <th class="px-6 py-4">File HPP</th>
                                 <th class="px-6 py-4 text-right">Tanggal</th>
                             </tr>

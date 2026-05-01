@@ -29,6 +29,6 @@ class Order extends Model
     // relasi ke HPP
     public function hpp()
     {
-        return $this->hasOne(Hpp::class);
+        return $this->hasOne(Hpp::class, 'order_id');
     }
 }

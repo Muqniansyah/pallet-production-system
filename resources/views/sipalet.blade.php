@@ -254,6 +254,9 @@
     }
 </style>
 
+<title>{{ config('app.name', 'Laravel') }}</title>
+<link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
 <canvas id="woodCanvas"></canvas>
 <div class="vignette"></div>
 <div class="dark-overlay"></div>
@@ -263,18 +266,18 @@
         <div class="logo-icon">S</div>
         SIPALET
     </div>
-    <div class="nav-badge">SISTEM PRODUKSI PALLET</div>
+    <div class="nav-badge">SISTEM PRODUKSI PALET</div>
 </nav>
 
 <section class="hero">
     <div class="tag-pill">
         <div class="tag-dot"></div>
-        Platform Manajemen Pallet Indonesia
+        Platform Manajemen Palet Indonesia
     </div>
     <h1 class="hero-title">Kelola produksi</h1>
     <div class="hero-sub">lebih cerdas &amp; efisien</div>
     <p class="hero-desc">
-        SIPALET adalah platform terintegrasi untuk mengelola produksi pallet, monitoring stok, dan distribusi — semua dalam satu sistem yang mudah digunakan.
+        SIPALET adalah platform terintegrasi untuk mengelola produksi palet. mulai dari kustomisasi desain, penjadwalan meeting, hingga transparansi kalkulasi HPP dalam satu sistem yang presisi.
     </p>
     <div class="cta-row">
         <a href="{{ route('login') }}" class="btn-primary">&#9654; Mulai Sekarang</a>
@@ -283,11 +286,11 @@
 </section>
 
 <div class="feature-strip">
-    <div class="feat-tag"><span>✓</span>Produksi Realtime</div>
-    <div class="feat-tag"><span>✓</span>Monitoring Stok</div>
-    <div class="feat-tag"><span>✓</span>Distribusi Terintegrasi</div>
-    <div class="feat-tag"><span>✓</span>Laporan Otomatis</div>
-    <div class="feat-tag"><span>✓</span>Multi Gudang</div>
+    <div class="feat-tag"><span>✓</span>Custom Design Pallet</div>
+    <div class="feat-tag"><span>✓</span>Transparansi HPP</div>
+    <div class="feat-tag"><span>✓</span>Jadwal Meeting Instan</div>
+    <div class="feat-tag"><span>✓</span>Monitoring Produksi</div>
+    <div class="feat-tag"><span>✓</span>Arsip Dokumen Digital</div>
 </div>
 
 <script>
