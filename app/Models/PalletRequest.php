@@ -15,7 +15,8 @@ class PalletRequest extends Model
         'file_desain',
         'alamat_kirim',
         'catatan',
-        'status'
+        'status',
+        'rejection_note',
     ];
 
     public function client()

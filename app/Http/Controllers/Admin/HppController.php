@@ -15,11 +15,17 @@ class HppController extends Controller
     public function index()
     {
         $clients = User::where('role', 'client')->get();
-        $orders = Order::with('client')
-            ->where('status', 'deal') // hanya yang siap HPP
-            ->whereDoesntHave('hpp') // belum punya HPP
+
+        // Untuk DROPDOWN upload HPP: hanya deal & belum punya HPP
+        $ordersForUpload = Order::with('client')
+            ->where('status', 'deal')
+            ->whereDoesntHave('hpp')
             ->latest()
             ->get();
+
+        // Untuk TABEL riwayat pesanan: semua order tampil
+        $orders = Order::with('client')->latest()->get();
+
         $hpps = Hpp::with('order.client')->latest()->get();
 
         // ambil request palet yang SUDAH DISETUJUI CLIENT
@@ -28,7 +34,7 @@ class HppController extends Controller
             ->whereDoesntHave('order')
             ->get();
 
-        return view('admin.hpp', compact('clients', 'orders', 'hpps', 'requests'));
+        return view('admin.hpp', compact('clients', 'orders', 'ordersForUpload', 'hpps', 'requests'));
     }
 
     // upload HPP

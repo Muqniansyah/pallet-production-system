@@ -17,6 +17,7 @@
         </div>
         @endif
 
+        <!-- ===== FORM PENGAJUAN ===== -->
         <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
             <form action="{{ route('client.pallet.store') }}" method="POST" enctype="multipart/form-data" class="p-8">
                 @csrf
@@ -99,6 +100,109 @@
                     </button>
                 </div>
             </form>
+        </div>
+
+        {{-- ===== TABEL PENGAJUAN ===== --}}
+        <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mt-8">
+            <div class="px-8 py-5 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="font-black text-gray-800 tracking-tight">Riwayat Pengajuan Palet</h3>
+                <span class="text-xs text-gray-400 font-medium">{{ $requests->count() }} pengajuan</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-gray-50/50 border-b border-gray-100">
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Jenis Palet</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Qty</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Alamat Kirim</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Catatan</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Status</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Tanggal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse($requests as $req)
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+
+                            {{-- JENIS PALET --}}
+                            <td class="px-8 py-5">
+                                <div class="text-sm font-bold text-gray-800">{{ $req->jenis_palet }}</div>
+                                @if($req->file_desain)
+                                <a href="{{ asset('storage/' . $req->file_desain) }}" target="_blank"
+                                    class="text-[10px] text-blue-500 hover:underline font-semibold">
+                                    Lihat Desain
+                                </a>
+                                @endif
+                            </td>
+
+                            {{-- QTY --}}
+                            <td class="px-8 py-5">
+                                <span class="text-sm font-black text-blue-600">{{ $req->qty }}</span>
+                                <span class="text-[10px] text-gray-400 font-normal ml-1">PCS</span>
+                            </td>
+
+                            {{-- ALAMAT --}}
+                            <td class="px-8 py-5">
+                                <p class="text-xs text-gray-500 max-w-[180px] truncate" title="{{ $req->alamat_kirim }}">
+                                    {{ $req->alamat_kirim }}
+                                </p>
+                            </td>
+
+                            {{-- CATATAN --}}
+                            <td class="px-8 py-5">
+                                <p class="text-xs text-gray-400 max-w-[150px] truncate" title="{{ $req->catatan }}">
+                                    {{ $req->catatan ?? '-' }}
+                                </p>
+                            </td>
+
+                            {{-- STATUS --}}
+                            <td class="px-8 py-5">
+                                @if($req->status == 'pending')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200 text-[10px] font-black uppercase tracking-wider">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>
+                                    Pending
+                                </span>
+
+                                @elseif($req->status == 'approved')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 text-[10px] font-black uppercase tracking-wider">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                                    Disetujui
+                                </span>
+
+                                @elseif($req->status == 'rejected')
+                                <div>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-200 text-[10px] font-black uppercase tracking-wider">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span>
+                                        Ditolak
+                                    </span>
+                                    {{-- Tampilkan alasan jika ada --}}
+                                    @if($req->rejection_note)
+                                    <p class="text-[10px] text-rose-400 italic mt-1 max-w-[160px]">
+                                        "{{ $req->rejection_note }}"
+                                    </p>
+                                    @endif
+                                </div>
+                                @endif
+                            </td>
+
+                            {{-- TANGGAL --}}
+                            <td class="px-8 py-5">
+                                <div class="text-xs text-gray-400 font-medium">{{ $req->created_at->format('d M Y') }}</div>
+                            </td>
+
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center py-16">
+                                <div class="text-gray-200 font-black text-3xl italic tracking-tighter mb-2">BELUM ADA PENGAJUAN</div>
+                                <p class="text-gray-400 text-xs">Pengajuan palet kamu akan muncul di sini.</p>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ===== PaletView 3D Card Box ===== -->

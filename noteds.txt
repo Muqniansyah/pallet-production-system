@@ -1,0 +1,6 @@
+untuk refresh tabel dari awal
+php artisan migrate:fresh -seed 
+
+development
+php artisan serve
+npm run dev

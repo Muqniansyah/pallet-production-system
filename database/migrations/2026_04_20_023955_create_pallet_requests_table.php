@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('alamat_kirim');
             $table->text('catatan')->nullable();
             $table->string('status')->default('pending');
+            $table->text('rejection_note')->nullable();
             $table->timestamps();
         });
     }

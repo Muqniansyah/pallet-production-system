@@ -28,8 +28,23 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email'    => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * Pesan validasi dalam bahasa Indonesia
+     * (DITAMBAHKAN — tidak ada di versi asli Breeze)
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required'    => 'Alamat email wajib diisi.',
+            'email.string'      => 'Email harus berupa teks.',
+            'email.email'       => 'Format email tidak valid.',
+            'password.required' => 'Password wajib diisi.',
+            'password.string'   => 'Password harus berupa teks.',
         ];
     }
 
@@ -45,8 +60,9 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
+            // DIUBAH: dari trans('auth.failed') → pesan bahasa Indonesia
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => 'Email atau password yang Anda masukkan salah.',
             ]);
         }
 
@@ -68,11 +84,9 @@ class LoginRequest extends FormRequest
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
+        // DIUBAH: dari trans('auth.throttle') → pesan bahasa Indonesia
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'email' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $seconds . ' detik.',
         ]);
     }
 
@@ -81,6 +95,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

@@ -83,26 +83,48 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
+                            @foreach ($logs as $log)
                             <tr class="hover:bg-slate-50/30 transition-colors">
                                 <td class="px-6 py-3">
-                                    <p class="text-[11px] font-bold text-slate-700 uppercase">10 Apr 2026</p>
-                                    <p class="text-[8px] text-slate-400 font-medium">09:30 WIB</p>
+                                    <p class="text-[11px] font-bold text-slate-700 uppercase">
+                                        {{ \Carbon\Carbon::parse($log['waktu'])->translatedFormat('d M Y') }}
+                                    </p>
+                                    <p class="text-[8px] text-slate-400 font-medium">
+                                        {{ \Carbon\Carbon::parse($log['waktu'])->format('H:i') }} WIB
+                                    </p>
                                 </td>
+
                                 <td class="px-6 py-3">
                                     <div class="flex items-center gap-3">
-                                        <span class="text-sm">🛠️</span>
+                                        <span class="text-sm">{{ $log['icon'] }}</span>
                                         <div>
-                                            <p class="text-[11px] font-black text-slate-800 uppercase italic tracking-tight">Produksi Pallet Kayu</p>
-                                            <p class="text-[9px] text-slate-400 font-mono">#PROD-8821</p>
+                                            <p class="text-[11px] font-black text-slate-800 uppercase italic tracking-tight">
+                                                {{ $log['kegiatan'] }}
+                                            </p>
+                                            <p class="text-[9px] text-slate-400 font-mono">
+                                                {{ $log['kode'] }}
+                                            </p>
                                         </div>
                                     </div>
                                 </td>
+
                                 <td class="px-6 py-3 text-right">
-                                    <span class="inline-block px-2 py-0.5 rounded text-[8px] font-black uppercase border bg-green-50 text-green-600 border-green-100">
-                                        Selesai
+                                    @php
+                                    // Logika penentuan warna berdasarkan status
+                                    $statusClasses = match($log['status']) {
+                                    'approved', 'deal' => 'bg-green-50 text-green-600 border-green-100',
+                                    'pending' => 'bg-yellow-50 text-yellow-600 border-yellow-100',
+                                    'rejected' => 'bg-red-50 text-red-600 border-red-100',
+                                    default => 'bg-slate-50 text-slate-600 border-slate-100',
+                                    };
+                                    @endphp
+
+                                    <span class="inline-block px-2 py-0.5 rounded text-[8px] font-black uppercase border {{ $statusClasses }}">
+                                        {{ $log['status'] }}
                                     </span>
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

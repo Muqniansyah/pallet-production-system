@@ -24,12 +24,18 @@ class PalletRequestController extends Controller
         return back()->with('success', 'Request berhasil di-approve');
     }
 
-    public function reject($id)
+    public function reject(Request $request, $id)
     {
-        $request = PalletRequest::findOrFail($id);
-        $request->status = 'rejected';
-        $request->save();
+        $request->validate([
+            'rejection_note' => 'nullable|string|max:500',
+        ]);
 
-        return back()->with('success', 'Request berhasil di-reject');
+        $palletRequest = PalletRequest::findOrFail($id);
+        $palletRequest->update([
+            'status' => 'rejected',
+            'rejection_note' => $request->rejection_note,
+        ]);
+
+        return back()->with('success', 'Request berhasil ditolak.');
     }
 }

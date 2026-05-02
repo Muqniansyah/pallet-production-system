@@ -30,6 +30,7 @@
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Client</th>
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Detail Produk</th>
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Desain</th>
+                            <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Catatan</th>
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Alamat Kirim</th>
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Status</th>
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-center">Aksi</th>
@@ -71,6 +72,10 @@
                             </td>
 
                             <td class="px-6 py-5">
+                                <div class="text-sm text-gray-700">{{ $req->catatan }}</div>
+                            </td>
+
+                            <td class="px-6 py-5">
                                 <p class="text-xs text-gray-500 leading-relaxed max-w-[200px] truncate group-hover:whitespace-normal group-hover:overflow-visible group-hover:bg-white group-hover:shadow-sm">
                                     {{ $req->alamat_kirim }}
                                 </p>
@@ -92,30 +97,47 @@
                             <td class="px-6 py-5">
                                 <div class="flex justify-center gap-2">
                                     @if($req->status == 'pending')
-                                    <form action="/admin/pallet-request/{{ $req->id }}/approve" method="POST" class="inline">
-                                        @csrf
-                                        <button class="p-2 bg-white border border-emerald-500 text-emerald-500 rounded-xl hover:bg-emerald-500 hover:text-white transition-all shadow-sm" title="Approve">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
+                                    <div class="flex flex-col gap-3 w-full max-w-[200px]">
 
-                                    <form action="/admin/pallet-request/{{ $req->id }}/reject" method="POST" class="inline">
-                                        @csrf
-                                        <button class="p-2 bg-white border border-rose-500 text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all shadow-sm" title="Reject">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
+                                        {{-- APPROVE --}}
+                                        <form action="/admin/pallet-request/{{ $req->id }}/approve" method="POST" class="w-full">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02]">
+                                                APPROVE
+                                            </button>
+                                        </form>
+
+                                        {{-- REJECT dengan note --}}
+                                        <form action="/admin/pallet-request/{{ $req->id }}/reject" method="POST" class="flex flex-col gap-2 w-full">
+                                            @csrf
+                                            <input
+                                                type="text"
+                                                name="rejection_note"
+                                                placeholder="Alasan..."
+                                                class="w-full bg-white border border-slate-200 text-slate-700 text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 p-2.5 outline-none placeholder:text-slate-400">
+                                            <button type="submit"
+                                                class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
+                                                REJECT
+                                            </button>
+                                        </form>
+
+                                    </div>
                                     @else
-                                    <div class="flex flex-col items-center opacity-30">
+                                    <div class="flex flex-col items-center opacity-40">
                                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <span class="text-[9px] font-black uppercase tracking-widest mt-1">Processed</span>
+                                        <span class="text-[9px] font-black uppercase tracking-widest mt-1 text-gray-400">Processed</span>
                                     </div>
+
+                                    {{-- Tampilkan rejection note jika rejected --}}
+                                    @if($req->status == 'rejected' && $req->rejection_note)
+                                    <div class="text-[10px] text-rose-400 italic max-w-[150px] text-center leading-relaxed">
+                                        "{{ $req->rejection_note }}"
+                                    </div>
+                                    @endif
+
                                     @endif
                                 </div>
                             </td>

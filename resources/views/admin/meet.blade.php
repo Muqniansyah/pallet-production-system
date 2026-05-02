@@ -70,28 +70,32 @@
                         <td class="px-6 py-4 text-center">
                             <div class="flex justify-center space-x-2">
                                 @if($meeting->status === 'pending')
-                                <form action="/admin/meeting/{{ $meeting->id }}/approve" method="POST">
-                                    @csrf
-                                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded shadow-sm transition transform hover:scale-105">
-                                        APPROVE
-                                    </button>
-                                </form>
+                                <div class="flex flex-col gap-4 w-full max-w-md">
+                                    {{-- FORM APPROVE --}}
+                                    <form action="/admin/meeting/{{ $meeting->id }}/approve" method="POST" class="w-full">
+                                        @csrf
+                                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02]">
+                                            APPROVE
+                                        </button>
+                                    </form>
 
-                                <form action="/admin/meeting/{{ $meeting->id }}/reject" method="POST" class="flex flex-col sm:flex-row gap-3 items-center">
-                                    @csrf
-                                    <div class="relative w-full sm:w-64">
-                                        <input
-                                            type="text"
-                                            name="note"
-                                            placeholder="Alasan penolakan..."
-                                            required
-                                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2.5 transition-all duration-200 outline-none placeholder:text-slate-400">
-                                    </div>
+                                    {{-- FORM REJECT --}}
+                                    <form action="/admin/meeting/{{ $meeting->id }}/reject" method="POST" class="flex flex-col gap-2 w-full">
+                                        @csrf
+                                        <div class="relative w-full">
+                                            <input
+                                                type="text"
+                                                name="note"
+                                                placeholder="Alasan penolakan..."
+                                                required
+                                                class="w-full bg-white border border-slate-200 text-slate-700 text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2.5 transition-all duration-200 outline-none placeholder:text-slate-400">
+                                        </div>
 
-                                    <button type="submit" class="w-full sm:w-auto bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black px-5 py-2.5 rounded-lg shadow-sm transition transform hover:scale-105 uppercase tracking-wider">
-                                        REJECT
-                                    </button>
-                                </form>
+                                        <button type="submit" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
+                                            REJECT
+                                        </button>
+                                    </form>
+                                </div>
                                 @else
                                 @if($meeting->start_url)
                                 <a href="{{ $meeting->start_url }}" target="_blank"

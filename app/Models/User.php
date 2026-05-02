@@ -9,8 +9,11 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Order;
+use App\Models\MeetingRequest;
+use App\Models\PalletRequest;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -33,5 +36,15 @@ class User extends Authenticatable
     public function palletRequests()
     {
         return $this->hasMany(PalletRequest::class, 'client_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'client_id');
+    }
+
+    public function meetings()
+    {
+        return $this->hasMany(MeetingRequest::class, 'client_id');
     }
 }
