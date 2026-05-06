@@ -83,14 +83,6 @@
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">Catatan Tambahan</label>
                             <textarea name="catatan" rows="3" placeholder="Contoh: Kayu harus kering, warna cokelat..." class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4"></textarea>
                         </div>
-
-                        <div>
-                            <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Status Request</label>
-                            <div class="inline-flex items-center px-4 py-2 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 font-bold text-xs">
-                                <span class="w-2 h-2 rounded-full bg-amber-500 mr-2 animate-pulse"></span>
-                                NEW REQUEST (PENDING)
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -109,7 +101,7 @@
                 <span class="text-xs text-gray-400 font-medium">{{ $requests->count() }} pengajuan</span>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto" id="requests-table-wrapper">
                 <table class="w-full text-left">
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-100">
@@ -202,6 +194,12 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{-- pagination --}}
+                @if($requests->hasPages())
+                <div class="px-6 py-4 border-t border-gray-100 requests-pagination">
+                    {{ $requests->links() }}
+                </div>
+                @endif
             </div>
         </div>
 
@@ -508,6 +506,42 @@
         .pv-btn-pdf:active {
             transform: scale(0.97);
         }
+
+        /* ── Highlight baris baru ── */
+        @keyframes pvRowFlash {
+            0% {
+                background-color: #fefce8;
+            }
+
+            20% {
+                background-color: #fde047;
+            }
+
+            100% {
+                background-color: #fefce8;
+            }
+        }
+
+        .pv-row-new {
+            animation: pvRowFlash 1s ease-out forwards;
+            background-color: #fefce8 !important;
+            border-left: 3px solid #eab308 !important;
+        }
+
+        .pv-new-badge {
+            display: inline-block;
+            background: #eab308;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            padding: 1px 6px;
+            border-radius: 99px;
+            margin-right: 6px;
+            vertical-align: middle;
+            animation: pvPulse 1s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
     </style>
 
     <!-- jsPDF untuk ekspor PDF -->
@@ -781,6 +815,9 @@
                 el('pv-stat-last', lastTime);
             }
 
+            /* ─── Tracking baris terbaru ─────────────────────── */
+            var _lastTopId = null;
+
             function pvRenderTable(data) {
                 var tbody = document.getElementById('pv-table-body');
                 var info = document.getElementById('pv-table-info');
@@ -789,61 +826,55 @@
                 if (!data || data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm"><div class="flex flex-col items-center gap-2"><span style="font-size:24px;">📭</span><span>Belum ada data — mulai input di PaletView di atas</span></div></td></tr>';
                     if (info) info.textContent = 'Menampilkan 0 data';
+                    _lastTopId = null;
                     return;
                 }
 
-                var rows = data.map(function(d) {
+                // Gunakan kombinasi id + last_updated_at agar lebih sensitif terhadap perubahan
+                var currentTopId = data[0] ?
+                    (data[0].id + '|' + data[0].last_updated_at) :
+                    null;
+                var isNewRow = _lastTopId !== null && currentTopId !== _lastTopId;
+                _lastTopId = currentTopId;
+
+                var rows = data.map(function(d, idx) {
+                    var isNewest = idx === 0 && isNewRow;
+
                     var waktu = d.last_updated_at ?
                         new Date(d.last_updated_at).toLocaleString('id-ID', {
                             day: '2-digit',
                             month: 'short',
                             hour: '2-digit',
                             minute: '2-digit'
-                        }) :
-                        '—';
+                        }) : '—';
 
-                    // Dimensi utama
                     var dim = (d.dimensi_panjang && d.dimensi_lebar) ?
                         '<span class="pv-dim-cell">' + (d.dimensi_panjang * 10) + ' × ' + (d.dimensi_lebar * 10) + '</span>' :
                         '<span class="text-gray-300">—</span>';
 
-                    // Papan atas
                     var pa = (d.papan_atas_jumlah) ?
                         '<span class="font-medium">' + d.papan_atas_jumlah + ' pcs</span>' +
-                        '<div class="pv-sub">' +
-                        pvNullDash(d.papan_atas_tebal) + '×' + pvNullDash(d.papan_atas_lebar) + ' cm' +
-                        (d.papan_atas_arah ? ' · ' + (d.papan_atas_arah === 'x' ? '↔' : '↕') : '') +
-                        '</div>' :
+                        '<div class="pv-sub">' + pvNullDash(d.papan_atas_tebal) + '×' + pvNullDash(d.papan_atas_lebar) + ' cm' +
+                        (d.papan_atas_arah ? ' · ' + (d.papan_atas_arah === 'x' ? '↔' : '↕') : '') + '</div>' :
                         '<span class="text-gray-300">—</span>';
 
-                    // Lapisan tengah
                     var lt = (d.lapisan_tengah_jumlah) ?
                         '<span class="font-medium">' + d.lapisan_tengah_jumlah + ' balok</span>' +
-                        '<div class="pv-sub">' +
-                        pvNullDash(d.lapisan_tengah_tinggi) + '×' + pvNullDash(d.lapisan_tengah_lebar) + ' cm' +
-                        (d.lapisan_tengah_tipe ? ' · ' + d.lapisan_tengah_tipe : '') +
-                        '</div>' :
+                        '<div class="pv-sub">' + pvNullDash(d.lapisan_tengah_tinggi) + '×' + pvNullDash(d.lapisan_tengah_lebar) + ' cm' +
+                        (d.lapisan_tengah_tipe ? ' · ' + d.lapisan_tengah_tipe : '') + '</div>' :
                         '<span class="text-gray-300">—</span>';
 
-                    // Papan bawah
                     var pb = (d.papan_bawah_jumlah) ?
                         '<span class="font-medium">' + d.papan_bawah_jumlah + ' pcs</span>' +
-                        '<div class="pv-sub">' +
-                        pvNullDash(d.papan_bawah_tebal) + '×' + pvNullDash(d.papan_bawah_lebar) + ' cm' +
-                        (d.papan_bawah_pola ? ' · ' + d.papan_bawah_pola : '') +
-                        '</div>' :
+                        '<div class="pv-sub">' + pvNullDash(d.papan_bawah_tebal) + '×' + pvNullDash(d.papan_bawah_lebar) + ' cm' +
+                        (d.papan_bawah_pola ? ' · ' + d.papan_bawah_pola : '') + '</div>' :
                         '<span class="text-gray-300">—</span>';
 
-                    // Gesture
                     var gest = (d.gesture_x || d.gesture_y || d.gesture_z) ?
-                        '<span style="font-family:monospace;font-size:11px;">' +
-                        'X:' + pvNullDash(d.gesture_x) +
-                        ' Y:' + pvNullDash(d.gesture_y) +
-                        ' Z:' + pvNullDash(d.gesture_z) +
-                        '</span>' :
+                        '<span style="font-family:monospace;font-size:11px;">X:' + pvNullDash(d.gesture_x) +
+                        ' Y:' + pvNullDash(d.gesture_y) + ' Z:' + pvNullDash(d.gesture_z) + '</span>' :
                         '<span class="text-gray-300">—</span>';
 
-                    // Total tinggi dari hasil_kalkulasi
                     var hk = d.hasil_kalkulasi;
                     if (typeof hk === 'string') {
                         try {
@@ -856,14 +887,20 @@
                         '<span class="font-semibold text-blue-700">' + (hk.total_tinggi_cm * 10).toFixed(0) + ' mm</span>' :
                         '<span class="text-gray-300">—</span>';
 
-                    // Mode badge
                     var modeBadge = d.mode_tracking ?
                         '<span class="pv-badge ' + (d.mode_tracking === 'mode1' ? 'pv-badge-blue' : 'pv-badge-green') + '">' +
                         (d.mode_tracking === 'mode1' ? '✌ Gestur' : '⌨ VKB') + '</span>' :
                         '<span class="pv-badge pv-badge-gray">—</span>';
 
-                    return '<tr>' +
-                        '<td class="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">' + waktu + '</td>' +
+                    // Badge "BARU" + class highlight untuk baris terbaru
+                    var newBadge = isNewest ?
+                        '<span class="pv-new-badge">✦ BARU</span>' : '';
+
+                    var rowClass = isNewest ? 'pv-row-new' : '';
+                    var rowId = isNewest ? 'id="pv-newest-row"' : '';
+
+                    return '<tr ' + rowId + ' class="' + rowClass + ' hover:bg-gray-50/50 transition-colors">' +
+                        '<td class="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">' + newBadge + waktu + '</td>' +
                         '<td class="px-4 py-3">' + dim + '</td>' +
                         '<td class="px-4 py-3 text-xs">' + pa + '</td>' +
                         '<td class="px-4 py-3 text-xs">' + lt + '</td>' +
@@ -872,8 +909,7 @@
                         '<td class="px-4 py-3 text-xs">' + tinggi + '</td>' +
                         '<td class="px-4 py-3 text-xs">' + modeBadge + '</td>' +
                         '<td class="px-4 py-3 text-center">' +
-                        '<button onclick=\'pvExportPDF(' + JSON.stringify(d) + ')\' ' +
-                        'class="pv-btn-pdf" title="Ekspor ke PDF">' +
+                        '<button onclick=\'pvExportPDF(' + JSON.stringify(d) + ')\' class="pv-btn-pdf" title="Ekspor ke PDF">' +
                         '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline;vertical-align:-2px;margin-right:3px;"><path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>' +
                         'PDF</button>' +
                         '</td>' +
@@ -882,6 +918,22 @@
 
                 tbody.innerHTML = rows;
                 if (info) info.textContent = 'Menampilkan ' + data.length + ' data';
+
+                // Scroll ke baris baru & hilangkan highlight setelah 5 detik
+                if (isNewRow) {
+                    var newestRow = document.getElementById('pv-newest-row');
+                    if (newestRow) {
+                        newestRow.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                        setTimeout(function() {
+                            newestRow.classList.remove('pv-row-new');
+                            var badge = newestRow.querySelector('.pv-new-badge');
+                            if (badge) badge.style.opacity = '0';
+                        }, 5000);
+                    }
+                }
             }
 
             function pvNullDash(v) {
@@ -1104,6 +1156,40 @@
 
                 subText.innerText = "PDF, JPG, PNG up to 10MB";
             }
+        });
+
+        // pagination not refresh
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('requests-table-wrapper');
+            const link = e.target.closest('#requests-table-wrapper .requests-pagination a');
+
+            if (!link) return;
+
+            e.preventDefault();
+            wrapper.style.opacity = '0.5';
+            wrapper.style.pointerEvents = 'none';
+
+            fetch(link.href, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(r => r.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newWrapper = doc.getElementById('requests-table-wrapper');
+                    if (newWrapper) {
+                        wrapper.innerHTML = newWrapper.innerHTML;
+                    }
+                    history.pushState({}, '', link.href);
+                    wrapper.style.opacity = '1';
+                    wrapper.style.pointerEvents = 'auto';
+                })
+                .catch(() => {
+                    wrapper.style.opacity = '1';
+                    wrapper.style.pointerEvents = 'auto';
+                });
         });
     </script>
 </x-app-layout>

@@ -17,7 +17,7 @@
             <div class="rounded-2xl p-6 border border-[#C87941]/15 bg-white/[0.04] backdrop-blur-sm">
                 <x-auth-session-status class="mb-4 text-center text-sm text-[#C87941]" :status="session('status')" />
 
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('login') }}" novalidate>
                     @csrf
 
                     {{-- Email --}}
@@ -51,8 +51,8 @@
                         <x-input-error :messages="$errors->get('password')" class="mt-1.5 text-xs text-red-400" />
                     </div>
 
-                    {{-- Remember + Lupa Password --}}
-                    <div class="flex items-center justify-between mb-6">
+                    <!-- {{-- Remember + Lupa Password --}} -->
+                    <!-- <div class="flex items-center justify-between mb-6">
                         <label class="flex items-center gap-2 text-sm text-[#A07850] cursor-pointer select-none">
                             <input type="checkbox" name="remember"
                                 class="w-4 h-4 rounded border-[#C87941]/30 bg-white/5 text-[#C87941]" />
@@ -63,7 +63,7 @@
                             Lupa password?
                         </a>
                         @endif
-                    </div>
+                    </div> -->
 
                     <button type="submit"
                         class="w-full text-[#FDF0E0] font-bold text-sm py-2.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-[0.98]"

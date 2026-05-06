@@ -15,7 +15,7 @@
             </div>
 
             <div class="rounded-2xl p-6 border border-[#C87941]/15 bg-white/[0.04] backdrop-blur-sm">
-                <form method="POST" action="{{ route('register') }}">
+                <form method="POST" action="{{ route('register') }}" novalidate>
                     @csrf
 
                     {{-- Nama --}}

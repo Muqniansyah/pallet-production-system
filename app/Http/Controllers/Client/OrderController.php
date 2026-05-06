@@ -13,7 +13,7 @@ class OrderController extends Controller
         $orders = Order::with('hpp')
             ->where('client_id', auth()->id())
             ->latest()
-            ->get();
+            ->paginate(5, ['*'], 'orders_page');
 
         return view('client.orders', compact('orders'));
     }
@@ -28,5 +28,17 @@ class OrderController extends Controller
         ]);
 
         return back()->with('success', 'Order siap diproses HPP');
+    }
+
+    public function cancel($id)
+    {
+        $order = Order::where('client_id', auth()->id())
+            ->findOrFail($id);
+
+        $order->update([
+            'status' => 'batal'
+        ]);
+
+        return back()->with('success', 'Pesanan berhasil dibatalkan');
     }
 }

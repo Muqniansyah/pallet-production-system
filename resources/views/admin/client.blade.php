@@ -49,5 +49,12 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- pagination -->
+        @if($clients->hasPages())
+        <div class="px-6 py-4 border-t border-gray-100">
+            {{ $clients->links() }}
+        </div>
+        @endif
     </div>
 </x-app-layout>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('pallet_request_id')->constrained()->onDelete('cascade');
             $table->string('nama_project');
             $table->integer('qty');
-            $table->enum('status', ['pending', 'deal', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'deal', 'batal'])->default('pending');
             $table->timestamps();
         });
     }

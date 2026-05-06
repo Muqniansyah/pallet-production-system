@@ -60,17 +60,19 @@
                 </div>
             </div>
 
+            <!-- table meet -->
             <div class="md:col-span-2">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
                         <h3 class="font-bold text-gray-800">Daftar Pengajuan Meeting</h3>
                     </div>
 
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto" id="meetings-table-wrapper">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="text-xs uppercase tracking-wider text-gray-500 bg-gray-50">
                                     <th class="px-6 py-3 font-semibold">Judul</th>
+                                    <th class="px-6 py-3 font-semibold">Deskripsi</th>
                                     <th class="px-6 py-3 font-semibold">Waktu</th>
                                     <th class="px-6 py-3 font-semibold">Status</th>
                                     <th class="px-6 py-3 font-semibold text-center">Aksi</th>
@@ -82,6 +84,9 @@
                                 <tr class="hover:bg-blue-50/50 transition-colors">
                                     <td class="px-6 py-4">
                                         <span class="text-sm font-medium text-gray-900">{{ $meeting->title }}</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm font-normal text-gray-600">{{ $meeting->description }}</span>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600">
                                         {{ \Carbon\Carbon::parse($meeting->start_time)->format('d M Y, H:i') }}
@@ -127,9 +132,50 @@
                                 @endforelse
                             </tbody>
                         </table>
+
+                        <!-- pagination -->
+                        @if($meetings->hasPages())
+                        <div class="px-6 py-4 border-t border-gray-100 meetings-pagination">
+                            {{ $meetings->links() }}
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // pagination
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('meetings-table-wrapper');
+            const link = e.target.closest('#meetings-table-wrapper .meetings-pagination a');
+
+            if (!link) return;
+
+            e.preventDefault();
+            wrapper.style.opacity = '0.5';
+            wrapper.style.pointerEvents = 'none';
+
+            fetch(link.href, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(r => r.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newWrapper = doc.getElementById('meetings-table-wrapper');
+                    if (newWrapper) wrapper.innerHTML = newWrapper.innerHTML;
+                    history.pushState({}, '', link.href);
+                    wrapper.style.opacity = '1';
+                    wrapper.style.pointerEvents = 'auto';
+                })
+                .catch(() => {
+                    wrapper.style.opacity = '1';
+                    wrapper.style.pointerEvents = 'auto';
+                });
+        });
+    </script>
 </x-app-layout>

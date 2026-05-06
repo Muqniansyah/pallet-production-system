@@ -12,7 +12,7 @@ class MeetController extends Controller
     {
         $meetings = MeetingRequest::where('client_id', auth()->user()->id)
             ->latest()
-            ->get();
+            ->paginate(3);
 
         return view('client.meet', compact('meetings'));
     }

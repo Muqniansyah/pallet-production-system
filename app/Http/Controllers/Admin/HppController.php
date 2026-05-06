@@ -23,10 +23,11 @@ class HppController extends Controller
             ->latest()
             ->get();
 
-        // Untuk TABEL riwayat pesanan: semua order tampil
-        $orders = Order::with('client')->latest()->get();
+        // untuk tabel riwayat pesanan: semua order tampil
+        $orders = Order::with('client')->latest()->paginate(5, ['*'], 'orders_page');
 
-        $hpps = Hpp::with('order.client')->latest()->get();
+        // untuk tabel hpp riwayat
+        $hpps = Hpp::with('order.client')->latest()->paginate(5, ['*'], 'hpps_page');
 
         // ambil request palet yang SUDAH DISETUJUI CLIENT
         $requests = PalletRequest::with('client')

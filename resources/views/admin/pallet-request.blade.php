@@ -27,7 +27,7 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-100">
-                            <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Client</th>
+                            <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Klien</th>
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Detail Produk</th>
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Desain</th>
                             <th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Catatan</th>
@@ -147,10 +147,10 @@
                 </table>
             </div>
 
-            @if($requests->isEmpty())
-            <div class="py-20 text-center">
-                <div class="text-gray-300 mb-3 font-black text-4xl italic tracking-tighter opacity-20">EMPTY REQUEST</div>
-                <p class="text-gray-400 text-sm">Belum ada permintaan palet yang masuk saat ini.</p>
+            {{-- PAGINATION --}}
+            @if($requests->hasPages())
+            <div class="px-6 py-4 border-t border-gray-100">
+                {{ $requests->links() }}
             </div>
             @endif
         </div>

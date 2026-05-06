@@ -19,7 +19,7 @@
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Requests</span>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto" id="orders-table-wrapper">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50/50">
@@ -43,26 +43,42 @@
                                     {{ number_format($order->qty) }} unit
                                 </td>
                                 <td class="px-8 py-5">
-                                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter border {{ $order->status == 'deal' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-amber-50 text-amber-600 border-amber-100' }}">
+                                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter border {{ $order->status == 'deal' ? 'bg-green-50 text-green-600 border-green-100' : ($order->status == 'batal' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-amber-50 text-amber-600 border-amber-100') }}">
                                         {{ $order->status }}
                                     </span>
                                 </td>
                                 <td class="px-8 py-5">
                                     <div class="flex items-center gap-3">
+                                        @if($order->status == 'pending')
+                                        {{-- Tombol Ajukan Meeting --}}
                                         <a href="{{ url('client/meet') }}" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 border border-slate-200 text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
                                             Ajukan Meeting
                                         </a>
+
+                                        {{-- Tombol Proses HPP --}}
                                         <form action="{{ route('client.orders.deal', $order->id) }}" method="POST">
                                             @csrf
-                                            @if($order->status == 'pending')
-                                            <button
-                                                class="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-black px-3 py-2 rounded-lg">
+                                            <button class="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
                                                 Proses HPP
                                             </button>
-                                            @else
-                                            <span class="px-6 py-4 text-sm">Sudah Diproses</span>
-                                            @endif
                                         </form>
+
+                                        {{-- Tombol Batalkan --}}
+                                        <form action="{{ route('client.orders.cancel', $order->id) }}" method="POST"
+                                            onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?')">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="bg-white hover:bg-rose-600 hover:text-white text-rose-500 border border-rose-300 text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
+                                                Batalkan
+                                            </button>
+                                        </form>
+                                        @else
+                                        {{-- Tampilan jika sudah diproses atau dibatalkan --}}
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase italic tracking-widest">
+                                            Pesanan Sudah Diproses
+                                        </span>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -73,6 +89,13 @@
                             @endforelse
                         </tbody>
                     </table>
+
+                    <!-- pagination -->
+                    @if($orders->hasPages())
+                    <div class="px-6 py-4 border-t border-slate-100 orders-pagination">
+                        {{ $orders->links() }}
+                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -85,7 +108,7 @@
                     </h3>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto" id="hpp-table-wrapper">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50/50">
@@ -121,8 +144,61 @@
                             @endif
                         </tbody>
                     </table>
+
+                    <!-- pagination -->
+                    @if($orders->hasPages())
+                    <div class="px-6 py-4 border-t border-slate-100 hpp-pagination">
+                        {{ $orders->links() }}
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // fungsi pagination
+        function ajaxPaginate(wrapperId, paginationClass) {
+            document.addEventListener('click', function(e) {
+                const wrapper = document.getElementById(wrapperId);
+                const link = e.target.closest('#' + wrapperId + ' .' + paginationClass + ' a');
+
+                if (!link) return;
+
+                e.preventDefault();
+                wrapper.style.opacity = '0.5';
+                wrapper.style.pointerEvents = 'none';
+
+                fetch(link.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(r => r.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+
+                        // update tabel orders
+                        const newOrders = doc.getElementById('orders-table-wrapper');
+                        if (newOrders) document.getElementById('orders-table-wrapper').innerHTML = newOrders.innerHTML;
+
+                        // update tabel hpp
+                        const newHpp = doc.getElementById('hpp-table-wrapper');
+                        if (newHpp) document.getElementById('hpp-table-wrapper').innerHTML = newHpp.innerHTML;
+
+                        history.pushState({}, '', link.href);
+                        wrapper.style.opacity = '1';
+                        wrapper.style.pointerEvents = 'auto';
+                    })
+                    .catch(() => {
+                        wrapper.style.opacity = '1';
+                        wrapper.style.pointerEvents = 'auto';
+                    });
+            });
+        }
+
+        ajaxPaginate('orders-table-wrapper', 'orders-pagination');
+        ajaxPaginate('hpp-table-wrapper', 'hpp-pagination');
+    </script>
 </x-app-layout>

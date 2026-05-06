@@ -11,7 +11,7 @@ class AdminMeetingController extends Controller
 {
     public function index()
     {
-        $meetings = MeetingRequest::with('user')->latest()->get();
+        $meetings = MeetingRequest::with('user')->latest()->paginate(5);
         return view('admin.meet', compact('meetings'));
     }
 

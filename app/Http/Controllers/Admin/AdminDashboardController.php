@@ -9,6 +9,7 @@ use App\Models\PalletRequest;
 use App\Models\MeetingRequest;
 use App\Models\Hpp;
 use App\Models\User;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminDashboardController extends Controller
 {
@@ -27,8 +28,8 @@ class AdminDashboardController extends Controller
             })
             ->count();
 
-        // LOG AKTIVITAS
-        $orders = Order::with('client')->latest()->take(5)->get()->map(function ($item) {
+        // LOG AKTIVITAS — hapus take(5), ambil semua untuk pagination
+        $orders = Order::with('client')->latest()->get()->map(function ($item) {
             return [
                 'waktu' => $item->created_at,
                 'kegiatan' => 'Order ' . $item->nama_project . ' oleh ' . ($item->client->name ?? 'Client'),
@@ -38,7 +39,7 @@ class AdminDashboardController extends Controller
             ];
         });
 
-        $requests = PalletRequest::with('client')->latest()->take(5)->get()->map(function ($item) {
+        $requests = PalletRequest::with('client')->latest()->get()->map(function ($item) {
             return [
                 'waktu' => $item->created_at,
                 'kegiatan' => 'Pengajuan ' . $item->jenis_palet . ' oleh ' . ($item->client->name ?? 'Client'),
@@ -48,7 +49,7 @@ class AdminDashboardController extends Controller
             ];
         });
 
-        $meetings = MeetingRequest::with('user')->latest()->take(5)->get()->map(function ($item) {
+        $meetings = MeetingRequest::with('user')->latest()->get()->map(function ($item) {
             return [
                 'waktu' => $item->created_at,
                 'kegiatan' => 'Meeting: ' . $item->title . ' dengan ' . ($item->user->name ?? 'Client Tidak Dikenal'),
@@ -58,7 +59,7 @@ class AdminDashboardController extends Controller
             ];
         });
 
-        $hpps = Hpp::with('order.client')->latest()->take(5)->get()->map(function ($item) {
+        $hpps = Hpp::with('order.client')->latest()->get()->map(function ($item) {
             return [
                 'waktu' => $item->created_at,
                 'kegiatan' => 'HPP: ' . ($item->order->nama_project ?? '-') .
@@ -69,15 +70,26 @@ class AdminDashboardController extends Controller
             ];
         });
 
-        // gabungkan semua
-        $logs = collect()
+        // gabungkan semua & sort
+        $allLogs = collect()
             ->merge($orders)
             ->merge($requests)
             ->merge($meetings)
             ->merge($hpps)
-            ->sortByDesc('waktu')
-            ->take(10); // tampilkan 10 terbaru
+            ->sortByDesc('waktu');
 
+        // manual pagination
+        $perPage = 10;
+        $currentPage = request()->get('page', 1);
+        $pagedLogs = $allLogs->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $logs = new LengthAwarePaginator(
+            $pagedLogs,
+            $allLogs->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         return view('admin.dashboard', compact(
             'totalOrders',

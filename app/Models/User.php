@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(MeetingRequest::class, 'client_id');
     }
+
+    public function visits()
+    {
+        return $this->hasMany(VisitSchedule::class, 'client_id');
+    }
 }

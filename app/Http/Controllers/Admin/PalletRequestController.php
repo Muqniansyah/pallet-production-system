@@ -10,7 +10,7 @@ class PalletRequestController extends Controller
 {
     public function index()
     {
-        $requests = PalletRequest::with('client')->latest()->get();
+        $requests = PalletRequest::with('client')->latest()->paginate(5);
 
         return view('admin.pallet-request', compact('requests'));
     }

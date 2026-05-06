@@ -17,6 +17,8 @@
         use App\Http\Controllers\Client\ReferensiController;
         use App\Http\Controllers\Client\PaletDesignController;
         use App\Http\Controllers\Admin\AdminDashboardController;
+        use App\Http\Controllers\Client\VisitScheduleController;
+        use App\Http\Controllers\Admin\AdminVisitScheduleController;
 
         Route::get('/', function () {
             return view('splash');
@@ -66,6 +68,16 @@
 
             Route::post('/pallet-request/{id}/approve', [AdminPalletRequestController::class, 'approve']);
             Route::post('/pallet-request/{id}/reject', [AdminPalletRequestController::class, 'reject']);
+
+            // jadwal kunjungan
+            Route::get('/kunjungan', [AdminVisitScheduleController::class, 'index'])
+                ->name('admin.kunjungan');
+
+            Route::post('/kunjungan/{id}/approve', [AdminVisitScheduleController::class, 'approve'])
+                ->name('admin.kunjungan.approve');
+
+            Route::post('/kunjungan/{id}/reject', [AdminVisitScheduleController::class, 'reject'])
+                ->name('admin.kunjungan.reject');
         });
 
 
@@ -92,6 +104,9 @@
             Route::post('/orders/{id}/deal', [OrderController::class, 'setDeal'])
                 ->name('client.orders.deal');
 
+            Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel'])
+                ->name('client.orders.cancel');
+
             // Reference
             Route::get('/referensi', [ReferensiController::class, 'index']);
 
@@ -105,6 +120,13 @@
             // Route untuk mengambil data (perlu login)
             Route::get('/palet/designs', [PaletDesignController::class, 'index'])
                 ->name('client.palet.index');
+
+            // jadwal kunjungan
+            Route::get('/kunjungan', [VisitScheduleController::class, 'index'])
+                ->name('client.kunjungan');
+
+            Route::post('/kunjungan', [VisitScheduleController::class, 'store'])
+                ->name('client.kunjungan.store');
         });
 
 

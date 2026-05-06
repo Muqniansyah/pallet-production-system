@@ -134,7 +134,7 @@
             </div>
 
             {{-- ==================== ROW 2: TABLE ORDER ==================== --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" id="orders-table-wrapper">
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h3 class="font-bold text-gray-800">Riwayat Pesanan</h3>
                 </div>
@@ -179,9 +179,9 @@
                                 <span class="px-2 py-1 text-xs font-bold bg-green-100 text-green-700 rounded">
                                     Deal
                                 </span>
-                                @elseif($order->status == 'rejected')
+                                @elseif($order->status == 'batal')
                                 <span class="px-2 py-1 text-xs font-bold bg-red-100 text-red-700 rounded">
-                                    Rejected
+                                    Batal
                                 </span>
                                 @endif
                             </td>
@@ -201,10 +201,17 @@
                         @endforelse
                     </tbody>
                 </table>
+
+                {{-- PAGINATION --}}
+                @if($orders->hasPages())
+                <div class="px-6 py-4 border-t border-gray-100 orders-pagination">
+                    {{ $orders->links() }}
+                </div>
+                @endif
             </div>
 
             {{-- ==================== ROW 3: TABLE HPP ==================== --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" id="hpps-table-wrapper">
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h3 class="font-bold text-gray-800">Riwayat Data HPP</h3>
                 </div>
@@ -255,6 +262,13 @@
                         @endforelse
                     </tbody>
                 </table>
+
+                {{-- PAGINATION --}}
+                @if($hpps->hasPages())
+                <div class="px-6 py-4 border-t border-gray-100 hpps-pagination">
+                    {{ $hpps->links() }}
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -302,6 +316,52 @@
 
                 hppPrimaryText.innerText = "Klik untuk upload file HPP";
                 hppSecondaryText.innerText = "PDF atau Excel (Maks. 5MB)";
+            }
+        });
+
+        // AJAX pagination - orders
+        document.addEventListener('click', function(e) {
+            // Orders pagination
+            const ordersWrapper = document.getElementById('orders-table-wrapper');
+            const ordersLink = e.target.closest('#orders-table-wrapper .orders-pagination a');
+            if (ordersLink) {
+                e.preventDefault();
+                const url = new URL(ordersLink.href);
+                fetch(ordersLink.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(r => r.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newContent = doc.getElementById('orders-table-wrapper');
+                        if (newContent) ordersWrapper.innerHTML = newContent.innerHTML;
+                        // update URL tanpa reload
+                        history.pushState({}, '', url);
+                    });
+            }
+
+            // HPPs pagination
+            const hppsWrapper = document.getElementById('hpps-table-wrapper');
+            const hppsLink = e.target.closest('#hpps-table-wrapper .hpps-pagination a');
+            if (hppsLink) {
+                e.preventDefault();
+                const url = new URL(hppsLink.href);
+                fetch(hppsLink.href, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(r => r.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newContent = doc.getElementById('hpps-table-wrapper');
+                        if (newContent) hppsWrapper.innerHTML = newContent.innerHTML;
+                        history.pushState({}, '', url);
+                    });
             }
         });
     </script>

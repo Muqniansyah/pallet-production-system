@@ -27,8 +27,9 @@
             <table class="w-full text-left border-collapse">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 border-b">Client ID</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 border-b">Klien</th>
                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 border-b">Judul Meeting</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 border-b">Deskripsi</th>
                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 border-b">Waktu & Durasi</th>
                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 border-b text-center">Status</th>
                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 border-b text-center">Aksi</th>
@@ -48,6 +49,9 @@
                         </td>
                         <td class="px-6 py-4 font-medium text-gray-900">
                             {{ $meeting->title }}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-600">
+                            {{ $meeting->description }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">
                             <div class="font-semibold">{{ \Carbon\Carbon::parse($meeting->start_time)->format('d M, Y') }}</div>
@@ -124,5 +128,12 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- pagination -->
+        @if($meetings->hasPages())
+        <div class="px-6 py-4 border-t border-gray-100">
+            {{ $meetings->links() }}
+        </div>
+        @endif
     </div>
 </x-app-layout>

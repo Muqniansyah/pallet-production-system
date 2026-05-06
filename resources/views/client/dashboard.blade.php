@@ -9,12 +9,9 @@
                             {{ now()->translatedFormat('l, d F Y') }}
                         </p>
                         @php
-                        // Set timezone ke Jakarta agar tidak ikut waktu UTC (Global)
                         date_default_timezone_set('Asia/Jakarta');
-
                         $hour = date('G');
                         $greeting = 'Selamat Malam';
-
                         if ($hour >= 5 && $hour < 11) {
                             $greeting='Selamat Pagi' ;
                             } elseif ($hour>= 11 && $hour < 15) {
@@ -23,7 +20,6 @@
                                     $greeting='Selamat Sore' ;
                                     }
                                     @endphp
-
                                     <h2 class="text-3xl font-black text-slate-800 italic uppercase tracking-tighter">
                                     {{ $greeting }}, <span class="text-slate-400 font-light">{{ Auth::user()->name }}</span>
                                     </h2>
@@ -44,7 +40,7 @@
                         <span class="text-[10px] font-black text-slate-300 uppercase italic">Active</span>
                     </div>
                     <h3 class="text-slate-500 text-[10px] font-black uppercase tracking-widest">Pesanan Aktif</h3>
-                    <p class="text-3xl font-black text-slate-800 mt-1"> {{ number_format($activeOrders) }}</p>
+                    <p class="text-3xl font-black text-slate-800 mt-1">{{ number_format($activeOrders) }}</p>
                 </div>
 
                 <!-- card total project -->
@@ -76,73 +72,94 @@
                 </div>
             </div>
 
-            <!-- riwayat -->
+            <!-- riwayat / log aktivitas -->
             <div class="mt-8 bg-white p-6 rounded-xl shadow">
                 <h3 class="text-lg font-semibold mb-4">Aktivitas Terbaru</h3>
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="py-2">Tanggal</th>
-                            <th>Kegiatan</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- PALLET --}}
-                        @forelse($requests as $req)
-                        <tr class="border-b">
-                            <td class="py-2">
-                                {{ $req->created_at->format('d M Y') }}
-                            </td>
-                            <td>
-                                📦 Request Palet - {{ $req->jenis_palet }}
-                            </td>
-                            <td>
-                                @if($req->status == 'approved')
-                                <span class="text-green-500 font-semibold">Disetujui</span>
-                                @elseif($req->status == 'rejected')
-                                <span class="text-red-500 font-semibold">Ditolak</span>
-                                @else
-                                <span class="text-yellow-500 font-semibold">Pending</span>
-                                @endif
-                            </td>
-                        </tr>
-                        @empty
-                        @endforelse
 
-                        {{-- MEETING --}}
-                        @forelse($meetings as $meeting)
-                        <tr class="border-b">
-                            <td>
-                                {{ \Carbon\Carbon::parse($meeting->created_at)->format('d M Y') }}
-                            </td>
-                            <td>
-                                📅 Request Meeting - {{ $meeting->title }}
-                            </td>
-                            <td>
-                                @if($meeting->status === 'approved')
-                                <span class="text-green-500 font-semibold">Disetujui</span>
-                                @elseif($meeting->status === 'rejected')
-                                <span class="text-red-500 font-semibold">Ditolak</span>
-                                @else
-                                <span class="text-yellow-500 font-semibold">Pending</span>
-                                @endif
-                            </td>
-                        </tr>
-                        @empty
-                        @endforelse
+                <div id="logs-table-wrapper">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="py-2">Tanggal</th>
+                                <th>Kegiatan</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($logs as $log)
+                            <tr class="border-b">
+                                <td class="py-2">
+                                    {{ \Carbon\Carbon::parse($log['waktu'])->format('d M Y') }}
+                                </td>
+                                <td>
+                                    {{ $log['icon'] }} {{ $log['kegiatan'] }}
+                                </td>
+                                <td>
+                                    @if($log['status'] == 'approved')
+                                    <span class="text-green-500 font-semibold">Disetujui</span>
+                                    @elseif($log['status'] == 'rejected')
+                                    <span class="text-red-500 font-semibold">Ditolak</span>
+                                    @elseif($log['status'] == 'uploaded')
+                                    <span class="text-blue-500 font-semibold">Terunggah</span>
+                                    @else
+                                    <span class="text-yellow-500 font-semibold">Pending</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="3" class="text-center text-gray-400 py-4">
+                                    Belum ada aktivitas
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
 
-                        {{-- KOSONG --}}
-                        @if($requests->isEmpty() && $meetings->isEmpty())
-                        <tr>
-                            <td colspan="3" class="text-center text-gray-400 py-4">
-                                Belum ada aktivitas
-                            </td>
-                        </tr>
-                        @endif
-                    </tbody>
-                </table>
+                    {{-- pagination --}}
+                    @if($logs->hasPages())
+                    <div class="px-6 py-4 border-t border-gray-100 logs-pagination">
+                        {{ $logs->links() }}
+                    </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
+
+    {{-- AJAX pagination tanpa refresh --}}
+    <script>
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('logs-table-wrapper');
+            const link = e.target.closest('#logs-table-wrapper .logs-pagination a');
+
+            if (!link) return;
+
+            e.preventDefault();
+            wrapper.style.opacity = '0.5';
+            wrapper.style.pointerEvents = 'none';
+
+            fetch(link.href, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(r => r.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newWrapper = doc.getElementById('logs-table-wrapper');
+                    if (newWrapper) {
+                        wrapper.innerHTML = newWrapper.innerHTML;
+                    }
+                    history.pushState({}, '', link.href);
+                    wrapper.style.opacity = '1';
+                    wrapper.style.pointerEvents = 'auto';
+                })
+                .catch(() => {
+                    wrapper.style.opacity = '1';
+                    wrapper.style.pointerEvents = 'auto';
+                });
+        });
+    </script>
 </x-app-layout>

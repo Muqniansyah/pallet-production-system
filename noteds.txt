@@ -1,6 +1,12 @@
-untuk refresh tabel dari awal
-php artisan migrate:fresh -seed 
+- untuk refresh tabel dari awal
+php artisan migrate:fresh --seed 
 
-development
+- development
 php artisan serve
 npm run dev
+
+- views tidak terpakai dari login dan regis
+views/auth/confirm-password
+views/auth/forgot-password
+views/auth/reset-password
+views/auth/verify-email

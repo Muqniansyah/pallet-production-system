@@ -12,7 +12,7 @@ class PalletRequestController extends Controller
     {
         $requests = PalletRequest::where('client_id', auth()->id())
             ->latest()
-            ->get();
+            ->paginate(5);
 
         return view('client.pallet-request', compact('requests'));
     }
