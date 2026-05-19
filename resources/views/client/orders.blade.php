@@ -40,7 +40,7 @@
                                     {{ $order->nama_project }}
                                 </td>
                                 <td class="px-8 py-5 text-xs font-medium text-slate-600 text-center">
-                                    {{ number_format($order->qty) }} unit
+                                    {{ number_format($order->qty) }} pcs
                                 </td>
                                 <td class="px-8 py-5">
                                     <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter border {{ $order->status == 'deal' ? 'bg-green-50 text-green-600 border-green-100' : ($order->status == 'batal' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-amber-50 text-amber-600 border-amber-100') }}">
@@ -58,7 +58,7 @@
                                         {{-- Tombol Proses HPP --}}
                                         <form action="{{ route('client.orders.deal', $order->id) }}" method="POST">
                                             @csrf
-                                            <button class="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
+                                            <button class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-[9px] font-black px-3 py-2 rounded-lg shadow-sm shadow-emerald-200 transition-all active:scale-95 uppercase tracking-tighter">
                                                 Proses HPP
                                             </button>
                                         </form>

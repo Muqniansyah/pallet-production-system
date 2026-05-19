@@ -70,7 +70,7 @@
                                     <form action="{{ route('admin.kunjungan.approve', $visit->id) }}" method="POST" class="w-full">
                                         @csrf
                                         <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black py-2 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
-                                            APPROVE
+                                            Disetujui
                                         </button>
                                     </form>
 
@@ -85,7 +85,7 @@
                                             class="w-full bg-white border border-slate-200 text-[10px] text-slate-700 rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2 outline-none placeholder:text-slate-300">
 
                                         <button type="submit" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black py-2 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
-                                            REJECT
+                                            Ditolak
                                         </button>
                                     </form>
                                 </div>

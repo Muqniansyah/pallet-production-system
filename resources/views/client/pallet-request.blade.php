@@ -26,25 +26,61 @@
 
                     <div class="space-y-6">
                         <div class="group">
-                            <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">Jenis Palet</label>
-                            <select name="jenis_palet" class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4 pr-10 appearance-none" required>
-                                <option value="" disabled selected>Pilih Tipe Palet...</option>
-                                <option value="Palet Kayu Racuk">Palet Kayu Racuk</option>
-                                <option value="Palet Kayu Mahoni">Palet Kayu Mahoni</option>
-                                <option value="Palet Kayu Meranti">Palet Kayu Meranti</option>
-                                <option value="Palet Kayu Jati">Palet Kayu Jati</option>
-                                <option value="Palet Kayu Sengon">Palet Kayu Sengon</option>
-                                <option value="Palet Kayu Kamper">Palet Kayu Kamper</option>
+                            <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">
+                                Jenis Palet
+                            </label>
+
+                            <select
+                                id="produkSelect"
+                                name="jenis_palet"
+                                class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4 pr-10"
+                                required>
+
+                                <option value="" disabled selected>
+                                    Pilih Tipe Palet...
+                                </option>
+
+                                @foreach($produk as $item)
+
+                                @if(($item->stok->stok ?? 0) > 0)
+
+                                <option
+                                    value="{{ $item->nama_produk }}"
+                                    data-stok="{{ $item->stok->stok ?? 0 }}">
+
+                                    {{ $item->nama_produk }}
+                                    (tersedia {{ $item->stok->stok ?? 0 }} PCS)
+
+                                </option>
+
+                                @endif
+
+                                @endforeach
+
                             </select>
+
+                            <p id="stokInfo"
+                                class="text-xs mt-2 font-bold text-blue-600">
+                            </p>
+
                         </div>
 
                         <div class="group">
-                            <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">Quantity (Qty)</label>
-                            <div class="relative">
-                                <input type="number" name="qty" placeholder="0"
-                                    class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4 pr-16" required>
+                            <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
+                                Quantity (Qty)
+                            </label>
 
-                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 font-bold text-sm pointer-events-none">
+                            <div class="relative">
+                                <input
+                                    id="qtyInput"
+                                    type="number"
+                                    name="qty"
+                                    placeholder="0"
+                                    min="1"
+                                    class="w-full border-gray-200 rounded-2xl shadow-sm py-3 pl-4 pr-16"
+                                    required>
+
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 font-bold text-sm">
                                     PCS
                                 </span>
                             </div>
@@ -88,7 +124,7 @@
 
                 <div class="mt-10 pt-6 border-t border-gray-50 flex justify-end">
                     <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-12 rounded-2xl shadow-lg shadow-emerald-200 transition-all active:scale-95 uppercase tracking-widest text-sm">
-                        Kirim Request Palet
+                        Ajukan Palet
                     </button>
                 </div>
             </form>
@@ -98,19 +134,21 @@
         <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mt-8">
             <div class="px-8 py-5 border-b border-gray-100 flex items-center justify-between">
                 <h3 class="font-black text-gray-800 tracking-tight">Riwayat Pengajuan Palet</h3>
-                <span class="text-xs text-gray-400 font-medium">{{ $requests->count() }} pengajuan</span>
+                <span class="text-xs text-gray-400 font-medium">{{ $requests->total() }} pengajuan</span>
             </div>
 
+            <!-- table dan pagination -->
             <div class="overflow-x-auto" id="requests-table-wrapper">
                 <table class="w-full text-left">
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-100">
-                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Jenis Palet</th>
-                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Qty</th>
-                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Alamat Kirim</th>
-                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Catatan</th>
-                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Status</th>
-                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Tanggal</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Jenis Palet</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Qty</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Alamat Kirim</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Catatan</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Status</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Tanggal</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Keterangan</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -155,26 +193,16 @@
                                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>
                                     Pending
                                 </span>
-
                                 @elseif($req->status == 'approved')
                                 <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 text-[10px] font-black uppercase tracking-wider">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
                                     Disetujui
                                 </span>
-
                                 @elseif($req->status == 'rejected')
-                                <div>
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-200 text-[10px] font-black uppercase tracking-wider">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span>
-                                        Ditolak
-                                    </span>
-                                    {{-- Tampilkan alasan jika ada --}}
-                                    @if($req->rejection_note)
-                                    <p class="text-[10px] text-rose-400 italic mt-1 max-w-[160px]">
-                                        "{{ $req->rejection_note }}"
-                                    </p>
-                                    @endif
-                                </div>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-200 text-[10px] font-black uppercase tracking-wider">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span>
+                                    Ditolak
+                                </span>
                                 @endif
                             </td>
 
@@ -183,10 +211,23 @@
                                 <div class="text-xs text-gray-400 font-medium">{{ $req->created_at->format('d M Y') }}</div>
                             </td>
 
+                            {{-- KETERANGAN --}}
+                            <td class="px-8 py-5">
+                                @if($req->status == 'rejected' && $req->rejection_note)
+                                <div class="inline-flex items-start gap-1.5 max-w-[180px]">
+                                    <p class="text-[11px] text-slate-500 leading-relaxed italic">
+                                        {{ $req->rejection_note }}
+                                    </p>
+                                </div>
+                                @else
+                                <span class="text-[10px] text-gray-300 italic">—</span>
+                                @endif
+                            </td>
+
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="text-center py-16">
+                            <td colspan="7" class="text-center py-16">
                                 <div class="text-gray-200 font-black text-3xl italic tracking-tighter mb-2">BELUM ADA PENGAJUAN</div>
                                 <p class="text-gray-400 text-xs">Pengajuan palet kamu akan muncul di sini.</p>
                             </td>
@@ -194,6 +235,7 @@
                         @endforelse
                     </tbody>
                 </table>
+
                 {{-- pagination --}}
                 @if($requests->hasPages())
                 <div class="px-6 py-4 border-t border-gray-100 requests-pagination">
@@ -201,6 +243,13 @@
                 </div>
                 @endif
             </div>
+        </div>
+
+        <div class="mb-8 mt-16">
+            <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
+                Desain <span class="text-slate-400 font-light">Palet</span>
+            </h1>
+            <p class="text-slate-500 text-sm mt-1">Sesuaikan ukuran dimensi, papan atas, lapisan tengah, dan papan bawah palet kayu sesuai dengan kebutuhan Anda.</p>
         </div>
 
         <!-- ===== PaletView 3D Card Box ===== -->
@@ -1190,6 +1239,39 @@
                     wrapper.style.opacity = '1';
                     wrapper.style.pointerEvents = 'auto';
                 });
+        });
+
+        // form pengajuan (produk dan stok)
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const produk = document.getElementById('produkSelect');
+            const qty = document.getElementById('qtyInput');
+            const info = document.getElementById('stokInfo');
+
+            produk.addEventListener('change', function() {
+
+                let stok =
+                    this.options[this.selectedIndex]
+                    .dataset.stok;
+
+                info.innerHTML =
+                    `Stok tersedia : ${stok} PCS`;
+
+                qty.max = stok;
+            });
+
+            qty.addEventListener('input', function() {
+
+                if (parseInt(this.value) >
+                    parseInt(this.max)) {
+                    alert(
+                        'Jumlah melebihi stok tersedia');
+
+                    this.value = this.max;
+                }
+
+            });
+
         });
     </script>
 </x-app-layout>

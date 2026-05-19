@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PalletRequest;
+use App\Models\ProdukKayu;
 
 class PalletRequestController extends Controller
 {
@@ -14,7 +15,12 @@ class PalletRequestController extends Controller
             ->latest()
             ->paginate(5);
 
-        return view('client.pallet-request', compact('requests'));
+        $produk = ProdukKayu::with('stok')->get();
+
+        return view('client.pallet-request', compact(
+            'requests',
+            'produk'
+        ));
     }
 
     public function store(Request $request)

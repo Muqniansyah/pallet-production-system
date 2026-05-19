@@ -1,140 +1,161 @@
-        <?php
+<?php
 
-        use App\Http\Controllers\ProfileController;
-        use Illuminate\Support\Facades\Route;
-        // controller
-        use App\Http\Controllers\Admin\ClientController;
-        use App\Http\Controllers\Client\MeetController;
-        use App\Http\Controllers\Admin\AdminMeetingController;
-        use App\Http\Controllers\Client\MeetingRequestController;
-        use App\Http\Controllers\Admin\HppController;
-        use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-        use App\Http\Controllers\Client\OrderController;
-        use App\Http\Controllers\Client\PalletRequestController;
-        use App\Http\Controllers\Admin\PalletRequestController as AdminPalletRequestController;
-        use App\Http\Controllers\Client\DashboardController;
-        use App\Http\Controllers\Client\InformasiController;
-        use App\Http\Controllers\Client\ReferensiController;
-        use App\Http\Controllers\Client\PaletDesignController;
-        use App\Http\Controllers\Admin\AdminDashboardController;
-        use App\Http\Controllers\Client\VisitScheduleController;
-        use App\Http\Controllers\Admin\AdminVisitScheduleController;
+use Illuminate\Support\Facades\Route;
 
-        Route::get('/', function () {
-            return view('splash');
-        })->name('splash');
+// Profile Controller
+use App\Http\Controllers\ProfileController;
 
-        Route::get('/home', function () {
-            return view('sipalet');
-        })->name('home');
+// Admin Controllers
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminMeetingController;
+use App\Http\Controllers\Admin\AdminVisitScheduleController;
+use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\HppController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PalletRequestController as AdminPalletRequestController;
+use App\Http\Controllers\Admin\StokKayuController;
 
-        // WAJIB: dashboard fallback (biar Breeze tidak error) - redirect dashboard
-        Route::get('/dashboard', function () {
-            if (auth()->user()->role === 'admin') {
-                return redirect('/admin/dashboard');
-            }
-            return redirect('/client/dashboard');
-        })->middleware(['auth'])->name('dashboard');
+// Client Controllers
+use App\Http\Controllers\Client\DashboardController;
+use App\Http\Controllers\Client\InformasiController;
+use App\Http\Controllers\Client\MeetController;
+use App\Http\Controllers\Client\MeetingRequestController;
+use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Client\PaletDesignController;
+use App\Http\Controllers\Client\PalletRequestController;
+use App\Http\Controllers\Client\ReferensiController;
+use App\Http\Controllers\Client\VisitScheduleController;
 
+// halaman splash sipalet
+Route::get('/', function () {
+    return view('splash');
+})->name('splash');
 
-        // ADMIN dashboard
-        Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
-            // dashboard
-            Route::get('/dashboard', [AdminDashboardController::class, 'index']);
+// halaman utama / welcome page
+Route::get('/home', function () {
+    return view('sipalet');
+})->name('home');
 
-            // client
-            Route::get('/client', [ClientController::class, 'index']);
-            Route::patch('/client/{id}/role', [ClientController::class, 'updateRole'])
-                ->name('admin.client.updateRole');
+// WAJIB: dashboard fallback (biar Breeze tidak error) - redirect dashboard
+Route::get('/dashboard', function () {
+    if (auth()->user()->role === 'admin') {
+        return redirect('/admin/dashboard');
+    }
+    return redirect('/client/dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-            // meet
-            Route::get('/meeting', [AdminMeetingController::class, 'index']);
-            Route::post('/meeting/{id}/approve', [AdminMeetingController::class, 'approve']);
-            Route::post('/meeting/{id}/reject', [AdminMeetingController::class, 'reject']);
+// ADMIN dashboard
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
+    // dashboard
+    Route::get('/dashboard', [AdminDashboardController::class, 'index']);
 
-            // hpp
-            Route::get('/hpp', [HppController::class, 'index'])->name('admin.hpp');
-            // hpp upload
-            Route::post('/hpp/upload', [HppController::class, 'store'])->name('admin.hpp.store');
+    // client
+    Route::get('/client', [ClientController::class, 'index']);
+    Route::patch('/client/{id}/role', [ClientController::class, 'updateRole'])
+        ->name('admin.client.updateRole');
 
-            // order
-            Route::post('/orders', [AdminOrderController::class, 'store'])->name('admin.orders.store');
-            Route::post('/orders/{id}/{status}', [AdminOrderController::class, 'updateStatus'])
-                ->name('admin.orders.updateStatus');
+    // meet
+    Route::get('/meeting', [AdminMeetingController::class, 'index']);
+    Route::post('/meeting/{id}/approve', [AdminMeetingController::class, 'approve']);
+    Route::post('/meeting/{id}/reject', [AdminMeetingController::class, 'reject']);
 
-            // pallet request
-            Route::get('/pallet-request', [AdminPalletRequestController::class, 'index'])
-                ->name('admin.pallet.index');
+    // hpp
+    Route::get('/hpp', [HppController::class, 'index'])->name('admin.hpp');
+    // hpp upload
+    Route::post('/hpp/upload', [HppController::class, 'store'])->name('admin.hpp.store');
 
-            Route::post('/pallet-request/{id}/approve', [AdminPalletRequestController::class, 'approve']);
-            Route::post('/pallet-request/{id}/reject', [AdminPalletRequestController::class, 'reject']);
+    // order
+    Route::post('/orders', [AdminOrderController::class, 'store'])->name('admin.orders.store');
+    Route::post('/orders/{id}/{status}', [AdminOrderController::class, 'updateStatus'])
+        ->name('admin.orders.updateStatus');
 
-            // jadwal kunjungan
-            Route::get('/kunjungan', [AdminVisitScheduleController::class, 'index'])
-                ->name('admin.kunjungan');
+    // pallet request
+    Route::get('/pallet-request', [AdminPalletRequestController::class, 'index'])
+        ->name('admin.pallet.index');
 
-            Route::post('/kunjungan/{id}/approve', [AdminVisitScheduleController::class, 'approve'])
-                ->name('admin.kunjungan.approve');
+    Route::post('/pallet-request/{id}/approve', [AdminPalletRequestController::class, 'approve']);
+    Route::post('/pallet-request/{id}/reject', [AdminPalletRequestController::class, 'reject']);
 
-            Route::post('/kunjungan/{id}/reject', [AdminVisitScheduleController::class, 'reject'])
-                ->name('admin.kunjungan.reject');
-        });
+    // jadwal kunjungan
+    Route::get('/kunjungan', [AdminVisitScheduleController::class, 'index'])
+        ->name('admin.kunjungan');
 
+    Route::post('/kunjungan/{id}/approve', [AdminVisitScheduleController::class, 'approve'])
+        ->name('admin.kunjungan.approve');
 
-        // CLIENT dashboard
-        Route::middleware(['auth'])->prefix('client')->group(function () {
-            // dashboard
-            Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::post('/kunjungan/{id}/reject', [AdminVisitScheduleController::class, 'reject'])
+        ->name('admin.kunjungan.reject');
 
-            // meet
-            Route::get('/meet', [MeetController::class, 'index']);
-            Route::get('/meeting-request', [MeetingRequestController::class, 'index']);
-            Route::post('/meeting-request', [MeetingRequestController::class, 'store']);
+    // stok kayu
+    Route::get('/stok', [StokKayuController::class, 'index'])
+        ->name('admin.stok');
 
-            // request palet
-            Route::get('/pallet-request', [PalletRequestController::class, 'index'])
-                ->name('client.pallet.index');
-            Route::post('/pallet-request', [PalletRequestController::class, 'store'])
-                ->name('client.pallet.store');
+    Route::post('/stok', [StokKayuController::class, 'store'])
+        ->name('admin.stok.store');
 
-            // order
-            Route::get('/orders', [OrderController::class, 'index'])
-                ->name('client.orders');
+    Route::put('/stok/{id}', [StokKayuController::class, 'update'])
+        ->name('admin.stok.update');
 
-            Route::post('/orders/{id}/deal', [OrderController::class, 'setDeal'])
-                ->name('client.orders.deal');
+    Route::delete('/stok/{id}', [StokKayuController::class, 'destroy'])
+        ->name('admin.stok.destroy');
 
-            Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel'])
-                ->name('client.orders.cancel');
+    Route::post('/stok/tambah', [StokKayuController::class, 'tambahStok'])
+        ->name('admin.stok.tambah');
+});
 
-            // Reference
-            Route::get('/referensi', [ReferensiController::class, 'index']);
+// CLIENT dashboard
+Route::middleware(['auth'])->prefix('client')->group(function () {
+    // dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 
-            // informasi
-            Route::get('/informasi', [InformasiController::class, 'index']);
+    // meet
+    Route::get('/meet', [MeetController::class, 'index']);
+    Route::get('/meeting-request', [MeetingRequestController::class, 'index']);
+    Route::post('/meeting-request', [MeetingRequestController::class, 'store']);
 
-            // Route untuk menerima data real-time dari Netlify (tidak perlu auth agar iframe bisa kirim)
-            Route::post('/palet/sync', [PaletDesignController::class, 'sync'])
-                ->name('client.palet.sync');
+    // request palet
+    Route::get('/pallet-request', [PalletRequestController::class, 'index'])
+        ->name('client.pallet.index');
+    Route::post('/pallet-request', [PalletRequestController::class, 'store'])
+        ->name('client.pallet.store');
 
-            // Route untuk mengambil data (perlu login)
-            Route::get('/palet/designs', [PaletDesignController::class, 'index'])
-                ->name('client.palet.index');
+    // order
+    Route::get('/orders', [OrderController::class, 'index'])
+        ->name('client.orders');
 
-            // jadwal kunjungan
-            Route::get('/kunjungan', [VisitScheduleController::class, 'index'])
-                ->name('client.kunjungan');
+    Route::post('/orders/{id}/deal', [OrderController::class, 'setDeal'])
+        ->name('client.orders.deal');
 
-            Route::post('/kunjungan', [VisitScheduleController::class, 'store'])
-                ->name('client.kunjungan.store');
-        });
+    Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel'])
+        ->name('client.orders.cancel');
 
+    // Reference
+    Route::get('/referensi', [ReferensiController::class, 'index']);
 
-        // PROFILE
-        Route::middleware('auth')->group(function () {
-            Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-            Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        });
+    // informasi
+    Route::get('/informasi', [InformasiController::class, 'index']);
 
-        require __DIR__ . '/auth.php';
+    // Route untuk menerima data real-time dari Netlify (tidak perlu auth agar iframe bisa kirim)
+    Route::post('/palet/sync', [PaletDesignController::class, 'sync'])
+        ->name('client.palet.sync');
+
+    // Route untuk mengambil data (perlu login)
+    Route::get('/palet/designs', [PaletDesignController::class, 'index'])
+        ->name('client.palet.index');
+
+    // jadwal kunjungan
+    Route::get('/kunjungan', [VisitScheduleController::class, 'index'])
+        ->name('client.kunjungan');
+
+    Route::post('/kunjungan', [VisitScheduleController::class, 'store'])
+        ->name('client.kunjungan.store');
+});
+
+// PROFILE
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__ . '/auth.php';

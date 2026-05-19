@@ -3,40 +3,44 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+// pemanggilan model
 use App\Models\PalletRequest;
 use App\Models\MeetingRequest;
 use App\Models\Order;
+
+// pemanggilan pagination
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        // ambil id yang sedang login
         $userId = auth()->id();
 
-        // riwayat pallet — untuk tabel dashboard (5 terbaru)
+        // riwayat pengajuan palet — untuk tabel dashboard (5 terbaru)
         $requests = PalletRequest::where('client_id', $userId)
             ->latest()
             ->take(5)
             ->get();
 
-        // riwayat meeting — untuk log
+        // riwayat meeting 
         $meetings = MeetingRequest::where('client_id', $userId)
             ->latest()
             ->get();
 
-        // HITUNG HPP TERUNGGAH
+        // CARD Total HPP Yang Sudah Diunggah - jumlah order client yang punya relasi HPP.
         $hppCount = Order::where('client_id', $userId)
             ->whereHas('hpp')
             ->count();
 
-        // TOTAL PROJECT
+        // CARD Total project pengajuan palet dengan status approved
         $totalProject = PalletRequest::where('client_id', $userId)
             ->where('status', 'approved')
             ->count();
 
-        // PESANAN AKTIF
+        // CARD pesanan aktif klien - jumlah order client dengan status deal.
         $activeOrders = Order::where('client_id', $userId)
             ->where('status', 'deal')
             ->count();
@@ -84,6 +88,7 @@ class DashboardController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]
         );
 
+        // mengembalikkan ke tampilan
         return view('client.dashboard', compact(
             'requests',
             'meetings',

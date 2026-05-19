@@ -74,9 +74,12 @@
 
             <!-- riwayat / log aktivitas -->
             <div class="mt-8 bg-white p-6 rounded-xl shadow">
+                <!-- judul -->
                 <h3 class="text-lg font-semibold mb-4">Aktivitas Terbaru</h3>
 
+                <!-- table dan pagination -->
                 <div id="logs-table-wrapper">
+                    <!-- table -->
                     <table class="w-full text-left">
                         <thead>
                             <tr class="border-b">
@@ -116,7 +119,7 @@
                         </tbody>
                     </table>
 
-                    {{-- pagination --}}
+                    <!-- pagination -->
                     @if($logs->hasPages())
                     <div class="px-6 py-4 border-t border-gray-100 logs-pagination">
                         {{ $logs->links() }}

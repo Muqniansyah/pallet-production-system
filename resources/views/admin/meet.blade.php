@@ -4,7 +4,7 @@
         <div class="flex justify-between items-center mb-8">
             <div>
                 <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
-                    Pengajuan <span class="text-slate-400 font-light">Meeting</span>
+                    Data Jadwal <span class="text-slate-400 font-light">Meeting</span>
                 </h1>
                 <p class="text-sm text-slate-500 mt-1">Kelola dan tinjau semua permintaan meeting dari client.</p>
             </div>
@@ -79,7 +79,7 @@
                                     <form action="/admin/meeting/{{ $meeting->id }}/approve" method="POST" class="w-full">
                                         @csrf
                                         <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02]">
-                                            APPROVE
+                                            Disetujui
                                         </button>
                                     </form>
 
@@ -96,7 +96,7 @@
                                         </div>
 
                                         <button type="submit" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
-                                            REJECT
+                                            Ditolak
                                         </button>
                                     </form>
                                 </div>

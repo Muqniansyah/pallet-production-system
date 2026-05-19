@@ -1,5 +1,5 @@
-<div x-data="{ open: true }" class="flex min-h-screen">
-    <div :class="open ? 'w-72' : 'w-20'" class="bg-[#064e3b] text-emerald-100 p-5 transition-all duration-300 ease-in-out relative flex flex-col shadow-none border-none outline-none">
+<div x-data="{ open: true }" class="flex">
+    <div :class="open ? 'w-72' : 'w-20'" class="bg-[#064e3b] text-emerald-100 p-5 transition-all duration-300 ease-in-out relative flex flex-col shadow-2xl">
 
         <button @click="open = !open" class="absolute -right-3 top-10 bg-emerald-500 text-white rounded-full p-1 shadow-lg hover:bg-emerald-600 transition-colors z-50 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" :class="open ? 'rotate-0' : 'rotate-180'" class="h-4 w-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -20,8 +20,8 @@
             ['route' => 'client/dashboard', 'label' => 'Beranda', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
             ['route' => 'client/referensi', 'label' => 'Referensi Produk', 'icon' => 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z'],
             ['route' => 'client/pallet-request', 'label' => 'Pengajuan & Desain Palet', 'icon' => 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
-            ['route' => 'client/orders', 'label' => 'Pesanan Saya', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'],
-            ['route' => 'client/meet', 'label' => 'Ajukan Pertemuan', 'icon' => 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z'],
+            ['route' => 'client/orders', 'label' => 'Pesanan & HPP', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'],
+            ['route' => 'client/meet', 'label' => 'Jadwal Pertemuan', 'icon' => 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z'],
             ['route' => 'client/kunjungan', 'label' => 'Jadwal Kunjungan', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
             ['route' => 'client/informasi', 'label' => 'Pusat Informasi', 'icon' => 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
             ];
@@ -29,7 +29,7 @@
 
             @foreach($clientMenus as $menu)
             <a href="/{{ $menu['route'] }}"
-                class="group flex items-center p-3 rounded-xl transition-all duration-200 
+                class="group flex items-center p-3 rounded-xl transition-all duration-200
                    {{ request()->is($menu['route']) ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' : 'hover:bg-emerald-900/50 hover:text-white' }}">
 
                 <div class="flex-shrink-0">
@@ -62,9 +62,7 @@
         </div>
     </div>
 
-    <div class="flex-1 bg-white">
-        <main class="p-8">
-            {{ $slot ?? '' }}
-        </main>
+    <div class="flex-1">
+        {{ $slot ?? '' }}
     </div>
 </div>

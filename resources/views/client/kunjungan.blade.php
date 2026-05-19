@@ -31,7 +31,7 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sticky top-8">
                     <h3 class="text-lg font-bold text-gray-800 mb-5 flex items-center">
                         <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
                         </span>
@@ -54,11 +54,7 @@
                                 class="w-full rounded-xl border-gray-200 py-3 focus:ring-blue-500 focus:border-blue-500 transition-all">
                         </div>
 
-                        <button type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-100 transition transform hover:scale-[1.02] flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
+                        <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-200 transition-all active:scale-95 uppercase tracking-widest text-sm flex items-center justify-center">
                             Ajukan Kunjungan
                         </button>
                     </form>
@@ -77,7 +73,7 @@
                             @forelse($visits as $visit)
                             <div class="p-6 hover:bg-gray-50 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div class="flex items-start space-x-4">
-                                    <div class="bg-blue-50 text-blue-600 p-3 rounded-xl">
+                                    <div class="bg-emerald-50 text-emerald-600 p-3 rounded-xl">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
