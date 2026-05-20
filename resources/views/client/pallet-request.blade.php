@@ -271,13 +271,13 @@
                             <p class="text-xs text-gray-400">Hand Gesture Edition — Live Preview</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
+                    <!-- <div class="flex items-center gap-3">
                         <button onclick="pvLaunchSecure()"
                             class="text-xs font-medium px-4 py-2 rounded-lg text-white transition-all duration-200 hover:opacity-90 active:scale-95"
                             style="background: linear-gradient(135deg, #1e3a5f, #2563eb);">
                             ↗ Buka Fullscreen
                         </button>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Iframe Container -->

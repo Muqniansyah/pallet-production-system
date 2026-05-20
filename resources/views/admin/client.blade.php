@@ -8,9 +8,9 @@
 
         <div class="mb-8">
             <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
-                Data <span class="text-slate-400 font-light">Client</span>
+                Data <span class="text-slate-400 font-light">Klien</span>
             </h1>
-            <p class="text-slate-500 mt-1">Kelola dan pantau daftar seluruh client yang terdaftar dalam sistem.</p>
+            <p class="text-slate-500 mt-1">Kelola dan pantau daftar seluruh klien yang terdaftar dalam sistem.</p>
         </div>
 
         <div class="overflow-x-auto bg-white rounded-lg shadow">

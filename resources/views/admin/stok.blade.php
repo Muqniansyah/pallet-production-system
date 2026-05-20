@@ -70,16 +70,34 @@
                     </div>
 
                     <!-- gambar -->
-                    <div>
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                    <div class="space-y-2">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400">
                             Gambar Produk
                         </label>
 
-                        <input type="file"
-                            name="gambar"
-                            class="w-full rounded-2xl border-slate-200 py-3 px-4">
-                    </div>
+                        <div class="relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 group cursor-pointer">
+                            <input type="file" name="gambar" id="input-gambar" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
 
+                            <div id="wrapper-panduan" class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                                <div class="p-3 bg-white rounded-xl shadow-sm border border-slate-100 text-slate-400 group-hover:text-slate-600 group-hover:scale-105 transition-all duration-200 mb-3">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <p id="teks-panduan" class="text-xs text-slate-600 font-medium">
+                                    <span class="text-blue-600 font-bold">Klik untuk unggah</span> atau seret gambar ke sini
+                                </p>
+                                <p id="info-file" class="text-[10px] text-slate-400 mt-1 uppercase tracking-wider">PNG, JPG, atau JPEG (Maks. 2MB)</p>
+                            </div>
+
+                            <div id="wrapper-preview" class="hidden absolute inset-0 w-full h-full p-2 flex items-center justify-center bg-white rounded-2xl">
+                                <img id="preview-gambar" src="#" alt="Preview" class="max-h-full max-w-full rounded-xl object-contain shadow-sm">
+                                <span class="absolute bottom-2 right-2 bg-slate-900/70 backdrop-blur-sm text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-md pointer-events-none">
+                                    Ganti Gambar
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     <!-- keterangan -->
                     <div>
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
@@ -397,8 +415,7 @@
                 <!-- tombol -->
                 <div class="flex items-end">
                     <button type="submit"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 rounded-xl transition">
-
+                        class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 rounded-xl transition">
                         Tambah Stok
                     </button>
                 </div>
@@ -406,5 +423,30 @@
             </form>
         </div>
     </div>
+
+    <script>
+        // unggah gambar
+        document.getElementById('input-gambar').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const wrapperPanduan = document.getElementById('wrapper-panduan');
+            const wrapperPreview = document.getElementById('wrapper-preview');
+            const previewGambar = document.getElementById('preview-gambar');
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    // Pasang src gambar ke elemen img preview
+                    previewGambar.src = event.target.result;
+
+                    // Sembunyikan teks panduan, tampilkan gambar
+                    wrapperPanduan.classList.add('hidden');
+                    wrapperPreview.classList.remove('hidden');
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 
 </x-app-layout>

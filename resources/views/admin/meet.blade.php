@@ -6,7 +6,7 @@
                 <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
                     Data Jadwal <span class="text-slate-400 font-light">Meeting</span>
                 </h1>
-                <p class="text-sm text-slate-500 mt-1">Kelola dan tinjau semua permintaan meeting dari client.</p>
+                <p class="text-sm text-slate-500 mt-1">Kelola dan tinjau semua permintaan meeting dari klien.</p>
             </div>
         </div>
 
@@ -78,7 +78,7 @@
                                     {{-- FORM APPROVE --}}
                                     <form action="/admin/meeting/{{ $meeting->id }}/approve" method="POST" class="w-full">
                                         @csrf
-                                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02]">
+                                        <button type="submit" class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02]">
                                             Disetujui
                                         </button>
                                     </form>
@@ -107,7 +107,7 @@
                                     Start Meeting
                                 </a>
                                 @else
-                                <span class="text-xs text-gray-400 italic font-medium">No action needed</span>
+                                <span class="text-xs text-gray-400 italic font-medium">Selesai</span>
                                 @endif
                                 @endif
                             </div>

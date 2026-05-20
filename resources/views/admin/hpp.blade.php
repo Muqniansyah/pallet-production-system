@@ -66,7 +66,7 @@
                             </div>
 
                             <button type="submit"
-                                class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">
+                                class="w-full uppercase bg-blue-600 text-white font-bold py-3 rounded-xl">
                                 Buat Pesanan
                             </button>
                         </form>
@@ -78,7 +78,7 @@
                     <div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl border border-blue-100 p-6 h-full">
                         <h3 class="text-lg font-bold text-indigo-900 mb-4 flex items-center">
                             <span class="bg-indigo-200 text-indigo-700 w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm">2</span>
-                            Upload Dokumen HPP
+                            Unggah Dokumen HPP
                         </h3>
 
                         <form action="{{ route('admin.hpp.store') }}" method="POST" enctype="multipart/form-data">
@@ -114,7 +114,7 @@
 
                                     <div id="hppContent">
                                         <p id="hppPrimaryText" class="text-xs font-black text-slate-600 uppercase italic tracking-tight">
-                                            Klik untuk upload file HPP
+                                            Klik untuk unggah file HPP
                                         </p>
                                         <p id="hppSecondaryText" class="text-[10px] text-slate-400 mt-1">
                                             PDF atau Excel (Maks. 5MB)
@@ -125,7 +125,7 @@
 
                             <button type="submit"
                                 class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-3 rounded-xl shadow-lg shadow-indigo-100 transition transform hover:scale-[1.02] uppercase tracking-widest">
-                                Upload HPP
+                                Unggah HPP
                             </button>
                         </form>
                     </div>

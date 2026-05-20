@@ -13,10 +13,10 @@
             <div class="mb-12 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
                 <div class="p-8 border-b border-slate-50 flex items-center justify-between">
                     <h3 class="text-sm font-black text-slate-800 uppercase italic tracking-tight flex items-center gap-2">
-                        <span class="w-2 h-5 bg-blue-600 rounded-full"></span>
+                        <span class="w-2 h-5 bg-emerald-500 rounded-full"></span>
                         Pesanan Saya
                     </h3>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Requests</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Daftar Pesanan</span>
                 </div>
 
                 <div class="overflow-x-auto" id="orders-table-wrapper">
@@ -33,7 +33,7 @@
                         <tbody class="divide-y divide-slate-50">
                             @forelse($orders as $order)
                             <tr class="hover:bg-slate-50/30 transition-colors">
-                                <td class="px-8 py-5 text-xs font-bold text-blue-600">
+                                <td class="px-8 py-5 text-xs font-bold text-emerald-600">
                                     #REQ-{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}
                                 </td>
                                 <td class="px-8 py-5 text-xs font-bold text-slate-800 uppercase italic">
@@ -114,7 +114,7 @@
                             <tr class="bg-slate-50/50">
                                 <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Request ID</th>
                                 <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Project</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Hasil Upload HPP</th>
+                                <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Hasil Unggah HPP</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">

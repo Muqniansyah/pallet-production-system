@@ -6,7 +6,7 @@
                 <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
                     Data Pengajuan <span class="text-slate-400 font-light">Palet</span>
                 </h1>
-                <p class="text-sm text-slate-500 mt-1">Manajemen persetujuan pengajuan palet dari client secara real-time.</p>
+                <p class="text-sm text-slate-500 mt-1">Manajemen persetujuan pengajuan palet dari klien secara real-time.</p>
             </div>
         </div>
 
@@ -111,7 +111,7 @@
                                     <div class="flex flex-col gap-1.5 w-32">
                                         <form action="/admin/pallet-request/{{ $req->id }}/approve" method="POST">
                                             @csrf
-                                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 rounded-lg transition">
+                                            <button type="submit" class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold py-1.5 rounded-lg transition">
                                                 Disetujui
                                             </button>
                                         </form>
@@ -129,7 +129,7 @@
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <span class="text-[8px] font-black uppercase tracking-widest mt-1 text-gray-400">Processed</span>
+                                        <span class="text-[8px] font-black uppercase tracking-widest mt-1 text-gray-400">Diproses</span>
                                     </div>
                                     @endif
                                 </div>

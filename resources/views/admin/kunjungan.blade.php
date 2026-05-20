@@ -69,7 +69,7 @@
                                     {{-- BUTTON APPROVE --}}
                                     <form action="{{ route('admin.kunjungan.approve', $visit->id) }}" method="POST" class="w-full">
                                         @csrf
-                                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black py-2 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
+                                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black py-2 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
                                             Disetujui
                                         </button>
                                     </form>
@@ -91,7 +91,7 @@
                                 </div>
                                 @else
                                 <div class="text-center">
-                                    <span class="text-[10px] font-bold text-slate-300 uppercase italic">No Action Needed</span>
+                                    <span class="text-[10px] font-bold text-slate-300 uppercase italic">Selesai</span>
                                 </div>
                                 @endif
                             </td>
