@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Order;
+use App\Models\Pesanan;
 use App\Models\User;
 use App\Models\PalletRequest;
 
-class OrderController extends Controller
+class PesananController extends Controller
 {
     public function index()
     {
         $clients = User::where('role', 'client')->get();
-        $orders = Order::with('client')->latest()->get();
+        $pesanan = Pesanan::with('client')->latest()->get();
 
-        return view('admin.hpp.index', compact('clients', 'orders'));
+        return view('admin.hpp.index', compact('clients', 'pesanan'));
     }
 
     public function store(Request $request)
@@ -25,14 +25,14 @@ class OrderController extends Controller
             'nama_project' => 'required|string|max:255',
         ]);
 
-        // cegah double order
-        if (Order::where('pallet_request_id', $request->pallet_request_id)->exists()) {
-            return back()->with('error', 'Request ini sudah dibuat order!');
+        // cegah double pesanan
+        if (Pesanan::where('pallet_request_id', $request->pallet_request_id)->exists()) {
+            return back()->with('error', 'Pesanan sudah pernah dibuat!');
         }
 
         $palletRequest = PalletRequest::findOrFail($request->pallet_request_id);
 
-        Order::create([
+        Pesanan::create([
             'client_id' => $palletRequest->client_id, // otomatis
             'pallet_request_id' => $palletRequest->id,
             'nama_project' => $request->nama_project,
@@ -40,14 +40,14 @@ class OrderController extends Controller
             'status' => 'pending'
         ]);
 
-        return back()->with('success', 'Order berhasil dibuat dari request');
+        return back()->with('success', 'Pesanan berhasil dibuat!');
     }
 
     public function updateStatus($id, $status)
     {
-        $order = Order::findOrFail($id);
+        $pesanan = Pesanan::findOrFail($id);
 
-        $order->update([
+        $pesanan->update([
             'status' => $status
         ]);
 

@@ -7,13 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Hpp extends Model
 {
     protected $fillable = [
-        'order_id',
+        'pesanan_id',
         'file_hpp',
-        'keterangan'
     ];
 
-    public function order()
+    public function pesanan()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Pesanan::class);
     }
 }

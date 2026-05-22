@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 // pemanggilan model
-use App\Models\Order;
+use App\Models\Pesanan;
 use App\Models\PalletRequest;
 use App\Models\MeetingRequest;
 use App\Models\Hpp;
@@ -25,7 +25,7 @@ class AdminDashboardController extends Controller
         */
 
         // Total seluruh pesanan
-        $totalOrders = Order::count();
+        $totalPesanan = Pesanan::count();
 
         // Total seluruh pengajuan pallet
         $totalRequests = PalletRequest::count();
@@ -36,7 +36,7 @@ class AdminDashboardController extends Controller
         |--------------------------------------------------------------------------
         |
         | Client dianggap aktif apabila memiliki
-        | order dengan status "deal"
+        | pesanan dengan status "deal"
         |
         | Query ini dijalankan menggunakan PostgreSQL
         | melalui Eloquent ORM Laravel.
@@ -44,13 +44,13 @@ class AdminDashboardController extends Controller
         */
 
         $activeClients = User::where('role', 'client')
-            ->whereHas('orders', function ($query) {
+            ->whereHas('pesanan', function ($query) {
                 $query->where('status', 'deal');
             })
             ->count();
 
-        // Riwayat Aktivitas Order
-        $orders = Order::with('client')
+        // Riwayat Aktivitas Pesanan
+        $pesanan = Pesanan::with('client')
             ->orderByDesc('created_at')
             ->get()
             ->map(function ($item) {
@@ -105,7 +105,7 @@ class AdminDashboardController extends Controller
             });
 
         // Riwayat Upload HPP
-        $hpps = Hpp::with('order.client')
+        $hpps = Hpp::with('pesanan.client')
             ->orderByDesc('created_at')
             ->get()
             ->map(function ($item) {
@@ -126,7 +126,7 @@ class AdminDashboardController extends Controller
 
         // Gabungkan Seluruh Aktivitas & sort
         $allLogs = collect()
-            ->merge($orders)
+            ->merge($pesanan)
             ->merge($requests)
             ->merge($meetings)
             ->merge($hpps)
@@ -152,7 +152,7 @@ class AdminDashboardController extends Controller
 
         // mengembalikan ke tampilan
         return view('admin.dashboard', compact(
-            'totalOrders',
+            'totalPesanan',
             'totalRequests',
             'activeClients',
             'logs'

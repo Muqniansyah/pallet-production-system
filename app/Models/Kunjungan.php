@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VisitSchedule extends Model
+class Kunjungan extends Model
 {
+    protected $table = 'kunjungan';
+
     protected $fillable = [
         'client_id',
-        'title',
-        'visit_date',
+        'judul',
+        'tanggal_kunjungan',
         'status',
-        'note'
+        'keterangan'
     ];
 
     public function client()

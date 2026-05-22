@@ -25,36 +25,36 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50">
-                        @forelse($visits as $visit)
+                        @forelse($kunjungan as $item)
                         <tr class="hover:bg-slate-50/30 transition-colors">
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs mr-3">
-                                        {{ substr($visit->client->name ?? 'C', 0, 1) }}
+                                        {{ substr($item->client->name ?? 'C', 0, 1) }}
                                     </div>
-                                    <span class="text-sm font-semibold text-slate-700">{{ $visit->client->name ?? 'Client' }}</span>
+                                    <span class="text-sm font-semibold text-slate-700">{{ $item->client->name ?? 'Client' }}</span>
                                 </div>
                             </td>
 
                             <td class="px-6 py-4 text-sm text-slate-600 font-medium">
-                                {{ $visit->title }}
+                                {{ $item->judul }}
                             </td>
 
                             <td class="px-6 py-4">
                                 <div class="flex flex-col">
-                                    <span class="text-sm font-bold text-slate-700">{{ \Carbon\Carbon::parse($visit->visit_date)->format('d M Y') }}</span>
-                                    <span class="text-xs text-slate-400">{{ \Carbon\Carbon::parse($visit->visit_date)->format('H:i') }} WIB</span>
+                                    <span class="text-sm font-bold text-slate-700">{{ \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('d M Y') }}</span>
+                                    <span class="text-xs text-slate-400">{{ \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('H:i') }} WIB</span>
                                 </div>
                             </td>
 
                             <td class="px-6 py-4 text-center">
-                                @if($visit->status == 'approved')
+                                @if($item->status == 'disetujui')
                                 <span class="inline-flex px-3 py-1 text-[10px] font-black uppercase tracking-tighter bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full">
-                                    Approved
+                                    Disetujui
                                 </span>
-                                @elseif($visit->status == 'rejected')
+                                @elseif($item->status == 'ditolak')
                                 <span class="inline-flex px-3 py-1 text-[10px] font-black uppercase tracking-tighter bg-rose-50 text-rose-600 border border-rose-100 rounded-full">
-                                    Rejected
+                                    Ditolak
                                 </span>
                                 @else
                                 <span class="inline-flex px-3 py-1 text-[10px] font-black uppercase tracking-tighter bg-amber-50 text-amber-600 border border-amber-100 rounded-full">
@@ -64,10 +64,10 @@
                             </td>
 
                             <td class="px-6 py-4">
-                                @if($visit->status == 'pending')
+                                @if($item->status == 'pending')
                                 <div class="flex flex-col gap-2 ml-auto w-32">
                                     {{-- BUTTON APPROVE --}}
-                                    <form action="{{ route('admin.kunjungan.approve', $visit->id) }}" method="POST" class="w-full">
+                                    <form action="{{ route('admin.kunjungan.approve', $item->id) }}" method="POST" class="w-full">
                                         @csrf
                                         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black py-2 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
                                             Disetujui
@@ -75,11 +75,11 @@
                                     </form>
 
                                     {{-- FORM REJECT --}}
-                                    <form action="{{ route('admin.kunjungan.reject', $visit->id) }}" method="POST" class="flex flex-col gap-1.5 w-full">
+                                    <form action="{{ route('admin.kunjungan.reject', $item->id) }}" method="POST" class="flex flex-col gap-1.5 w-full">
                                         @csrf
                                         <input
                                             type="text"
-                                            name="note"
+                                            name="keterangan"
                                             placeholder="Alasan..."
                                             required
                                             class="w-full bg-white border border-slate-200 text-[10px] text-slate-700 rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2 outline-none placeholder:text-slate-300">
@@ -115,9 +115,9 @@
                 </table>
 
                 <!-- pagination -->
-                @if($visits->hasPages())
+                @if($kunjungan->hasPages())
                 <div class="px-6 py-4 border-t border-slate-100 visits-pagination">
-                    {{ $visits->links() }}
+                    {{ $kunjungan->links() }}
                 </div>
                 @endif
             </div>

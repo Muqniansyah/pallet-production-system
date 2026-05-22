@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('meeting_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('users')->onDelete('cascade');
-            $table->string('title');
-            $table->text('description')->nullable();
+            $table->string('judul');
+            $table->text('deskripsi')->nullable();
             $table->dateTime('start_time');
-            $table->integer('duration'); // menit
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->text('note')->nullable();
+            $table->integer('durasi'); // menit
+            $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
+            $table->text('keterangan')->nullable();
             $table->string('zoom_meeting_id')->nullable();
             $table->text('start_url')->nullable();
             $table->text('join_url')->nullable();

@@ -26,10 +26,10 @@ class ZoomService
         $response = Http::withToken($token)->post(
             'https://api.zoom.us/v2/users/me/meetings',
             [
-                'topic' => $data['title'],
+                'topic' => $data['judul'],
                 'type' => 2,
                 'start_time' => $data['start_time'],
-                'duration' => $data['duration'],
+                'duration' => $data['durasi'],
                 'timezone' => 'Asia/Jakarta',
             ]
         );

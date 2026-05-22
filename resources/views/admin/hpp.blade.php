@@ -33,7 +33,7 @@
                             Buat Pesanan
                         </h3>
 
-                        <form action="{{ route('admin.orders.store') }}" method="POST" class="space-y-5">
+                        <form action="{{ route('admin.pesanan.store') }}" method="POST" class="space-y-5">
                             @csrf
 
                             {{-- PILIH REQUEST PALET --}}
@@ -60,9 +60,7 @@
                             {{-- QTY --}}
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 mb-2">Jumlah (Qty)</label>
-                                <input id="qtyInput" type="number" readonly
-                                    class="w-full rounded-xl border-gray-200 py-3"
-                                    placeholder="Masukkan jumlah pallet">
+                                <input id="qtyInput" type="number" readonly class="w-full rounded-xl border-gray-200 py-3">
                             </div>
 
                             <button type="submit"
@@ -90,11 +88,11 @@
                                     Pilih Pesanan (Status Deal) 'Nama Klien - Nama Project'
                                 </label>
 
-                                <select name="order_id" required class="w-full mt-2 rounded-xl border-gray-200">
+                                <select name="pesanan_id" required class="w-full mt-2 rounded-xl border-gray-200">
                                     <option value="" disabled selected>Pilih Pesanan...</option>
-                                    @foreach($ordersForUpload as $order)
-                                    <option value="{{ $order->id }}">
-                                        {{ $order->client->name }} - {{ $order->nama_project }}
+                                    @foreach($pesananForUpload as $p)
+                                    <option value="{{  $p->id }}">
+                                        {{ $p->client->name }} - {{ $p->nama_project }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -151,35 +149,35 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-100 text-sm">
-                        @forelse($orders as $order)
+                        @forelse($pesanan as $p)
                         <tr class="hover:bg-gray-50">
 
                             {{-- CLIENT --}}
                             <td class="px-6 py-4 font-medium text-gray-900">
-                                {{ $order->client->name }}
+                                {{ $p->client->name }}
                             </td>
 
                             {{-- PROJECT --}}
                             <td class="px-6 py-4">
-                                {{ $order->nama_project }}
+                                {{ $p->nama_project }}
                             </td>
 
                             {{-- QTY --}}
                             <td class="px-6 py-4">
-                                {{ $order->qty }}
+                                {{ $p->qty }}
                             </td>
 
                             {{-- STATUS --}}
                             <td class="px-6 py-4">
-                                @if($order->status == 'pending')
+                                @if($p->status == 'pending')
                                 <span class="px-2 py-1 text-xs font-bold bg-yellow-100 text-yellow-700 rounded">
                                     Pending
                                 </span>
-                                @elseif($order->status == 'deal')
+                                @elseif($p->status == 'deal')
                                 <span class="px-2 py-1 text-xs font-bold bg-green-100 text-green-700 rounded">
                                     Deal
                                 </span>
-                                @elseif($order->status == 'batal')
+                                @elseif($p->status == 'batal')
                                 <span class="px-2 py-1 text-xs font-bold bg-red-100 text-red-700 rounded">
                                     Batal
                                 </span>
@@ -188,7 +186,7 @@
 
                             {{-- TANGGAL --}}
                             <td class="px-6 py-4 text-right text-gray-400">
-                                {{ $order->created_at->format('d M Y') }}
+                                {{ $p->created_at->format('d M Y') }}
                             </td>
 
                         </tr>
@@ -203,9 +201,9 @@
                 </table>
 
                 {{-- PAGINATION --}}
-                @if($orders->hasPages())
+                @if($pesanan->hasPages())
                 <div class="px-6 py-4 border-t border-gray-100 orders-pagination">
-                    {{ $orders->links() }}
+                    {{ $pesanan->links() }}
                 </div>
                 @endif
             </div>
@@ -231,12 +229,12 @@
                         <tr class="hover:bg-gray-50">
                             {{-- KLIEN --}}
                             <td class="px-6 py-4 font-medium text-gray-900">
-                                {{ $hpp->order->client->name }}
+                                {{ $hpp->pesanan->client->name }}
                             </td>
 
                             {{-- PROJECT --}}
                             <td class="px-6 py-4">
-                                {{ $hpp->order->nama_project }}
+                                {{ $hpp->pesanan->nama_project }}
                             </td>
 
                             {{-- FILE --}}

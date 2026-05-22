@@ -4,30 +4,30 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\VisitSchedule;
+use App\Models\Kunjungan;
 
-class VisitScheduleController extends Controller
+class KunjunganController extends Controller
 {
     public function index()
     {
-        $visits = VisitSchedule::where('client_id', auth()->id())
+        $kunjungan = Kunjungan::where('client_id', auth()->id())
             ->latest()
             ->paginate(3);
 
-        return view('client.kunjungan', compact('visits'));
+        return view('client.kunjungan', compact('kunjungan'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'visit_date' => 'required|date',
+            'judul' => 'required|string|max:255',
+            'tanggal_kunjungan' => 'required|date',
         ]);
 
-        VisitSchedule::create([
+        Kunjungan::create([
             'client_id' => auth()->id(),
-            'title' => $request->title,
-            'visit_date' => $request->visit_date,
+            'judul' => $request->judul,
+            'tanggal_kunjungan' => $request->tanggal_kunjungan,
             'status' => 'pending'
         ]);
 

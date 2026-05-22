@@ -4,24 +4,24 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Order;
+use App\Models\Pesanan;
 use App\Models\ProdukKayu;
 
-class OrderController extends Controller
+class PesananController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('hpp')
+        $pesanan = Pesanan::with('hpp')
             ->where('client_id', auth()->id())
             ->latest()
-            ->paginate(5, ['*'], 'orders_page');
+            ->paginate(5, ['*'], 'pesanan_page');
 
-        return view('client.orders', compact('orders'));
+        return view('client.pesanan', compact('pesanan'));
     }
 
     public function setDeal($id)
     {
-        $order = Order::with('palletRequest')
+        $pesanan = Pesanan::with('palletRequest')
             ->where('client_id', auth()->id())
             ->findOrFail($id);
 
@@ -29,7 +29,7 @@ class OrderController extends Controller
         $produk = ProdukKayu::with('stok')
             ->where(
                 'nama_produk',
-                $order->palletRequest->jenis_palet
+                $pesanan->palletRequest->jenis_palet
             )
             ->first();
 
@@ -37,7 +37,7 @@ class OrderController extends Controller
         if ($produk && $produk->stok) {
 
             // cek stok cukup atau tidak
-            if ($produk->stok->stok < $order->qty) {
+            if ($produk->stok->stok < $pesanan->qty) {
                 return back()->with(
                     'error',
                     'Stok produk tidak mencukupi'
@@ -47,27 +47,27 @@ class OrderController extends Controller
             // kurangi stok
             $produk->stok->decrement(
                 'stok',
-                $order->qty
+                $pesanan->qty
             );
         }
 
-        // ubah status order
-        $order->update([
+        // ubah status pesanan
+        $pesanan->update([
             'status' => 'deal'
         ]);
 
         return back()->with(
             'success',
-            'Order siap diproses HPP'
+            'Pesanan siap diproses HPP'
         );
     }
 
     public function cancel($id)
     {
-        $order = Order::where('client_id', auth()->id())
+        $pesanan = Pesanan::where('client_id', auth()->id())
             ->findOrFail($id);
 
-        $order->update([
+        $pesanan->update([
             'status' => 'batal'
         ]);
 

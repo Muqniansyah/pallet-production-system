@@ -4,25 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\VisitSchedule;
+use App\Models\Kunjungan;
 
-class AdminVisitScheduleController extends Controller
+class AdminKunjunganController extends Controller
 {
     public function index()
     {
-        $visits = VisitSchedule::with('client')
+        $kunjungan = Kunjungan::with('client')
             ->latest()
             ->paginate(5);
 
-        return view('admin.kunjungan', compact('visits'));
+        return view('admin.kunjungan', compact('kunjungan'));
     }
 
     public function approve($id)
     {
-        $visit = VisitSchedule::findOrFail($id);
+        $kunjungan = Kunjungan::findOrFail($id);
 
-        $visit->update([
-            'status' => 'approved'
+        $kunjungan->update([
+            'status' => 'disetujui'
         ]);
 
         return back()->with('success', 'Kunjungan disetujui');
@@ -31,14 +31,14 @@ class AdminVisitScheduleController extends Controller
     public function reject(Request $request, $id)
     {
         $request->validate([
-            'note' => 'required|string|max:500'
+            'keterangan' => 'required|string|max:500'
         ]);
 
-        $visit = VisitSchedule::findOrFail($id);
+        $kunjungan = Kunjungan::findOrFail($id);
 
-        $visit->update([
-            'status' => 'rejected',
-            'note' => $request->note
+        $kunjungan->update([
+            'status' => 'ditolak',
+            'keterangan' => $request->keterangan
         ]);
 
         return back()->with('success', 'Kunjungan ditolak dengan alasan');

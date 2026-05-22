@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 // pemanggilan model
 use App\Models\PalletRequest;
 use App\Models\MeetingRequest;
-use App\Models\Order;
+use App\Models\Pesanan;
 
 // pemanggilan pagination
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -30,8 +30,8 @@ class DashboardController extends Controller
             ->latest()
             ->get();
 
-        // CARD Total HPP Yang Sudah Diunggah - jumlah order client yang punya relasi HPP.
-        $hppCount = Order::where('client_id', $userId)
+        // CARD Total HPP Yang Sudah Diunggah - jumlah pesanan client yang punya relasi HPP.
+        $hppCount = Pesanan::where('client_id', $userId)
             ->whereHas('hpp')
             ->count();
 
@@ -40,8 +40,8 @@ class DashboardController extends Controller
             ->where('status', 'approved')
             ->count();
 
-        // CARD pesanan aktif klien - jumlah order client dengan status deal.
-        $activeOrders = Order::where('client_id', $userId)
+        // CARD pesanan aktif klien - jumlah pesanan client dengan status deal.
+        $activePesanan = Pesanan::where('client_id', $userId)
             ->where('status', 'deal')
             ->count();
 
@@ -95,7 +95,7 @@ class DashboardController extends Controller
             'logs',
             'hppCount',
             'totalProject',
-            'activeOrders'
+            'activePesanan'
         ));
     }
 }

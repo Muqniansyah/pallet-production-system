@@ -8,10 +8,10 @@ use App\Http\Controllers\ProfileController;
 // Admin Controllers
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMeetingController;
-use App\Http\Controllers\Admin\AdminVisitScheduleController;
+use App\Http\Controllers\Admin\AdminKunjunganController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\HppController;
-use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PesananController as AdminPesananController;
 use App\Http\Controllers\Admin\PalletRequestController as AdminPalletRequestController;
 use App\Http\Controllers\Admin\StokKayuController;
 
@@ -20,11 +20,11 @@ use App\Http\Controllers\Client\DashboardController;
 use App\Http\Controllers\Client\InformasiController;
 use App\Http\Controllers\Client\MeetController;
 use App\Http\Controllers\Client\MeetingRequestController;
-use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Client\PesananController;
 use App\Http\Controllers\Client\PaletDesignController;
 use App\Http\Controllers\Client\PalletRequestController;
 use App\Http\Controllers\Client\ReferensiController;
-use App\Http\Controllers\Client\VisitScheduleController;
+use App\Http\Controllers\Client\KunjunganController;
 
 // halaman splash sipalet
 Route::get('/', function () {
@@ -65,9 +65,9 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
     Route::post('/hpp/upload', [HppController::class, 'store'])->name('admin.hpp.store');
 
     // order
-    Route::post('/orders', [AdminOrderController::class, 'store'])->name('admin.orders.store');
-    Route::post('/orders/{id}/{status}', [AdminOrderController::class, 'updateStatus'])
-        ->name('admin.orders.updateStatus');
+    Route::post('/pesanan', [AdminPesananController::class, 'store'])->name('admin.pesanan.store');
+    Route::post('/pesanan/{id}/{status}', [AdminPesananController::class, 'updateStatus'])
+        ->name('admin.pesanan.updateStatus');
 
     // pallet request
     Route::get('/pallet-request', [AdminPalletRequestController::class, 'index'])
@@ -77,13 +77,13 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
     Route::post('/pallet-request/{id}/reject', [AdminPalletRequestController::class, 'reject']);
 
     // jadwal kunjungan
-    Route::get('/kunjungan', [AdminVisitScheduleController::class, 'index'])
+    Route::get('/kunjungan', [AdminKunjunganController::class, 'index'])
         ->name('admin.kunjungan');
 
-    Route::post('/kunjungan/{id}/approve', [AdminVisitScheduleController::class, 'approve'])
+    Route::post('/kunjungan/{id}/approve', [AdminKunjunganController::class, 'approve'])
         ->name('admin.kunjungan.approve');
 
-    Route::post('/kunjungan/{id}/reject', [AdminVisitScheduleController::class, 'reject'])
+    Route::post('/kunjungan/{id}/reject', [AdminKunjunganController::class, 'reject'])
         ->name('admin.kunjungan.reject');
 
     // stok kayu
@@ -120,14 +120,14 @@ Route::middleware(['auth'])->prefix('client')->group(function () {
         ->name('client.pallet.store');
 
     // order
-    Route::get('/orders', [OrderController::class, 'index'])
-        ->name('client.orders');
+    Route::get('/pesanan', [PesananController::class, 'index'])
+        ->name('client.pesanan');
 
-    Route::post('/orders/{id}/deal', [OrderController::class, 'setDeal'])
-        ->name('client.orders.deal');
+    Route::post('/pesanan/{id}/deal', [PesananController::class, 'setDeal'])
+        ->name('client.pesanan.deal');
 
-    Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel'])
-        ->name('client.orders.cancel');
+    Route::patch('/pesanan/{id}/cancel', [PesananController::class, 'cancel'])
+        ->name('client.pesanan.cancel');
 
     // Reference
     Route::get('/referensi', [ReferensiController::class, 'index']);
@@ -144,10 +144,10 @@ Route::middleware(['auth'])->prefix('client')->group(function () {
         ->name('client.palet.index');
 
     // jadwal kunjungan
-    Route::get('/kunjungan', [VisitScheduleController::class, 'index'])
+    Route::get('/kunjungan', [KunjunganController::class, 'index'])
         ->name('client.kunjungan');
 
-    Route::post('/kunjungan', [VisitScheduleController::class, 'store'])
+    Route::post('/kunjungan', [KunjunganController::class, 'store'])
         ->name('client.kunjungan.store');
 });
 

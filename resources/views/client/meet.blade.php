@@ -29,12 +29,12 @@
                         @csrf
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Judul Meeting</label>
-                            <input type="text" name="title" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Contoh: Konsultasi Proyek">
+                            <input type="text" name="judul" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Contoh: Konsultasi Proyek">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                            <textarea name="description" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Detail singkat..."></textarea>
+                            <textarea name="deskripsi" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Detail singkat..."></textarea>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
@@ -44,7 +44,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Durasi (Menit)</label>
-                                <select name="duration" required
+                                <select name="durasi" required
                                     class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                                     <option value="15">15 menit</option>
                                     <option value="30">30 menit</option>
@@ -83,10 +83,10 @@
                                 @forelse($meetings as $meeting)
                                 <tr class="hover:bg-blue-50/50 transition-colors">
                                     <td class="px-6 py-4">
-                                        <span class="text-sm font-medium text-gray-900">{{ $meeting->title }}</span>
+                                        <span class="text-sm font-medium text-gray-900">{{ $meeting->judul }}</span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <span class="text-sm font-normal text-gray-600">{{ $meeting->description }}</span>
+                                        <span class="text-sm font-normal text-gray-600">{{ $meeting->deskripsi }}</span>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600">
                                         {{ \Carbon\Carbon::parse($meeting->start_time)->format('d M Y, H:i') }}
@@ -95,8 +95,8 @@
                                         @php
                                         $statusColor = [
                                         'pending' => 'bg-yellow-100 text-yellow-700',
-                                        'approved' => 'bg-green-100 text-green-700',
-                                        'rejected' => 'bg-red-100 text-red-700',
+                                        'disetujui' => 'bg-green-100 text-green-700',
+                                        'ditolak' => 'bg-red-100 text-red-700',
                                         ][$meeting->status] ?? 'bg-gray-100 text-gray-700';
                                         @endphp
                                         <span class="px-2.5 py-1 rounded-full text-xs font-medium {{ $statusColor }}">
@@ -116,8 +116,8 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 text-sm">
-                                        @if($meeting->status === 'rejected')
-                                        {{ $meeting->note }}
+                                        @if($meeting->status === 'ditolak')
+                                        {{ $meeting->keterangan }}
                                         @else
                                         -
                                         @endif
@@ -125,8 +125,8 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-10 text-center text-gray-400 italic">
-                                        Belum ada data request.
+                                    <td colspan="6" class="px-6 py-10 text-center text-gray-400 italic">
+                                        Belum ada data meeting.
                                     </td>
                                 </tr>
                                 @endforelse

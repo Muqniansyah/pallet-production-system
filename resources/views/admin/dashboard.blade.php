@@ -36,7 +36,7 @@
                         <span class="text-[10px] font-black text-slate-300 uppercase italic">Permintaan</span>
                     </div>
                     <h3 class="text-slate-500 text-[10px] font-black uppercase tracking-widest">Total Pesanan</h3>
-                    <p class="text-3xl font-black text-slate-800 mt-1">{{ number_format($totalOrders) }}</p>
+                    <p class="text-3xl font-black text-slate-800 mt-1">{{ number_format($totalPesanan) }}</p>
                 </div>
 
                 <!-- card total pengajuan -->

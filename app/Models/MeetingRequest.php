@@ -9,12 +9,12 @@ class MeetingRequest extends Model
 {
     protected $fillable = [
         'client_id',
-        'title',
-        'description',
+        'judul',
+        'deskripsi',
         'start_time',
-        'duration',
+        'durasi',
         'status',
-        'note',
+        'keterangan',
         'zoom_meeting_id',
         'start_url',
         'join_url',

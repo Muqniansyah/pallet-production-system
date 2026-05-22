@@ -31,32 +31,32 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
-                            @forelse($orders as $order)
+                            @forelse($pesanan as $p)
                             <tr class="hover:bg-slate-50/30 transition-colors">
                                 <td class="px-8 py-5 text-xs font-bold text-emerald-600">
-                                    #REQ-{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}
+                                    #REQ-{{ str_pad($p->id, 5, '0', STR_PAD_LEFT) }}
                                 </td>
                                 <td class="px-8 py-5 text-xs font-bold text-slate-800 uppercase italic">
-                                    {{ $order->nama_project }}
+                                    {{ $p->nama_project }}
                                 </td>
                                 <td class="px-8 py-5 text-xs font-medium text-slate-600 text-center">
-                                    {{ number_format($order->qty) }} pcs
+                                    {{ number_format($p->qty) }} pcs
                                 </td>
                                 <td class="px-8 py-5">
-                                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter border {{ $order->status == 'deal' ? 'bg-green-50 text-green-600 border-green-100' : ($order->status == 'batal' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-amber-50 text-amber-600 border-amber-100') }}">
-                                        {{ $order->status }}
+                                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter border {{ $p->status == 'deal' ? 'bg-green-50 text-green-600 border-green-100' : ($p->status == 'batal' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-amber-50 text-amber-600 border-amber-100') }}">
+                                        {{ $p->status }}
                                     </span>
                                 </td>
                                 <td class="px-8 py-5">
                                     <div class="flex items-center gap-3">
-                                        @if($order->status == 'pending')
+                                        @if($p->status == 'pending')
                                         {{-- Tombol Ajukan Meeting --}}
                                         <a href="{{ url('client/meet') }}" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 border border-slate-200 text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
                                             Ajukan Meeting
                                         </a>
 
                                         {{-- Tombol Proses HPP --}}
-                                        <form action="{{ route('client.orders.deal', $order->id) }}" method="POST">
+                                        <form action="{{ route('client.pesanan.deal', $p->id) }}" method="POST">
                                             @csrf
                                             <button class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-[9px] font-black px-3 py-2 rounded-lg shadow-sm shadow-emerald-200 transition-all active:scale-95 uppercase tracking-tighter">
                                                 Proses HPP
@@ -64,7 +64,7 @@
                                         </form>
 
                                         {{-- Tombol Batalkan --}}
-                                        <form action="{{ route('client.orders.cancel', $order->id) }}" method="POST"
+                                        <form action="{{ route('client.pesanan.cancel', $p->id) }}" method="POST"
                                             onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?')">
                                             @csrf
                                             @method('PATCH')
@@ -91,9 +91,9 @@
                     </table>
 
                     <!-- pagination -->
-                    @if($orders->hasPages())
+                    @if($pesanan->hasPages())
                     <div class="px-6 py-4 border-t border-slate-100 orders-pagination">
-                        {{ $orders->links() }}
+                        {{ $pesanan->links() }}
                     </div>
                     @endif
                 </div>
@@ -118,13 +118,13 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
-                            @forelse($orders as $order)
-                            @if($order->hpp)
+                            @forelse($pesanan as $p)
+                            @if($p->hpp)
                             <tr class="hover:bg-slate-50/30 transition-colors">
-                                <td class="px-8 py-5 text-xs font-bold text-slate-500 uppercase">#REQ-{{ $order->id }}</td>
-                                <td class="px-8 py-5 text-xs font-bold text-slate-800 uppercase italic">{{ $order->nama_project }}</td>
+                                <td class="px-8 py-5 text-xs font-bold text-slate-500 uppercase">#REQ-{{ $p->id }}</td>
+                                <td class="px-8 py-5 text-xs font-bold text-slate-800 uppercase italic">{{ $p->nama_project }}</td>
                                 <td class="px-8 py-5">
-                                    <a href="{{ asset('storage/' . $order->hpp->file_hpp) }}" target="_blank" class="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-black text-[10px] uppercase tracking-widest transition-all">
+                                    <a href="{{ asset('storage/' . $p->hpp->file_hpp) }}" target="_blank" class="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-black text-[10px] uppercase tracking-widest transition-all">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2" />
                                         </svg>
@@ -137,7 +137,7 @@
                             @endforelse
 
                             {{-- Cek jika benar-benar tidak ada HPP dari semua order --}}
-                            @if(!$orders->contains(fn($o) => $o->hpp))
+                            @if(!$pesanan->contains(fn($o) => $o->hpp))
                             <tr>
                                 <td colspan="3" class="px-8 py-12 text-center text-slate-400 italic text-xs">Belum ada dokumen HPP yang terunggah.</td>
                             </tr>
@@ -146,9 +146,9 @@
                     </table>
 
                     <!-- pagination -->
-                    @if($orders->hasPages())
+                    @if($pesanan->hasPages())
                     <div class="px-6 py-4 border-t border-slate-100 hpp-pagination">
-                        {{ $orders->links() }}
+                        {{ $pesanan->links() }}
                     </div>
                     @endif
                 </div>

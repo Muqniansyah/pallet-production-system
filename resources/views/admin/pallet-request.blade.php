@@ -95,8 +95,8 @@
                                 @php
                                 $statusClasses = [
                                 'pending' => 'bg-amber-100 text-amber-700 border-amber-200',
-                                'approved' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
-                                'rejected' => 'bg-rose-100 text-rose-700 border-rose-200',
+                                'disetujui' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                                'ditolak' => 'bg-rose-100 text-rose-700 border-rose-200',
                                 ];
                                 @endphp
                                 <span class="px-2 py-1 rounded-full border text-[9px] font-black uppercase tracking-tighter whitespace-nowrap {{ $statusClasses[$req->status] ?? 'bg-gray-100' }}">
@@ -117,7 +117,7 @@
                                         </form>
                                         <form action="/admin/pallet-request/{{ $req->id }}/reject" method="POST" class="flex flex-col gap-1">
                                             @csrf
-                                            <input type="text" name="rejection_note" placeholder="Alasan..."
+                                            <input type="text" name="keterangan" placeholder="Alasan..."
                                                 class="w-full border border-slate-200 text-[10px] rounded-lg p-1.5 outline-none placeholder:text-slate-300">
                                             <button type="submit" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-400 text-[9px] font-black py-1.5 rounded-lg transition uppercase">
                                                 Ditolak
@@ -137,9 +137,9 @@
 
                             {{-- KETERANGAN --}}
                             <td class="px-3 py-4">
-                                @if($req->status == 'rejected' && $req->rejection_note)
-                                <p class="text-[10px] text-slate-500 italic max-w-[120px] truncate" title="{{ $req->rejection_note }}">
-                                    "{{ $req->rejection_note }}"
+                                @if($req->status == 'ditolak' && $req->keterangan)
+                                <p class="text-[10px] text-slate-500 italic max-w-[120px] truncate" title="{{ $req->keterangan }}">
+                                    "{{ $req->keterangan }}"
                                 </p>
                                 @else
                                 <span class="text-[10px] text-gray-300 italic">—</span>

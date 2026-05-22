@@ -43,14 +43,14 @@
 
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Judul Kunjungan</label>
-                            <input type="text" name="title" required
+                            <input type="text" name="judul" required
                                 class="w-full rounded-xl border-gray-200 py-3 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                 placeholder="Contoh: Peninjauan Palet">
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Waktu Kunjungan</label>
-                            <input type="datetime-local" name="visit_date" required
+                            <input type="datetime-local" name="tanggal_kunjungan" required
                                 class="w-full rounded-xl border-gray-200 py-3 focus:ring-blue-500 focus:border-blue-500 transition-all">
                         </div>
 
@@ -70,7 +70,7 @@
 
                     <div id="visits-wrapper">
                         <div class="divide-y divide-gray-100">
-                            @forelse($visits as $visit)
+                            @forelse($kunjungan as $item)
                             <div class="p-6 hover:bg-gray-50 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div class="flex items-start space-x-4">
                                     <div class="bg-emerald-50 text-emerald-600 p-3 rounded-xl">
@@ -79,36 +79,36 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-gray-900">{{ $visit->title }}</h4>
+                                        <h4 class="font-bold text-gray-900">{{ $item->judul }}</h4>
                                         <div class="flex items-center text-sm text-gray-500 mt-1">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
-                                            {{ \Carbon\Carbon::parse($visit->visit_date)->format('d M Y - H:i') }} WIB
+                                            {{ \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('d M Y - H:i') }} WIB
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="flex flex-col items-start gap-1">
 
-                                    @if($visit->status == 'pending')
+                                    @if($item->status == 'pending')
                                     <span class="px-3 py-1 text-xs font-black uppercase tracking-widest bg-amber-100 text-amber-700 rounded-full border border-amber-200">
                                         Pending
                                     </span>
 
-                                    @elseif($visit->status == 'approved')
+                                    @elseif($item->status == 'disetujui')
                                     <span class="px-3 py-1 text-xs font-black uppercase tracking-widest bg-emerald-100 text-emerald-700 rounded-full border border-emerald-200">
-                                        Approved
+                                        Disetujui
                                     </span>
 
-                                    @elseif($visit->status == 'rejected')
+                                    @elseif($item->status == 'ditolak')
                                     <span class="px-3 py-1 text-xs font-black uppercase tracking-widest bg-rose-100 text-rose-700 rounded-full border border-rose-200">
-                                        Rejected
+                                        Ditolak
                                     </span>
 
-                                    @if($visit->note)
+                                    @if($item->keterangan)
                                     <span class="text-[10px] text-rose-500 font-medium italic">
-                                        Alasan: {{ $visit->note }}
+                                        Alasan: {{ $item->keterangan }}
                                     </span>
                                     @endif
 
@@ -129,9 +129,9 @@
                         </div>
 
                         {{-- pagination --}}
-                        @if($visits->hasPages())
+                        @if($kunjungan->hasPages())
                         <div class="px-6 py-4 border-t border-gray-100 visits-pagination">
-                            {{ $visits->links() }}
+                            {{ $kunjungan->links() }}
                         </div>
                         @endif
                     </div>{{-- end visits-wrapper --}}

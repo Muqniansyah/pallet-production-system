@@ -9,14 +9,13 @@ class PalletRequest extends Model
 {
     protected $fillable = [
         'client_id',
-        'nama_project',
         'jenis_palet',
         'qty',
         'file_desain',
         'alamat_kirim',
         'catatan',
         'status',
-        'rejection_note',
+        'keterangan',
     ];
 
     public function client()
@@ -24,8 +23,8 @@ class PalletRequest extends Model
         return $this->belongsTo(User::class, 'client_id');
     }
 
-    public function order()
+    public function pesanan()
     {
-        return $this->hasOne(Order::class);
+        return $this->hasOne(Pesanan::class);
     }
 }

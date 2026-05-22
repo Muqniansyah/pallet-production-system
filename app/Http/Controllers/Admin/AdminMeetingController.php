@@ -24,13 +24,13 @@ class AdminMeetingController extends Controller
         $startTime = date('Y-m-d\TH:i:s', strtotime($meeting->start_time));
 
         $zoom = $zoomService->createMeeting([
-            'title' => $meeting->title,
+            'judul' => $meeting->judul,
             'start_time' => $startTime,
-            'duration' => $meeting->duration,
+            'durasi' => $meeting->durasi,
         ]);
 
         $meeting->update([
-            'status' => 'approved',
+            'status' => 'disetujui',
             'zoom_meeting_id' => $zoom['id'] ?? null,
             'join_url' => $zoom['join_url'] ?? null,
             'start_url' => $zoom['start_url'] ?? null,
@@ -43,14 +43,14 @@ class AdminMeetingController extends Controller
     public function reject(Request $request, $id)
     {
         $request->validate([
-            'note' => 'required|string'
+            'keterangan' => 'required|string'
         ]);
 
         $meeting = MeetingRequest::findOrFail($id);
 
         $meeting->update([
-            'status' => 'rejected',
-            'note' => $request->note,
+            'status' => 'ditolak',
+            'keterangan' => $request->keterangan,
         ]);
 
         return back()->with('success', 'Meeting ditolak');

@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('hpps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('pesanan_id')->constrained('pesanan')->onDelete('cascade');
             $table->string('file_hpp');
-            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

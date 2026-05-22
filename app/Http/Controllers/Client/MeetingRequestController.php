@@ -20,9 +20,9 @@ class MeetingRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'judul' => 'required',
             'start_time' => 'required|date|after:now',
-            'duration' => 'required|in:15,30,40',
+            'durasi' => 'required|in:15,30,40',
         ]);
 
         $userId = auth()->id();
@@ -38,10 +38,10 @@ class MeetingRequestController extends Controller
 
         MeetingRequest::create([
             'client_id' => $userId,
-            'title' => $request->title,
-            'description' => $request->description,
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
             'start_time' => $request->start_time,
-            'duration' => $request->duration,
+            'durasi' => $request->durasi,
         ]);
 
         return back()->with('success', 'Request berhasil dikirim');

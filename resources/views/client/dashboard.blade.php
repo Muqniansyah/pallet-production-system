@@ -40,7 +40,7 @@
                         <span class="text-[10px] font-black text-slate-300 uppercase italic">Aktif</span>
                     </div>
                     <h3 class="text-slate-500 text-[10px] font-black uppercase tracking-widest">Pesanan Aktif</h3>
-                    <p class="text-3xl font-black text-slate-800 mt-1">{{ number_format($activeOrders) }}</p>
+                    <p class="text-3xl font-black text-slate-800 mt-1">{{ number_format($activePesanan) }}</p>
                 </div>
 
                 <!-- card total project -->

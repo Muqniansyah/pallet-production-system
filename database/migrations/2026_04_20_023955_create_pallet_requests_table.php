@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('pallet_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('users')->onDelete('cascade');
-            $table->string('nama_project')->nullable();
             $table->string('jenis_palet');
             $table->integer('qty');
             $table->string('file_desain')->nullable();
             $table->text('alamat_kirim');
             $table->text('catatan')->nullable();
-            $table->string('status')->default('pending');
-            $table->text('rejection_note')->nullable();
+            $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

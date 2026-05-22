@@ -41,7 +41,6 @@ class PalletRequestController extends Controller
         // simpan ke database
         PalletRequest::create([
             'client_id' => auth()->id(),
-            'nama_project' => $request->nama_project,
             'jenis_palet' => $request->jenis_palet,
             'qty' => $request->qty,
             'file_desain' => $filePath,
@@ -50,6 +49,6 @@ class PalletRequestController extends Controller
             'status' => 'pending'
         ]);
 
-        return back()->with('success', 'Request palet berhasil dikirim');
+        return back()->with('success', 'Pengajuan palet berhasil dikirim');
     }
 }

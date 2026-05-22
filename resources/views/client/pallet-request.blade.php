@@ -193,12 +193,12 @@
                                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>
                                     Pending
                                 </span>
-                                @elseif($req->status == 'approved')
+                                @elseif($req->status == 'disetujui')
                                 <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 text-[10px] font-black uppercase tracking-wider">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
                                     Disetujui
                                 </span>
-                                @elseif($req->status == 'rejected')
+                                @elseif($req->status == 'ditolak')
                                 <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-200 text-[10px] font-black uppercase tracking-wider">
                                     <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span>
                                     Ditolak
@@ -213,10 +213,10 @@
 
                             {{-- KETERANGAN --}}
                             <td class="px-8 py-5">
-                                @if($req->status == 'rejected' && $req->rejection_note)
+                                @if($req->status == 'ditolak' && $req->keterangan)
                                 <div class="inline-flex items-start gap-1.5 max-w-[180px]">
                                     <p class="text-[11px] text-slate-500 leading-relaxed italic">
-                                        {{ $req->rejection_note }}
+                                        {{ $req->keterangan }}
                                     </p>
                                 </div>
                                 @else

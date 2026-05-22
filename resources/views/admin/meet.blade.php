@@ -48,23 +48,23 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 font-medium text-gray-900">
-                            {{ $meeting->title }}
+                            {{ $meeting->judul }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ $meeting->description }}
+                            {{ $meeting->deskripsi }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">
                             <div class="font-semibold">{{ \Carbon\Carbon::parse($meeting->start_time)->format('d M, Y') }}</div>
                             <div class="text-gray-400 text-xs mt-1">
-                                <span class="bg-gray-100 px-2 py-0.5 rounded italic">{{ $meeting->duration }} Menit</span>
+                                <span class="bg-gray-100 px-2 py-0.5 rounded italic">{{ $meeting->durasi }} Menit</span>
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center">
                             @php
                             $statusStyles = [
                             'pending' => 'bg-amber-100 text-amber-700 border-amber-200',
-                            'approved' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
-                            'rejected' => 'bg-rose-100 text-rose-700 border-rose-200',
+                            'disetujui' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                            'ditolak' => 'bg-rose-100 text-rose-700 border-rose-200',
                             ][$meeting->status] ?? 'bg-gray-100 text-gray-700 border-gray-200';
                             @endphp
                             <span class="px-3 py-1 rounded-full text-xs font-bold border {{ $statusStyles }}">
@@ -89,7 +89,7 @@
                                         <div class="relative w-full">
                                             <input
                                                 type="text"
-                                                name="note"
+                                                name="keterangan"
                                                 placeholder="Alasan penolakan..."
                                                 required
                                                 class="w-full bg-white border border-slate-200 text-slate-700 text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2.5 transition-all duration-200 outline-none placeholder:text-slate-400">

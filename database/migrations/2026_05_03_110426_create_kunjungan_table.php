@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('visit_schedules', function (Blueprint $table) {
+        Schema::create('kunjungan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('users')->cascadeOnDelete();
-            $table->string('title');
-            $table->dateTime('visit_date');
-            $table->enum('status', ['pending', 'approved', 'rejected'])
-                ->default('pending');
-            $table->text('note')->nullable();
+            $table->string('judul');
+            $table->dateTime('tanggal_kunjungan');
+            $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('visit_schedules');
+        Schema::dropIfExists('kunjungan');
     }
 };

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Order;
+use App\Models\Pesanan;
 use App\Models\MeetingRequest;
 use App\Models\PalletRequest;
 
@@ -38,9 +38,9 @@ class User extends Authenticatable
         return $this->hasMany(PalletRequest::class, 'client_id');
     }
 
-    public function orders()
+    public function pesanan()
     {
-        return $this->hasMany(Order::class, 'client_id');
+        return $this->hasMany(Pesanan::class, 'client_id');
     }
 
     public function meetings()
