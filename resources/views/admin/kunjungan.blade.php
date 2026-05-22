@@ -10,6 +10,9 @@
             </div>
         </div>
 
+        {{-- Notifikasi dari components --}}
+        <x-alert />
+
         <!-- tabel kunjungan -->
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
             <div class="overflow-x-auto" id="visits-table-wrapper">

@@ -98,9 +98,9 @@
                                     {{ $log['icon'] }} {{ $log['kegiatan'] }}
                                 </td>
                                 <td>
-                                    @if($log['status'] == 'approved')
+                                    @if($log['status'] == 'disetujui')
                                     <span class="text-green-500 font-semibold">Disetujui</span>
-                                    @elseif($log['status'] == 'rejected')
+                                    @elseif($log['status'] == 'ditolak')
                                     <span class="text-red-500 font-semibold">Ditolak</span>
                                     @elseif($log['status'] == 'uploaded')
                                     <span class="text-blue-500 font-semibold">Terunggah</span>

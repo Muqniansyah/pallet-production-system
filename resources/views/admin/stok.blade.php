@@ -14,12 +14,8 @@
             </div>
         </div>
 
-        <!-- ALERT -->
-        @if(session('success'))
-        <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-4 rounded-2xl text-sm font-semibold">
-            {{ session('success') }}
-        </div>
-        @endif
+        {{-- Notifikasi dari components --}}
+        <x-alert />
 
         <!-- FORM TAMBAH PRODUK -->
         <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm mb-10 overflow-hidden">

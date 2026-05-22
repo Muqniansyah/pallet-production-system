@@ -57,7 +57,7 @@ class AdminDashboardController extends Controller
                 return [
                     'waktu' => $item->created_at,
 
-                    'kegiatan' => 'Order ' .
+                    'kegiatan' => 'Pesanan ' .
                         $item->nama_project .
                         ' oleh ' .
                         ($item->client->name ?? 'Client'),
@@ -113,9 +113,9 @@ class AdminDashboardController extends Controller
                     'waktu' => $item->created_at,
 
                     'kegiatan' => 'HPP: ' .
-                        ($item->order->nama_project ?? '-') .
+                        ($item->pesanan->nama_project ?? '-') .
                         ' (' .
-                        ($item->order->client->name ?? 'Client') .
+                        ($item->pesanan->client->name ?? 'Client') .
                         ')',
 
                     'kode' => '#HPP-' . $item->id,

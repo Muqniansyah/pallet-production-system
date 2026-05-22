@@ -8,18 +8,8 @@
             <p class="text-slate-500 mt-1">Kelola pembuatan pesanan dan unggah dokumen Harga Pokok Produksi (HPP) dalam satu tempat.</p>
         </div>
 
-        {{-- NOTIFIKASI --}}
-        @if(session('success'))
-        <div class="mb-4 bg-green-100 text-green-700 p-3 rounded-lg">
-            {{ session('success') }}
-        </div>
-        @endif
-
-        @if(session('error'))
-        <div class="mb-4 bg-red-100 text-red-700 p-3 rounded-lg">
-            {{ session('error') }}
-        </div>
-        @endif
+        {{-- Notifikasi dari components --}}
+        <x-alert />
 
         <div class="space-y-8">
             {{-- ==================== ROW 1: BUAT ORDER + UPLOAD HPP ==================== --}}

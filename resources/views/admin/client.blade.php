@@ -1,17 +1,14 @@
 <x-app-layout>
     <div class="container mx-auto py-8 px-4">
-        @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 shadow-sm">
-            {{ session('success') }}
-        </div>
-        @endif
-
         <div class="mb-8">
             <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
                 Data <span class="text-slate-400 font-light">Klien</span>
             </h1>
             <p class="text-slate-500 mt-1">Kelola dan pantau daftar seluruh klien yang terdaftar dalam sistem.</p>
         </div>
+
+        {{-- Notifikasi dari components --}}
+        <x-alert />
 
         <div class="overflow-x-auto bg-white rounded-lg shadow">
             <table class="w-full text-left border-collapse">
@@ -24,7 +21,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach($clients as $client)
+                    @forelse($clients as $client)
                     <tr class="border-b hover:bg-gray-50 transition-colors">
                         <td class="p-4 text-gray-600">{{ $client->name }}</td>
                         <td class="p-4 text-gray-600">{{ $client->email }}</td>
@@ -45,7 +42,16 @@
                             </form>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    {{-- BLOK TAMPILAN JIKA DATA KLIEN KOSONG --}}
+                    <tr>
+                        <td colspan="3" class="p-16 text-center">
+                            <div class="flex flex-col items-center justify-center">
+                                <p class="text-xs text-slate-400 italic font-medium">Belum ada data klien yang terdaftar.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

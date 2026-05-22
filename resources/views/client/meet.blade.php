@@ -8,11 +8,8 @@
             <p class="text-slate-500 mt-1">Pilih jadwal temu Anda (maks. 3 sesi/hari). Diskusi intensif selama 40 menit untuk memastikan setiap detail palet Anda terencana dengan presisi.</p>
         </div>
 
-        @if(session('error'))
-        <div class="bg-red-100 text-red-600 text-sm p-2 rounded mb-3">
-            {{ session('error') }}
-        </div>
-        @endif
+        {{-- Notifikasi dari components --}}
+        <x-alert />
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 

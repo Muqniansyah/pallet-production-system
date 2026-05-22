@@ -86,7 +86,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
-                            @foreach ($logs as $log)
+                            @forelse ($logs as $log)
                             <tr class="hover:bg-slate-50/30 transition-colors">
                                 <td class="px-6 py-3">
                                     <p class="text-[11px] font-bold text-slate-700 uppercase">
@@ -115,9 +115,9 @@
                                     @php
                                     // Logika penentuan warna berdasarkan status
                                     $statusClasses = match($log['status']) {
-                                    'approved', 'deal' => 'bg-green-50 text-green-600 border-green-100',
+                                    'disetujui', 'deal' => 'bg-green-50 text-green-600 border-green-100',
                                     'pending' => 'bg-yellow-50 text-yellow-600 border-yellow-100',
-                                    'rejected' => 'bg-red-50 text-red-600 border-red-100',
+                                    'ditolak' => 'bg-red-50 text-red-600 border-red-100',
                                     default => 'bg-slate-50 text-slate-600 border-slate-100',
                                     };
                                     @endphp
@@ -127,7 +127,21 @@
                                     </span>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            {{-- KONDISI JIKA DATA LOG KOSONG (MENGGUNAKAN COLSPAN 3 SESUAI JUMLAH TH) --}}
+                            <tr>
+                                <td colspan="3" class="px-6 py-12 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-slate-300 mb-2">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <p class="text-[11px] text-slate-400 italic font-medium">Belum ada riwayat aktivitas log.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

@@ -31,7 +31,7 @@ class HppController extends Controller
 
         // ambil request palet yang SUDAH DISETUJUI CLIENT
         $requests = PalletRequest::with('client')
-            ->where('status', 'approved')
+            ->where('status', 'disetujui')
             ->whereDoesntHave('pesanan')
             ->get();
 

@@ -9,6 +9,9 @@
                 <p class="text-slate-500 mt-1 text-sm">Pantau status produksi dan unduh dokumen kalkulasi HPP Anda.</p>
             </div>
 
+            {{-- Notifikasi dari components --}}
+            <x-alert />
+
             <!-- pesanan saya table -->
             <div class="mb-12 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
                 <div class="p-8 border-b border-slate-50 flex items-center justify-between">

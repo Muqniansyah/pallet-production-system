@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+// use Illuminate\Http\Request;
 
 // pemanggilan model
 use App\Models\PalletRequest;
@@ -35,9 +36,9 @@ class DashboardController extends Controller
             ->whereHas('hpp')
             ->count();
 
-        // CARD Total project pengajuan palet dengan status approved
+        // CARD Total project pengajuan palet dengan status disetujui
         $totalProject = PalletRequest::where('client_id', $userId)
-            ->where('status', 'approved')
+            ->where('status', 'disetujui')
             ->count();
 
         // CARD pesanan aktif klien - jumlah pesanan client dengan status deal.
@@ -62,7 +63,7 @@ class DashboardController extends Controller
         $meetingLogs = $meetings->map(function ($item) {
             return [
                 'waktu' => $item->created_at,
-                'kegiatan' => 'Meeting: ' . $item->title,
+                'kegiatan' => 'Meeting: ' . $item->judul,
                 'kode' => '#MTG-' . $item->id,
                 'status' => $item->status,
                 'icon' => '📅'
