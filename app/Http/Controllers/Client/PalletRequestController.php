@@ -26,10 +26,20 @@ class PalletRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jenis_palet' => 'required',
-            'qty' => 'required|integer|min:1',
+            'jenis_palet'  => 'required',
+            'qty'          => 'required|integer|min:1',
             'alamat_kirim' => 'required',
-            'file_desain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'catatan'      => 'required',
+            'file_desain' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ], [
+            'jenis_palet.required'  => 'Jenis palet wajib dipilih.',
+            'qty.required'          => 'Jumlah (qty) wajib diisi.',
+            'qty.min'               => 'Jumlah (qty) minimal 1.',
+            'alamat_kirim.required' => 'Alamat pengiriman wajib diisi.',
+            'catatan.required'      => 'Catatan wajib diisi.',
+            'file_desain.required'  => 'File desain wajib diunggah.',
+            'file_desain.mimes'     => 'File desain harus berformat PDF, JPG, atau PNG.',
+            'file_desain.max'       => 'Ukuran file desain maksimal 5MB.',
         ]);
 
         // upload file (kalau ada)

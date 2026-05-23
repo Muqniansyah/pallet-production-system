@@ -26,18 +26,27 @@
                         @csrf
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Judul Meeting</label>
-                            <input type="text" name="judul" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Contoh: Konsultasi Proyek">
+                            <input type="text" name="judul" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Contoh: Konsultasi Proyek">
+                            @error('judul')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
                             <textarea name="deskripsi" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" placeholder="Detail singkat..."></textarea>
+                            @error('deskripsi')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal & Waktu</label>
-                                <input type="datetime-local" name="start_time" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-2">
+                                <input type="datetime-local" name="start_time" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-2">
+                                @error('start_time')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Durasi (Menit)</label>

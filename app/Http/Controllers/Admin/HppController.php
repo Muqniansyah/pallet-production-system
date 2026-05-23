@@ -43,7 +43,12 @@ class HppController extends Controller
     {
         $request->validate([
             'pesanan_id' => 'required|exists:pesanan,id',
-            'file_hpp' => 'required|mimes:pdf,xlsx,xls|max:5120'
+            'file_hpp'   => 'required|mimes:pdf,xlsx,xls|max:5120',
+        ], [
+            'pesanan_id.required' => 'Pesanan wajib dipilih.',
+            'file_hpp.required'   => 'File HPP wajib diunggah.',
+            'file_hpp.mimes'      => 'File HPP harus berformat PDF atau Excel.',
+            'file_hpp.max'        => 'Ukuran file HPP maksimal 5MB.',
         ]);
 
         $pesanan = Pesanan::findOrFail($request->pesanan_id);

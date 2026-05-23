@@ -48,8 +48,10 @@
                         <input type="text"
                             name="nama_produk"
                             class="w-full rounded-2xl border-slate-200 py-3 px-4 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Contoh: Kayu Jati"
-                            required>
+                            placeholder="Contoh: Kayu Jati">
+                        @error('nama_produk')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- stok -->
@@ -61,8 +63,10 @@
                         <input type="number"
                             name="stok"
                             class="w-full rounded-2xl border-slate-200 py-3 px-4 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="0"
-                            required>
+                            placeholder="0">
+                        @error('stok')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- gambar -->
@@ -93,6 +97,9 @@
                                 </span>
                             </div>
                         </div>
+                        @error('gambar')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <!-- keterangan -->
                     <div>
@@ -104,6 +111,9 @@
                             rows="3"
                             class="w-full rounded-2xl border-slate-200 py-3 px-4 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Keterangan tambahan..."></textarea>
+                        @error('keterangan')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="md:col-span-2">
@@ -381,8 +391,7 @@
                     </label>
 
                     <select name="produk_kayu_id"
-                        class="w-full rounded-xl border-slate-200 text-sm py-3 px-4"
-                        required>
+                        class="w-full rounded-xl border-slate-200 text-sm py-3 px-4">
 
                         <option value="">Pilih Produk</option>
 
@@ -392,6 +401,9 @@
                         </option>
                         @endforeach
                     </select>
+                    @error('produk_kayu_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- jumlah -->
@@ -402,10 +414,11 @@
 
                     <input type="number"
                         name="jumlah"
-                        min="1"
                         class="w-full rounded-xl border-slate-200 text-sm py-3 px-4"
-                        placeholder="Masukkan jumlah"
-                        required>
+                        placeholder="Masukkan jumlah">
+                    @error('jumlah')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- tombol -->

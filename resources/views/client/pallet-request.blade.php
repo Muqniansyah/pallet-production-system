@@ -24,39 +24,28 @@
                                 Jenis Palet
                             </label>
 
-                            <select
-                                id="produkSelect"
-                                name="jenis_palet"
-                                class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4 pr-10"
-                                required>
-
+                            <select id="produkSelect" name="jenis_palet" class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4 pr-10">
                                 <option value="" disabled selected>
                                     Pilih Tipe Palet...
                                 </option>
 
                                 @foreach($produk as $item)
-
                                 @if(($item->stok->stok ?? 0) > 0)
 
                                 <option
                                     value="{{ $item->nama_produk }}"
                                     data-stok="{{ $item->stok->stok ?? 0 }}">
-
                                     {{ $item->nama_produk }}
                                     (tersedia {{ $item->stok->stok ?? 0 }} PCS)
-
                                 </option>
-
                                 @endif
-
                                 @endforeach
-
                             </select>
 
-                            <p id="stokInfo"
-                                class="text-xs mt-2 font-bold text-blue-600">
-                            </p>
-
+                            <p id="stokInfo" class="text-xs mt-2 font-bold text-blue-600"></p>
+                            @error('jenis_palet')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="group">
@@ -70,19 +59,20 @@
                                     type="number"
                                     name="qty"
                                     placeholder="0"
-                                    min="1"
-                                    class="w-full border-gray-200 rounded-2xl shadow-sm py-3 pl-4 pr-16"
-                                    required>
+                                    class="w-full border-gray-200 rounded-2xl shadow-sm py-3 pl-4 pr-16">
 
                                 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 font-bold text-sm">
                                     PCS
                                 </span>
                             </div>
+                            @error('qty')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
-                                Upload Desain <span class="text-gray-300 font-normal italic">(Opsional)</span>
+                                Unggah Desain
                             </label>
 
                             <div id="dropzone" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl hover:border-blue-400 transition-all cursor-pointer relative bg-white">
@@ -96,22 +86,31 @@
 
                                     <div id="fileStatus" class="flex flex-col items-center">
                                         <p id="statusText" class="text-xs text-gray-400 font-medium italic">Klik atau drag file ke sini</p>
-                                        <p id="subText" class="text-[9px] text-gray-300 mt-1">PDF, JPG, PNG up to 10MB</p>
+                                        <p id="subText" class="text-[9px] text-gray-300 mt-1">PDF, JPG, PNG up to 5MB</p>
                                     </div>
                                 </div>
                             </div>
+                            @error('file_desain')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">Alamat Kirim</label>
-                            <textarea name="alamat_kirim" rows="3" placeholder="Masukkan alamat lengkap pengiriman..." class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4" required></textarea>
+                            <textarea name="alamat_kirim" rows="3" placeholder="Masukkan alamat lengkap pengiriman..." class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4"></textarea>
+                            @error('alamat_kirim')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">Catatan Tambahan</label>
                             <textarea name="catatan" rows="3" placeholder="Contoh: Kayu harus kering, warna cokelat..." class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4"></textarea>
+                            @error('catatan')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </div>

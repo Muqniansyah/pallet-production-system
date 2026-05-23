@@ -22,9 +22,18 @@ class StokKayuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_produk' => 'required|string|max:255',
-            'stok' => 'required|integer|min:0',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'nama_produk' => 'required|string|max:255|unique:produk_kayu,nama_produk',
+            'stok'        => 'required|integer|min:0',
+            'gambar'      => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'keterangan'  => 'required|string',
+        ], [
+            'nama_produk.required' => 'Nama produk wajib diisi.',
+            'nama_produk.unique'   => 'Nama produk sudah pernah dipakai, gunakan nama lain.',
+            'stok.required'        => 'Stok awal wajib diisi.',
+            'stok.min'             => 'Stok awal tidak boleh kurang dari 0.',
+            'gambar.required'      => 'Gambar produk wajib diunggah.',
+            'gambar.max'           => 'Ukuran gambar maksimal 2MB.',
+            'keterangan.required'  => 'Keterangan wajib diisi.',
         ]);
 
         // upload gambar
@@ -101,7 +110,11 @@ class StokKayuController extends Controller
     {
         $request->validate([
             'produk_kayu_id' => 'required|exists:produk_kayu,id',
-            'jumlah' => 'required|integer|min:1',
+            'jumlah'         => 'required|integer|min:1',
+        ], [
+            'produk_kayu_id.required' => 'Produk kayu wajib dipilih.',
+            'jumlah.required'         => 'Jumlah stok wajib diisi.',
+            'jumlah.min'              => 'Jumlah stok minimal 1.',
         ]);
 
         $stok = StokKayu::where('produk_kayu_id', $request->produk_kayu_id)

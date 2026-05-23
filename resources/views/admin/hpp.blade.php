@@ -29,7 +29,7 @@
                             {{-- PILIH REQUEST PALET --}}
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 mb-2">Pilih Pengajuan Palet</label>
-                                <select id="requestSelect" name="pallet_request_id" required class="w-full rounded-xl border-gray-200 py-3">
+                                <select id="requestSelect" name="pallet_request_id" class="w-full rounded-xl border-gray-200 py-3">
                                     <option value="" disabled selected>Pilih Pengajuan...</option>
                                     @foreach($requests as $req)
                                     <option value="{{ $req->id }}" data-qty="{{ $req->qty }}">
@@ -37,14 +37,20 @@
                                     </option>
                                     @endforeach
                                 </select>
+                                @error('pallet_request_id')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             {{-- NAMA PROJECT --}}
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 mb-2">Nama Project</label>
-                                <input type="text" name="nama_project" required
+                                <input type="text" name="nama_project"
                                     class="w-full rounded-xl border-gray-200 py-3"
                                     placeholder="Contoh: Pallet Gudang Bekasi">
+                                @error('nama_project')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             {{-- QTY --}}
@@ -78,7 +84,7 @@
                                     Pilih Pesanan (Status Deal) 'Nama Klien - Nama Project'
                                 </label>
 
-                                <select name="pesanan_id" required class="w-full mt-2 rounded-xl border-gray-200">
+                                <select name="pesanan_id" class="w-full mt-2 rounded-xl border-gray-200">
                                     <option value="" disabled selected>Pilih Pesanan...</option>
                                     @foreach($pesananForUpload as $p)
                                     <option value="{{  $p->id }}">
@@ -86,12 +92,15 @@
                                     </option>
                                     @endforeach
                                 </select>
+                                @error('pesanan_id')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             {{-- Upload Section --}}
                             <div class="relative group">
                                 <input name="file_hpp" type="file" id="hppFileInput"
-                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" required>
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
 
                                 <div id="hppDropzone" class="border-2 border-dashed border-slate-200 rounded-[2rem] p-10 text-center transition-all bg-white">
                                     <div id="hppIcon" class="mb-3 flex justify-center text-slate-300">
@@ -110,6 +119,10 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @error('file_hpp')
+                            <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                            @enderror
 
                             <button type="submit"
                                 class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-3 rounded-xl shadow-lg shadow-indigo-100 transition transform hover:scale-[1.02] uppercase tracking-widest">

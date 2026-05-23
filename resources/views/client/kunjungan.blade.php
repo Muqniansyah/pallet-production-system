@@ -31,15 +31,21 @@
 
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Judul Kunjungan</label>
-                            <input type="text" name="judul" required
+                            <input type="text" name="judul"
                                 class="w-full rounded-xl border-gray-200 py-3 focus:ring-blue-500 focus:border-blue-500 transition-all"
                                 placeholder="Contoh: Peninjauan Palet">
+                            @error('judul')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Waktu Kunjungan</label>
-                            <input type="datetime-local" name="tanggal_kunjungan" required
+                            <input type="datetime-local" name="tanggal_kunjungan"
                                 class="w-full rounded-xl border-gray-200 py-3 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                            @error('tanggal_kunjungan')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-200 transition-all active:scale-95 uppercase tracking-widest text-sm flex items-center justify-center">

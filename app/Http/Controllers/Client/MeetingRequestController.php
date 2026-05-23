@@ -20,9 +20,15 @@ class MeetingRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required',
+            'judul'      => 'required|string|max:255',
+            'deskripsi'  => 'required|string',
             'start_time' => 'required|date|after:now',
-            'durasi' => 'required|in:15,30,40',
+            'durasi'     => 'required|in:15,30,40',
+        ], [
+            'judul.required'      => 'Judul meeting wajib diisi.',
+            'deskripsi.required'  => 'Deskripsi wajib diisi.',
+            'start_time.required' => 'Tanggal & waktu wajib diisi.',
+            'start_time.after'    => 'Tanggal & waktu tidak boleh di hari/jam yang sudah lewat.',
         ]);
 
         $userId = auth()->id();
@@ -33,15 +39,15 @@ class MeetingRequestController extends Controller
             ->count();
 
         if ($todayCount >= 3) {
-            return back()->with('error', 'Maksimal 3 pengajuan meeting per hari');
+            return back()->withInput()->with('error', 'Maksimal 3 pengajuan meeting per hari.');
         }
 
         MeetingRequest::create([
-            'client_id' => $userId,
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
+            'client_id'  => $userId,
+            'judul'      => $request->judul,
+            'deskripsi'  => $request->deskripsi,
             'start_time' => $request->start_time,
-            'durasi' => $request->durasi,
+            'durasi'     => $request->durasi,
         ]);
 
         return back()->with('success', 'Request berhasil dikirim');

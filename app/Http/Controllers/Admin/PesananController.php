@@ -22,22 +22,27 @@ class PesananController extends Controller
     {
         $request->validate([
             'pallet_request_id' => 'required|exists:pallet_requests,id',
-            'nama_project' => 'required|string|max:255',
+            'nama_project'      => 'required|string|max:255|unique:pesanan,nama_project',
+        ], [
+            'pallet_request_id.required' => 'Pengajuan palet wajib dipilih.',
+            'pallet_request_id.exists'   => 'Pengajuan palet tidak valid.',
+            'nama_project.required'      => 'Nama project wajib diisi.',
+            'nama_project.unique'        => 'Nama project sudah pernah dipakai, gunakan nama lain.',
         ]);
 
-        // cegah double pesanan
+        // cegah double pesanan dari pallet request yang sama
         if (Pesanan::where('pallet_request_id', $request->pallet_request_id)->exists()) {
-            return back()->with('error', 'Pesanan sudah pernah dibuat!');
+            return back()->withInput()->with('error', 'Pengajuan palet ini sudah pernah dibuat pesanannya.');
         }
 
         $palletRequest = PalletRequest::findOrFail($request->pallet_request_id);
 
         Pesanan::create([
-            'client_id' => $palletRequest->client_id, // otomatis
+            'client_id'         => $palletRequest->client_id,
             'pallet_request_id' => $palletRequest->id,
-            'nama_project' => $request->nama_project,
-            'qty' => $palletRequest->qty,
-            'status' => 'pending'
+            'nama_project'      => $request->nama_project,
+            'qty'               => $palletRequest->qty,
+            'status'            => 'pending',
         ]);
 
         return back()->with('success', 'Pesanan berhasil dibuat!');
