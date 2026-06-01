@@ -36,7 +36,7 @@ Route::get('/home', function () {
     return view('sipalet');
 })->name('home');
 
-// WAJIB: dashboard fallback (biar Breeze tidak error) - redirect dashboard
+// WAJIB: dashboard fallback (biar Breeze tidak error) - redirect dashboard & hanya bisa diakses kalau sudah login.
 Route::get('/dashboard', function () {
     if (auth()->user()->role === 'admin') {
         return redirect('/admin/dashboard');

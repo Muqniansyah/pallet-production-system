@@ -1,14 +1,13 @@
 <?php
 
+// Import kelas yang dibutuhkan untuk membuat migrasi
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    // Membuat tabel kunjungan saat migrasi dijalankan
     public function up(): void
     {
         Schema::create('kunjungan', function (Blueprint $table) {
@@ -22,9 +21,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    // Menghapus tabel kunjungan saat migrasi dibatalkan (rollback)
     public function down(): void
     {
         Schema::dropIfExists('kunjungan');

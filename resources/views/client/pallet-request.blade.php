@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="max-w-4xl mx-auto py-10 px-4">
-
+        <!-- judul pengajuan -->
         <div class="mb-8">
             <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
                 Pengajuan <span class="text-slate-400 font-light">Palet</span>
@@ -8,17 +8,18 @@
             <p class="text-slate-500 text-sm mt-1">Silakan lengkapi detail pesanan palet Anda di bawah ini.</p>
         </div>
 
-        {{-- Notifikasi dari components --}}
+        <!-- Notifikasi dari components -->
         <x-alert />
 
-        <!-- ===== FORM PENGAJUAN ===== -->
+        <!-- form pengajuan palet -->
         <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
             <form action="{{ route('client.pallet.store') }}" method="POST" enctype="multipart/form-data" class="p-8">
                 @csrf
-
+                <!-- input -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
+                    <!-- kolom kiri -->
                     <div class="space-y-6">
+                        <!-- jenis palet -->
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">
                                 Jenis Palet
@@ -48,6 +49,7 @@
                             @enderror
                         </div>
 
+                        <!-- qty -->
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
                                 Quantity (Qty)
@@ -70,13 +72,13 @@
                             @enderror
                         </div>
 
+                        <!-- unggah desain -->
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
                                 Unggah Desain
                             </label>
 
                             <div id="dropzone" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl hover:border-blue-400 transition-all cursor-pointer relative bg-white">
-
                                 <input type="file" name="file_desain" id="fileInput" class="absolute inset-0 opacity-0 cursor-pointer z-20">
 
                                 <div class="space-y-2 text-center">
@@ -96,7 +98,9 @@
                         </div>
                     </div>
 
+                    <!-- kolom kanan -->
                     <div class="space-y-6">
+                        <!-- alamat kirim -->
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">Alamat Kirim</label>
                             <textarea name="alamat_kirim" rows="3" placeholder="Masukkan alamat lengkap pengiriman..." class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4"></textarea>
@@ -105,6 +109,7 @@
                             @enderror
                         </div>
 
+                        <!-- catatan -->
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">Catatan Tambahan</label>
                             <textarea name="catatan" rows="3" placeholder="Contoh: Kayu harus kering, warna cokelat..." class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4"></textarea>
@@ -115,6 +120,7 @@
                     </div>
                 </div>
 
+                <!-- tombol -->
                 <div class="mt-10 pt-6 border-t border-gray-50 flex justify-end">
                     <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-12 rounded-2xl shadow-lg shadow-emerald-200 transition-all active:scale-95 uppercase tracking-widest text-sm">
                         Ajukan Palet
@@ -123,8 +129,9 @@
             </form>
         </div>
 
-        {{-- ===== TABEL PENGAJUAN ===== --}}
+        <!-- data tabel pengajuan palet -->
         <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mt-8">
+            <!-- judul -->
             <div class="px-8 py-5 border-b border-gray-100 flex items-center justify-between">
                 <h3 class="font-black text-gray-800 tracking-tight">Riwayat Pengajuan Palet</h3>
                 <span class="text-xs text-gray-400 font-medium">{{ $requests->total() }} pengajuan</span>
@@ -133,6 +140,7 @@
             <!-- table dan pagination -->
             <div class="overflow-x-auto" id="requests-table-wrapper">
                 <table class="w-full text-left">
+                    <!-- tabel judul -->
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-100">
                             <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Jenis Palet</th>
@@ -144,11 +152,12 @@
                             <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Keterangan</th>
                         </tr>
                     </thead>
+                    <!-- tabel konten -->
                     <tbody class="divide-y divide-gray-50">
                         @forelse($requests as $req)
+                        <!-- Baris 1 -->
                         <tr class="hover:bg-gray-50/50 transition-colors">
-
-                            {{-- JENIS PALET --}}
+                            <!-- jenis palet & desain -->
                             <td class="px-8 py-5">
                                 <div class="text-sm font-bold text-gray-800">{{ $req->jenis_palet }}</div>
                                 @if($req->file_desain)
@@ -158,28 +167,24 @@
                                 </a>
                                 @endif
                             </td>
-
-                            {{-- QTY --}}
+                            <!-- qty -->
                             <td class="px-8 py-5">
                                 <span class="text-sm font-black text-blue-600">{{ $req->qty }}</span>
                                 <span class="text-[10px] text-gray-400 font-normal ml-1">PCS</span>
                             </td>
-
-                            {{-- ALAMAT --}}
+                            <!-- alamat kirim -->
                             <td class="px-8 py-5">
                                 <p class="text-xs text-gray-500 max-w-[180px] truncate" title="{{ $req->alamat_kirim }}">
                                     {{ $req->alamat_kirim }}
                                 </p>
                             </td>
-
-                            {{-- CATATAN --}}
+                            <!-- catatan -->
                             <td class="px-8 py-5">
                                 <p class="text-xs text-gray-400 max-w-[150px] truncate" title="{{ $req->catatan }}">
                                     {{ $req->catatan ?? '-' }}
                                 </p>
                             </td>
-
-                            {{-- STATUS --}}
+                            <!-- status -->
                             <td class="px-8 py-5">
                                 @if($req->status == 'pending')
                                 <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200 text-[10px] font-black uppercase tracking-wider">
@@ -198,13 +203,11 @@
                                 </span>
                                 @endif
                             </td>
-
-                            {{-- TANGGAL --}}
+                            <!-- tanggal -->
                             <td class="px-8 py-5">
                                 <div class="text-xs text-gray-400 font-medium">{{ $req->created_at->format('d M Y') }}</div>
                             </td>
-
-                            {{-- KETERANGAN --}}
+                            <!-- keterangan jika ditolak -->
                             <td class="px-8 py-5">
                                 @if($req->status == 'ditolak' && $req->keterangan)
                                 <div class="inline-flex items-start gap-1.5 max-w-[180px]">
@@ -216,9 +219,9 @@
                                 <span class="text-[10px] text-gray-300 italic">—</span>
                                 @endif
                             </td>
-
                         </tr>
                         @empty
+                        <!-- Baris 2: tampilan jika data kosong -->
                         <tr>
                             <td colspan="7" class="text-center py-16">
                                 <div class="text-gray-200 font-black text-3xl italic tracking-tighter mb-2">BELUM ADA PENGAJUAN</div>
@@ -229,7 +232,7 @@
                     </tbody>
                 </table>
 
-                {{-- pagination --}}
+                <!-- pagination -->
                 @if($requests->hasPages())
                 <div class="px-6 py-4 border-t border-gray-100 requests-pagination">
                     {{ $requests->links() }}
@@ -238,6 +241,7 @@
             </div>
         </div>
 
+        <!-- judul desain -->
         <div class="mb-8 mt-16">
             <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
                 Desain <span class="text-slate-400 font-light">Palet</span>
@@ -245,10 +249,9 @@
             <p class="text-slate-500 text-sm mt-1">Sesuaikan ukuran dimensi, papan atas, lapisan tengah, dan papan bawah palet kayu sesuai dengan kebutuhan Anda.</p>
         </div>
 
-        <!-- ===== PaletView 3D Card Box ===== -->
+        <!-- PaletView 3D Card Box -->
         <div class="mt-8">
             <div class="bg-white rounded-xl shadow overflow-hidden">
-
                 <!-- Card Title Bar -->
                 <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                     <div class="flex items-center gap-3">
@@ -275,7 +278,6 @@
 
                 <!-- Iframe Container -->
                 <div class="relative w-full" style="height: 640px; background:#0f172a;">
-
                     <!-- SPLASH SCREEN -->
                     <div id="pv-splash"
                         class="absolute inset-0 z-20 flex flex-col items-center justify-center"
@@ -326,15 +328,12 @@
                     <span id="pv-log-dot" style="width:6px;height:6px;border-radius:50%;background:#e2e8f0;flex-shrink:0;transition:background 0.3s;"></span>
                     <span id="pv-log-msg">Menunggu koneksi PaletView...</span>
                 </div>
-
             </div>
         </div>
-        <!-- ===== END PaletView 3D Card Box ===== -->
 
-        <!-- ===== TABEL DATA DESAIN PALET (dari database) ===== -->
+        <!-- tabel data desain palet (dari database) -->
         <div class="mt-8 bg-white rounded-xl shadow overflow-hidden">
-
-            <!-- Header -->
+            <!-- judul -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <div>
                     <h3 class="text-base font-semibold text-gray-800">📦 Data Desain Palet — Real-time</h3>
@@ -401,12 +400,10 @@
                 <span class="text-xs text-gray-400" id="pv-table-info">Menampilkan 0 data</span>
                 <span class="text-xs text-gray-300" id="pv-last-fetch">—</span>
             </div>
-
         </div>
-        <!-- ===== END TABEL DATA ===== -->
     </div>
 
-    <!-- ===== STYLES ===== -->
+    <!-- style -->
     <style>
         @keyframes pvGridScroll {
             0% {
@@ -589,7 +586,6 @@
     <!-- jsPDF untuk ekspor PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <!-- ===== SCRIPTS ===== -->
     <script>
         (function() {
             'use strict';

@@ -7,19 +7,16 @@ use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    // Mendaftarkan service ke dalam container aplikasi
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
+    // Dijalankan saat aplikasi pertama kali booting
     public function boot(): void
     {
+        // Menggunakan styling Tailwind CSS untuk pagination
         Paginator::useTailwind();
     }
 }

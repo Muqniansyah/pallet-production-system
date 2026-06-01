@@ -50,6 +50,6 @@ class MeetingRequestController extends Controller
             'durasi'     => $request->durasi,
         ]);
 
-        return back()->with('success', 'Request berhasil dikirim');
+        return back()->with('success', 'Jadwal Pertemuan berhasil dikirim');
     }
 }

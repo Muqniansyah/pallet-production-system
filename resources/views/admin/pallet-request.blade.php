@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-
+        <!-- Judul -->
         <div class="flex items-center justify-between mb-8">
             <div>
                 <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
@@ -10,12 +10,14 @@
             </div>
         </div>
 
-        {{-- Notifikasi dari components --}}
+        <!-- Notifikasi dari components -->
         <x-alert />
 
+        <!-- tabel pallet request -->
         <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-100 border border-gray-100 overflow-hidden">
             <div class="overflow-x-auto" id="requests-table-wrapper">
                 <table class="w-full text-left border-collapse text-xs">
+                    <!-- tabel judul -->
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-100">
                             <th class="px-3 py-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] whitespace-nowrap text-center">Klien</th>
@@ -28,11 +30,12 @@
                             <th class="px-3 py-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] whitespace-nowrap">Keterangan</th>
                         </tr>
                     </thead>
+                    <!-- tabel konten -->
                     <tbody class="divide-y divide-gray-50">
                         @forelse($requests as $req)
+                        <!-- Baris 1 -->
                         <tr class="hover:bg-blue-50/30 transition-colors group">
-
-                            {{-- KLIEN --}}
+                            <!-- nama -->
                             <td class="px-3 py-4">
                                 <div class="flex items-center gap-2">
                                     <div class="h-7 w-7 flex-shrink-0 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-[10px] uppercase">
@@ -44,14 +47,12 @@
                                     </div>
                                 </div>
                             </td>
-
-                            {{-- DETAIL PRODUK --}}
+                            <!-- qty / jumlah -->
                             <td class="px-3 py-4">
                                 <div class="font-bold text-gray-700 text-xs">{{ $req->jenis_palet }}</div>
                                 <div class="text-[10px] text-blue-600 font-black">{{ $req->qty }} <span class="text-[9px] text-gray-400 font-normal">PCS</span></div>
                             </td>
-
-                            {{-- DESAIN --}}
+                            <!-- file desain -->
                             <td class="px-3 py-4">
                                 @if($req->file_desain)
                                 <a href="{{ asset('storage/' . $req->file_desain) }}" target="_blank"
@@ -66,22 +67,19 @@
                                 <span class="text-[9px] font-bold text-gray-300 italic">—</span>
                                 @endif
                             </td>
-
-                            {{-- CATATAN --}}
+                            <!-- catatan -->
                             <td class="px-3 py-4">
                                 <div class="text-[11px] text-gray-600 max-w-[100px] truncate" title="{{ $req->catatan }}">
                                     {{ $req->catatan ?? '-' }}
                                 </div>
                             </td>
-
-                            {{-- ALAMAT --}}
+                            <!-- alamat kirim -->
                             <td class="px-3 py-4">
                                 <p class="text-[11px] text-gray-500 max-w-[110px] truncate" title="{{ $req->alamat_kirim }}">
                                     {{ $req->alamat_kirim }}
                                 </p>
                             </td>
-
-                            {{-- STATUS --}}
+                            <!-- status -->
                             <td class="px-3 py-4">
                                 @php
                                 $statusClasses = [
@@ -94,18 +92,20 @@
                                     {{ $req->status }}
                                 </span>
                             </td>
-
-                            {{-- AKSI --}}
+                            <!-- aksi -->
                             <td class="px-3 py-4">
                                 <div class="flex justify-center">
                                     @if($req->status == 'pending')
                                     <div class="flex flex-col gap-1.5 w-32">
+                                        <!-- tombol disetujui -->
                                         <form action="/admin/pallet-request/{{ $req->id }}/approve" method="POST">
                                             @csrf
                                             <button type="submit" class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold py-1.5 rounded-lg transition">
                                                 Disetujui
                                             </button>
                                         </form>
+
+                                        <!-- tombol ditolak -->
                                         <form action="/admin/pallet-request/{{ $req->id }}/reject" method="POST" class="flex flex-col gap-1">
                                             @csrf
                                             <input type="text" name="keterangan" placeholder="Alasan..."
@@ -125,21 +125,19 @@
                                     @endif
                                 </div>
                             </td>
-
-                            {{-- KETERANGAN --}}
+                            <!-- keterangan jika ditolak -->
                             <td class="px-3 py-4">
                                 @if($req->status == 'ditolak' && $req->keterangan)
-                                <p class="text-[10px] text-slate-500 italic max-w-[120px] truncate" title="{{ $req->keterangan }}">
+                                <p class="text-[10px] text-slate-500 italic max-w-[120px]" title="{{ $req->keterangan }}">
                                     "{{ $req->keterangan }}"
                                 </p>
                                 @else
                                 <span class="text-[10px] text-gray-300 italic">—</span>
                                 @endif
                             </td>
-
                         </tr>
                         @empty
-                        {{-- KONDISI JIKA TIDAK ADA DATANYA --}}
+                        <!-- Baris 2: tampilan jika data kosong -->
                         <tr>
                             <td colspan="8" class="px-3 py-16 text-center">
                                 <div class="flex flex-col items-center justify-center">
@@ -154,7 +152,7 @@
                     </tbody>
                 </table>
 
-                {{-- PAGINATION --}}
+                <!-- pagination -->
                 @if($requests->hasPages())
                 <div class="px-6 py-4 border-t border-gray-100 requests-pagination">
                     {{ $requests->links() }}
@@ -163,7 +161,9 @@
             </div>
         </div>
     </div>
+
     <script>
+        // pagination
         document.addEventListener('click', function(e) {
             const wrapper = document.getElementById('requests-table-wrapper');
             const link = e.target.closest('#requests-table-wrapper .requests-pagination a');

@@ -7,9 +7,7 @@ use Illuminate\View\View;
 
 class AppLayout extends Component
 {
-    /**
-     * Get the view / contents that represents the component.
-     */
+    // Mengembalikan layout utama untuk halaman yang membutuhkan login. Dipanggil di blade dengan <x-app-layout>
     public function render(): View
     {
         return view('layouts.app');

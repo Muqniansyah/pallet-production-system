@@ -130,8 +130,8 @@
         </div>
     </div>
 
-    {{-- AJAX pagination tanpa refresh --}}
     <script>
+        // AJAX pagination tanpa refresh
         document.addEventListener('click', function(e) {
             const wrapper = document.getElementById('logs-table-wrapper');
             const link = e.target.closest('#logs-table-wrapper .logs-pagination a');

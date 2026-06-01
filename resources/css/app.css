@@ -1,3 +1,8 @@
+/* Mengaktifkan styling dasar Tailwind CSS */
 @tailwind base;
+
+/* Mengaktifkan komponen bawaan Tailwind CSS */
 @tailwind components;
+
+/* Mengaktifkan utility class Tailwind CSS seperti p-4, mt-2, dll */
 @tailwind utilities;

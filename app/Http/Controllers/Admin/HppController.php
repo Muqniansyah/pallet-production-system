@@ -55,12 +55,12 @@ class HppController extends Controller
 
         // hanya boleh upload kalau deal
         if ($pesanan->status !== 'deal') {
-            return back()->with('error', 'Order belum deal!');
+            return back()->with('error', 'Pesanan belum deal!');
         }
 
         // anti double HPP
         if (Hpp::where('pesanan_id', $request->pesanan_id)->exists()) {
-            return back()->with('error', 'HPP sudah pernah diupload!');
+            return back()->with('error', 'HPP sudah pernah diunggah!');
         }
 
         $file = $request->file('file_hpp')->store('hpp_files', 'public');
@@ -70,6 +70,6 @@ class HppController extends Controller
             'file_hpp' => $file
         ]);
 
-        return back()->with('success', 'HPP berhasil diupload');
+        return back()->with('success', 'HPP berhasil diunggah');
     }
 }

@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        {{-- Notifikasi dari components --}}
+        <!-- Notifikasi dari components -->
         <x-alert />
 
         <!-- tabel kunjungan -->
@@ -18,6 +18,7 @@
             <div class="overflow-x-auto" id="visits-table-wrapper">
                 <!-- table kunjungan -->
                 <table class="w-full text-left border-collapse">
+                    <!-- tabel judul -->
                     <thead>
                         <tr class="bg-slate-50/50">
                             <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Klien</th>
@@ -25,11 +26,15 @@
                             <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Waktu & Durasi</th>
                             <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-center">Status</th>
                             <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-center">Aksi</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Keterangan</th>
                         </tr>
                     </thead>
+                    <!-- tabel konten -->
                     <tbody class="divide-y divide-slate-50">
                         @forelse($kunjungan as $item)
+                        <!-- Baris 1 -->
                         <tr class="hover:bg-slate-50/30 transition-colors">
+                            <!-- nama -->
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs mr-3">
@@ -38,18 +43,18 @@
                                     <span class="text-sm font-semibold text-slate-700">{{ $item->client->name ?? 'Client' }}</span>
                                 </div>
                             </td>
-
+                            <!-- judul -->
                             <td class="px-6 py-4 text-sm text-slate-600 font-medium">
                                 {{ $item->judul }}
                             </td>
-
+                            <!-- waktu kunjungan -->
                             <td class="px-6 py-4">
                                 <div class="flex flex-col">
                                     <span class="text-sm font-bold text-slate-700">{{ \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('d M Y') }}</span>
                                     <span class="text-xs text-slate-400">{{ \Carbon\Carbon::parse($item->tanggal_kunjungan)->format('H:i') }} WIB</span>
                                 </div>
                             </td>
-
+                            <!-- status -->
                             <td class="px-6 py-4 text-center">
                                 @if($item->status == 'disetujui')
                                 <span class="inline-flex px-3 py-1 text-[10px] font-black uppercase tracking-tighter bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full">
@@ -65,11 +70,11 @@
                                 </span>
                                 @endif
                             </td>
-
+                            <!-- aksi -->
                             <td class="px-6 py-4">
                                 @if($item->status == 'pending')
                                 <div class="flex flex-col gap-2 ml-auto w-32">
-                                    {{-- BUTTON APPROVE --}}
+                                    <!-- tombol disetujui -->
                                     <form action="{{ route('admin.kunjungan.approve', $item->id) }}" method="POST" class="w-full">
                                         @csrf
                                         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black py-2 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
@@ -77,7 +82,7 @@
                                         </button>
                                     </form>
 
-                                    {{-- FORM REJECT --}}
+                                    <!-- tombol ditolak -->
                                     <form action="{{ route('admin.kunjungan.reject', $item->id) }}" method="POST" class="flex flex-col gap-1.5 w-full">
                                         @csrf
                                         <input
@@ -86,7 +91,6 @@
                                             placeholder="Alasan..."
                                             required
                                             class="w-full bg-white border border-slate-200 text-[10px] text-slate-700 rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2 outline-none placeholder:text-slate-300">
-
                                         <button type="submit" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black py-2 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
                                             Ditolak
                                         </button>
@@ -98,9 +102,19 @@
                                 </div>
                                 @endif
                             </td>
+                            <!-- keterangan jika ditolak -->
+                            <td class="px-3 py-4">
+                                @if($item->status == 'ditolak' && $item->keterangan)
+                                <p class="text-[10px] text-slate-500 italic max-w-[120px]" title="{{ $item->keterangan }}">
+                                    "{{ $item->keterangan }}"
+                                </p>
+                                @else
+                                <span class="text-[10px] text-gray-300 italic">—</span>
+                                @endif
+                            </td>
                         </tr>
                         @empty
-                        {{-- EMPTY  --}}
+                        <!-- Baris 2: tampilan jika data kosong -->
                         <tr>
                             <td colspan="5" class="py-20">
                                 <div class="flex flex-col items-center justify-center text-center">

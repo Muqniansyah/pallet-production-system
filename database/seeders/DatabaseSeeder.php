@@ -8,23 +8,13 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    // Menonaktifkan event model saat seeder berjalan
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
+    // Menjalankan semua seeder yang terdaftar
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // data dummy
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        //     'role' => 'client'
-        // ]);
-
-        // menjalankan seeder lain
+        // menjalankan seeder AdminSeeder 
         $this->call([
             AdminSeeder::class,
         ]);

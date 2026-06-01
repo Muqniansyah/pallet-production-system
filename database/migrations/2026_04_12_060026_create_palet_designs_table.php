@@ -1,14 +1,13 @@
 <?php
 
-// FILE: database/migrations/xxxx_xx_xx_create_palet_designs_table.php
-// Jalankan: php artisan migrate
-
+// Import kelas yang dibutuhkan untuk membuat migrasi
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Membuat tabel palet_designs saat migrasi dijalankan
     public function up(): void
     {
         Schema::create('palet_designs', function (Blueprint $table) {
@@ -62,6 +61,7 @@ return new class extends Migration
         });
     }
 
+    // Menghapus tabel palet_designs saat migrasi dibatalkan (rollback)
     public function down(): void
     {
         Schema::dropIfExists('palet_designs');

@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kunjungan extends Model
 {
-    protected $table = 'kunjungan';
+    protected $table = 'kunjungan'; // memberitahu Laravel nama tabel yang digunakan model ini secara eksplisit.
 
+    // daftar kolom yang diizinkan untuk diisi data
     protected $fillable = [
         'client_id',
         'judul',
@@ -16,6 +17,7 @@ class Kunjungan extends Model
         'keterangan'
     ];
 
+    // menghubungkan tabel kunjungan dengan users sebagai klien (relasi m:1)
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');

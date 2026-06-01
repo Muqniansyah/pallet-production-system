@@ -1,7 +1,5 @@
 <?php
 
-// FILE: app/Models/PaletDesign.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PaletDesign extends Model
 {
+    // daftar kolom yang diizinkan untuk diisi data
     protected $fillable = [
         'user_id',
         // Dimensi utama
@@ -48,12 +47,14 @@ class PaletDesign extends Model
         'last_updated_at',
     ];
 
+    // mengatur perubahan tipe data pada kolom saat diakses
     protected $casts = [
         'hasil_kalkulasi' => 'array',
         'raw_payload'     => 'array',
         'last_updated_at' => 'datetime',
     ];
 
+    // menghubungkan tabel paletdesign dengan users (relasi m:1)
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

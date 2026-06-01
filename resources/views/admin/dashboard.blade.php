@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-6 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- ucapan -->
+            <!-- Ucapan -->
             <div class="mb-10">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <!-- card data -->
+            <!-- Card Data -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <!-- card total pesanan -->
                 <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all group">
@@ -78,6 +78,7 @@
                 <!-- tabel -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
+                        <!-- tabel judul -->
                         <thead>
                             <tr class="bg-slate-50/50">
                                 <th class="px-6 py-3 text-[9px] font-black text-slate-400 uppercase tracking-widest">Waktu</th>
@@ -85,9 +86,12 @@
                                 <th class="px-6 py-3 text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">Status</th>
                             </tr>
                         </thead>
+                        <!-- tabel konten -->
                         <tbody class="divide-y divide-slate-50">
                             @forelse ($logs as $log)
+                            <!-- Baris 1 -->
                             <tr class="hover:bg-slate-50/30 transition-colors">
+                                <!-- waktu -->
                                 <td class="px-6 py-3">
                                     <p class="text-[11px] font-bold text-slate-700 uppercase">
                                         {{ \Carbon\Carbon::parse($log['waktu'])->translatedFormat('d M Y') }}
@@ -96,7 +100,7 @@
                                         {{ \Carbon\Carbon::parse($log['waktu'])->format('H:i') }} WIB
                                     </p>
                                 </td>
-
+                                <!-- kegiatan -->
                                 <td class="px-6 py-3">
                                     <div class="flex items-center gap-3">
                                         <span class="text-sm">{{ $log['icon'] }}</span>
@@ -110,7 +114,7 @@
                                         </div>
                                     </div>
                                 </td>
-
+                                <!-- status -->
                                 <td class="px-6 py-3 text-right">
                                     @php
                                     // Logika penentuan warna berdasarkan status
@@ -128,7 +132,7 @@
                                 </td>
                             </tr>
                             @empty
-                            {{-- KONDISI JIKA DATA LOG KOSONG (MENGGUNAKAN COLSPAN 3 SESUAI JUMLAH TH) --}}
+                            <!-- Baris 2: tampilan jika data kosong -->
                             <tr>
                                 <td colspan="3" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center justify-center">

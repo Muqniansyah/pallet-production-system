@@ -7,6 +7,7 @@ use App\Models\User;
 
 class MeetingRequest extends Model
 {
+    // daftar kolom yang diizinkan untuk diisi data
     protected $fillable = [
         'client_id',
         'judul',
@@ -20,7 +21,7 @@ class MeetingRequest extends Model
         'join_url',
     ];
 
-    // menghubungkan tabel meetings dengan tabel users
+    // menghubungkan tabel meetings dengan users sebagai klien (relasi m:1)
     public function user()
     {
         return $this->belongsTo(User::class, 'client_id');

@@ -1,16 +1,16 @@
 <?php
 
+// Import kelas yang dibutuhkan untuk membuat migrasi
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    // Membuat tabel jobs, job_batches dan failed_jobs saat migrasi dijalankan
     public function up(): void
     {
+        // Menyimpan antrian pekerjaan yang menunggu diproses
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
             $table->string('queue')->index();
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('created_at');
         });
 
+        // Menyimpan grup job yang dijalankan bersamaan
         Schema::create('job_batches', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('name');
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->integer('finished_at')->nullable();
         });
 
+        // Menyimpan job yang gagal agar bisa dicoba ulang
         Schema::create('failed_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
@@ -45,9 +47,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    // Menghapus tabel jobs, job_batches dan failed_jobs saat migrasi dibatalkan (rollback)
     public function down(): void
     {
         Schema::dropIfExists('jobs');

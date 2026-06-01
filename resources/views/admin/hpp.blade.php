@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-
+        <!-- Judul -->
         <div class="mb-8">
             <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
                 Data HPP & <span class="text-slate-400 font-light">Management Pesanan</span>
@@ -8,25 +8,25 @@
             <p class="text-slate-500 mt-1">Kelola pembuatan pesanan dan unggah dokumen Harga Pokok Produksi (HPP) dalam satu tempat.</p>
         </div>
 
-        {{-- Notifikasi dari components --}}
+        <!-- Notifikasi dari components -->
         <x-alert />
 
+        <!-- Kontainer Pesanan, HPP dan Tabel -->
         <div class="space-y-8">
-            {{-- ==================== ROW 1: BUAT ORDER + UPLOAD HPP ==================== --}}
+            <!-- Kontainer Row1: Form Pesanan dan HPP -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                {{-- ==================== BUAT ORDER / PESANAN ==================== --}}
+                <!-- Form Pesanan -->
                 <div class="lg:col-span-1">
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                        <!-- judul pesanan -->
                         <h3 class="text-lg font-bold text-gray-800 mb-5 flex items-center">
                             <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm">1</span>
                             Buat Pesanan
                         </h3>
-
+                        <!-- form -->
                         <form action="{{ route('admin.pesanan.store') }}" method="POST" class="space-y-5">
                             @csrf
-
-                            {{-- PILIH REQUEST PALET --}}
+                            <!-- Select pengajuan palet -->
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 mb-2">Pilih Pengajuan Palet</label>
                                 <select id="requestSelect" name="pallet_request_id" class="w-full rounded-xl border-gray-200 py-3">
@@ -41,8 +41,7 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-
-                            {{-- NAMA PROJECT --}}
+                            <!-- Input nama project -->
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 mb-2">Nama Project</label>
                                 <input type="text" name="nama_project"
@@ -52,13 +51,12 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-
-                            {{-- QTY --}}
+                            <!-- Input qty -->
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 mb-2">Jumlah (Qty)</label>
                                 <input id="qtyInput" type="number" readonly class="w-full rounded-xl border-gray-200 py-3">
                             </div>
-
+                            <!-- tombol pesanan -->
                             <button type="submit"
                                 class="w-full uppercase bg-blue-600 text-white font-bold py-3 rounded-xl">
                                 Buat Pesanan
@@ -67,18 +65,18 @@
                     </div>
                 </div>
 
-                {{-- ==================== UPLOAD HPP ==================== --}}
+                <!-- Form Unggah HPP -->
                 <div class="lg:col-span-2">
                     <div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl border border-blue-100 p-6 h-full">
+                        <!-- judul Hpp -->
                         <h3 class="text-lg font-bold text-indigo-900 mb-4 flex items-center">
                             <span class="bg-indigo-200 text-indigo-700 w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm">2</span>
                             Unggah Dokumen HPP
                         </h3>
-
+                        <!-- form -->
                         <form action="{{ route('admin.hpp.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-
-                            {{-- pilih order / pesanan --}}
+                            <!-- Select pesanan -->
                             <div class="mb-4">
                                 <label class="text-xs font-bold text-gray-500 uppercase">
                                     Pilih Pesanan (Status Deal) 'Nama Klien - Nama Project'
@@ -96,12 +94,11 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-
-                            {{-- Upload Section --}}
+                            <!-- Unggah HPP -->
                             <div class="relative group">
                                 <input name="file_hpp" type="file" id="hppFileInput"
                                     class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
-
+                                <!-- keterangan unggah -->
                                 <div id="hppDropzone" class="border-2 border-dashed border-slate-200 rounded-[2rem] p-10 text-center transition-all bg-white">
                                     <div id="hppIcon" class="mb-3 flex justify-center text-slate-300">
                                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,11 +116,10 @@
                                     </div>
                                 </div>
                             </div>
-
                             @error('file_hpp')
                             <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                             @enderror
-
+                            <!-- tombol hpp -->
                             <button type="submit"
                                 class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-3 rounded-xl shadow-lg shadow-indigo-100 transition transform hover:scale-[1.02] uppercase tracking-widest">
                                 Unggah HPP
@@ -131,16 +127,18 @@
                         </form>
                     </div>
                 </div>
-
             </div>
 
-            {{-- ==================== ROW 2: TABLE ORDER ==================== --}}
+            <!-- Kontainer row2: Tabel Pesanan -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" id="orders-table-wrapper">
+                <!-- Judul -->
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h3 class="font-bold text-gray-800">Riwayat Pesanan</h3>
                 </div>
 
+                <!-- Tabel -->
                 <table class="w-full text-left">
+                    <!-- tabel judul -->
                     <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-bold">
                         <tr>
                             <th class="px-6 py-4">Klien</th>
@@ -150,27 +148,24 @@
                             <th class="px-6 py-4 text-right">Tanggal</th>
                         </tr>
                     </thead>
-
+                    <!-- tabel konten -->
                     <tbody class="divide-y divide-gray-100 text-sm">
                         @forelse($pesanan as $p)
+                        <!-- Baris 1 -->
                         <tr class="hover:bg-gray-50">
-
-                            {{-- CLIENT --}}
+                            <!-- klien -->
                             <td class="px-6 py-4 font-medium text-gray-900">
                                 {{ $p->client->name }}
                             </td>
-
-                            {{-- PROJECT --}}
+                            <!-- nama project -->
                             <td class="px-6 py-4">
                                 {{ $p->nama_project }}
                             </td>
-
-                            {{-- QTY --}}
+                            <!-- qty -->
                             <td class="px-6 py-4">
                                 {{ $p->qty }}
                             </td>
-
-                            {{-- STATUS --}}
+                            <!-- status -->
                             <td class="px-6 py-4">
                                 @if($p->status == 'pending')
                                 <span class="px-2 py-1 text-xs font-bold bg-yellow-100 text-yellow-700 rounded">
@@ -186,14 +181,13 @@
                                 </span>
                                 @endif
                             </td>
-
-                            {{-- TANGGAL --}}
+                            <!-- tanggal -->
                             <td class="px-6 py-4 text-right text-gray-400">
                                 {{ $p->created_at->format('d M Y') }}
                             </td>
-
                         </tr>
                         @empty
+                        <!-- Baris 2: tampilan jika data kosong -->
                         <tr>
                             <td colspan="5" class="text-center py-6 text-gray-400">
                                 Belum ada data pesanan
@@ -203,7 +197,7 @@
                     </tbody>
                 </table>
 
-                {{-- PAGINATION --}}
+                <!-- pagination -->
                 @if($pesanan->hasPages())
                 <div class="px-6 py-4 border-t border-gray-100 orders-pagination">
                     {{ $pesanan->links() }}
@@ -211,13 +205,16 @@
                 @endif
             </div>
 
-            {{-- ==================== ROW 3: TABLE HPP ==================== --}}
+            <!-- Kontainer row3: Tabel HPP -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" id="hpps-table-wrapper">
+                <!-- judul -->
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h3 class="font-bold text-gray-800">Riwayat Data HPP</h3>
                 </div>
 
+                <!-- tabel -->
                 <table class="w-full text-left">
+                    <!-- tabel judul -->
                     <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-bold">
                         <tr>
                             <th class="px-6 py-4">Klien</th>
@@ -226,21 +223,20 @@
                             <th class="px-6 py-4 text-right">Tanggal</th>
                         </tr>
                     </thead>
-
+                    <!-- tabel konten -->
                     <tbody class="divide-y divide-gray-100 text-sm">
                         @forelse($hpps as $hpp)
+                        <!-- Baris 1 -->
                         <tr class="hover:bg-gray-50">
-                            {{-- KLIEN --}}
+                            <!-- klien -->
                             <td class="px-6 py-4 font-medium text-gray-900">
                                 {{ $hpp->pesanan->client->name }}
                             </td>
-
-                            {{-- PROJECT --}}
+                            <!-- project -->
                             <td class="px-6 py-4">
                                 {{ $hpp->pesanan->nama_project }}
                             </td>
-
-                            {{-- FILE --}}
+                            <!-- file download hpp -->
                             <td class="px-6 py-4">
                                 <a href="{{ asset('storage/' . $hpp->file_hpp) }}"
                                     target="_blank"
@@ -248,13 +244,13 @@
                                     Download HPP
                                 </a>
                             </td>
-
-                            {{-- TANGGAL --}}
+                            <!-- tanggal -->
                             <td class="px-6 py-4 text-right text-gray-400">
                                 {{ $hpp->created_at->format('d M Y') }}
                             </td>
                         </tr>
                         @empty
+                        <!-- Baris 2: tampilan jika data kosong -->
                         <tr>
                             <td colspan="4" class="text-center py-6 text-gray-400">
                                 Belum ada data HPP
@@ -264,7 +260,7 @@
                     </tbody>
                 </table>
 
-                {{-- PAGINATION --}}
+                <!-- pagination -->
                 @if($hpps->hasPages())
                 <div class="px-6 py-4 border-t border-gray-100 hpps-pagination">
                     {{ $hpps->links() }}
@@ -275,7 +271,7 @@
     </div>
 
     <script>
-        // script order
+        // script pesanan
         const select = document.getElementById('requestSelect');
         const qtyInput = document.getElementById('qtyInput');
 

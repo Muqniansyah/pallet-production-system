@@ -1,7 +1,6 @@
 <x-app-layout>
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
-
+        <!-- judul -->
         <div class="mb-8">
             <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
                 Pusat <span class="text-slate-400 font-light">Informasi</span>
@@ -9,13 +8,16 @@
             <p class="text-slate-500 mt-1">Temukan lokasi kami dan terhubung melalui media sosial.</p>
         </div>
 
+        <!-- informasi kontak -->
         <div class="bg-white overflow-hidden shadow-sm rounded-[2rem] p-8 md:p-12 border border-slate-100">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-
+                <!-- information & sosmed -->
                 <div class="space-y-10">
+                    <!-- information -->
                     <div>
                         <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Informasi Kontak</h2>
                         <div class="space-y-6">
+                            <!-- email -->
                             <div class="flex items-center group">
                                 <div class="bg-slate-50 p-3 rounded-2xl mr-4 group-hover:bg-blue-50 transition-colors">
                                     <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,7 +29,7 @@
                                     <p class="text-slate-700 font-semibold">sales@menarabekasilestari.com</p>
                                 </div>
                             </div>
-
+                            <!-- telepon -->
                             <div class="flex items-center group">
                                 <div class="bg-slate-50 p-3 rounded-2xl mr-4 group-hover:bg-green-50 transition-colors">
                                     <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,7 +41,7 @@
                                     <p class="text-slate-700 font-semibold">+62 858-1729-8071</p>
                                 </div>
                             </div>
-
+                            <!-- jam operasional -->
                             <div class="flex items-center group">
                                 <div class="bg-slate-50 p-3 rounded-2xl mr-4">
                                     <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,6 +56,7 @@
                         </div>
                     </div>
 
+                    <!-- sosial media -->
                     <div>
                         <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Media Sosial</h2>
                         <div class="flex gap-4">
@@ -67,6 +70,7 @@
                     </div>
                 </div>
 
+                <!-- maps -->
                 <div class="space-y-6">
                     <div class="flex justify-between items-center">
                         <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Lokasi Perusahaan</h2>
@@ -90,10 +94,9 @@
                         Cimuning, Kota Bekasi, Provinsi Jawa Barat, Indonesia
                     </p>
                 </div>
-
             </div>
         </div>
-        <!-- card -->
+        <!-- card keterangan produksi -->
         <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="p-6 bg-blue-50 rounded-[1.5rem] border border-blue-100">
                 <h3 class="font-bold text-blue-900 text-sm">Produksi Modern</h3>
@@ -108,10 +111,11 @@
                 <p class="text-slate-700 text-xs mt-2">Bahan baku kayu berkelanjutan dan legal.</p>
             </div>
         </div>
-        <!-- alur -->
+        <!-- alur produksi-->
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="mt-20 border-t border-slate-100 pt-16">
+                    <!-- judul -->
                     <div class="mb-10 text-center">
                         <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-3">Alur Kerja Sistem</h2>
                         <h3 class="text-2xl font-black text-slate-800 italic uppercase tracking-tighter">Alur Layanan <span class="text-blue-600">SIPALET</span></h3>
@@ -131,9 +135,8 @@
                     <div class="relative">
                         <!-- Garis penghubung horizontal (hanya muncul di layar besar Lg ke atas) -->
                         <div class="hidden lg:block absolute top-10 left-10 right-10 h-0.5 bg-slate-100 z-0"></div>
-
+                        <!-- kontainer langkah -->
                         <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-8 relative z-10">
-
                             <!-- Lngkah 1: Klien melihat referensi -->
                             <div class="flex flex-col items-center text-center group">
                                 <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
@@ -210,12 +213,10 @@
                                 <h4 class="text-[10px] font-black uppercase tracking-tighter text-slate-800 italic">7. Finalisasi & Deal</h4>
                                 <p class="text-[9px] text-slate-400 mt-1 leading-tight">Admin terima jadwal/HPP final disepakati.</p>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </x-app-layout>
