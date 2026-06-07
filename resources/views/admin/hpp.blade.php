@@ -271,18 +271,21 @@
     </div>
 
     <script>
-        // script pesanan
+        // Mengisi qty otomatis saat pengajuan palet dipilih
         const select = document.getElementById('requestSelect');
         const qtyInput = document.getElementById('qtyInput');
 
         select.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
+
+            // Ambil nilai qty dari atribut data-qty option yang dipilih
             const qty = selectedOption.getAttribute('data-qty');
 
+            // Isi input qty dengan nilai yang diambil
             qtyInput.value = qty;
         });
 
-        // script upload hpp
+        // Menampilkan nama file saat file HPP dipilih
         const hppFileInput = document.getElementById('hppFileInput');
         const hppDropzone = document.getElementById('hppDropzone');
         const hppIcon = document.getElementById('hppIcon');
@@ -293,18 +296,18 @@
             if (this.files && this.files.length > 0) {
                 const fileName = this.files[0].name;
 
-                // Ubah Tampilan Menjadi "Active/Success"
+                // Ubah tampilan dropzone menjadi aktif saat file dipilih
                 hppDropzone.classList.remove('border-slate-200');
                 hppDropzone.classList.add('border-indigo-500', 'bg-indigo-50/50');
 
                 hppIcon.classList.remove('text-slate-300');
                 hppIcon.classList.add('text-indigo-600');
 
-                // Tampilkan Nama File yang dipilih
+                // Tampilkan nama file yang dipilih
                 hppPrimaryText.innerHTML = `<span class="text-indigo-600">FILE TERPILIH:</span>`;
                 hppSecondaryText.innerHTML = `<span class="text-slate-800 font-bold text-sm">${fileName}</span>`;
             } else {
-                // Reset Jika Batal
+                // Reset tampilan dropzone jika file dibatalkan
                 hppDropzone.classList.add('border-slate-200');
                 hppDropzone.classList.remove('border-indigo-500', 'bg-indigo-50/50');
 
@@ -316,14 +319,16 @@
             }
         });
 
-        // AJAX pagination - orders
+        // Pagination AJAX tanpa refresh halaman untuk tabel pesanan dan HPP
         document.addEventListener('click', function(e) {
-            // Orders pagination
+            // Pagination tabel pesanan
             const ordersWrapper = document.getElementById('orders-table-wrapper');
             const ordersLink = e.target.closest('#orders-table-wrapper .orders-pagination a');
             if (ordersLink) {
                 e.preventDefault();
                 const url = new URL(ordersLink.href);
+
+                // Ambil konten halaman berikutnya via AJAX
                 fetch(ordersLink.href, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
@@ -334,18 +339,21 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                         const newContent = doc.getElementById('orders-table-wrapper');
+                        // Update konten tabel pesanan dengan data baru
                         if (newContent) ordersWrapper.innerHTML = newContent.innerHTML;
-                        // update URL tanpa reload
+                        // Update URL tanpa refresh halaman
                         history.pushState({}, '', url);
                     });
             }
 
-            // HPPs pagination
+            // Pagination tabel HPP
             const hppsWrapper = document.getElementById('hpps-table-wrapper');
             const hppsLink = e.target.closest('#hpps-table-wrapper .hpps-pagination a');
             if (hppsLink) {
                 e.preventDefault();
                 const url = new URL(hppsLink.href);
+
+                // Ambil konten halaman berikutnya via AJAX
                 fetch(hppsLink.href, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
@@ -356,7 +364,9 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                         const newContent = doc.getElementById('hpps-table-wrapper');
+                        // Update konten tabel HPP dengan data baru
                         if (newContent) hppsWrapper.innerHTML = newContent.innerHTML;
+                        // Update URL tanpa refresh halaman
                         history.pushState({}, '', url);
                     });
             }

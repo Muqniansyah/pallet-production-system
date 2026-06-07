@@ -179,18 +179,22 @@
     </div>
 
     <script>
-        // fungsi pagination
+        // Fungsi pagination AJAX tanpa refresh halaman yang dapat digunakan ulang
         function ajaxPaginate(wrapperId, paginationClass) {
             document.addEventListener('click', function(e) {
                 const wrapper = document.getElementById(wrapperId);
                 const link = e.target.closest('#' + wrapperId + ' .' + paginationClass + ' a');
 
+                // Abaikan klik jika bukan tombol pagination
                 if (!link) return;
 
                 e.preventDefault();
+
+                // Nonaktifkan tabel saat memuat data baru
                 wrapper.style.opacity = '0.5';
                 wrapper.style.pointerEvents = 'none';
 
+                // Ambil konten halaman berikutnya via AJAX
                 fetch(link.href, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
@@ -201,25 +205,30 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
 
-                        // update tabel orders
+                        // Update tabel pesanan dengan data baru
                         const newOrders = doc.getElementById('orders-table-wrapper');
                         if (newOrders) document.getElementById('orders-table-wrapper').innerHTML = newOrders.innerHTML;
 
-                        // update tabel hpp
+                        // Update tabel HPP dengan data baru
                         const newHpp = doc.getElementById('hpp-table-wrapper');
                         if (newHpp) document.getElementById('hpp-table-wrapper').innerHTML = newHpp.innerHTML;
 
+                        // Update URL tanpa refresh halaman
                         history.pushState({}, '', link.href);
+
+                        // Aktifkan kembali tabel setelah selesai
                         wrapper.style.opacity = '1';
                         wrapper.style.pointerEvents = 'auto';
                     })
                     .catch(() => {
+                        // Aktifkan kembali tabel jika terjadi error
                         wrapper.style.opacity = '1';
                         wrapper.style.pointerEvents = 'auto';
                     });
             });
         }
 
+        // Inisialisasi pagination AJAX untuk tabel pesanan dan HPP
         ajaxPaginate('orders-table-wrapper', 'orders-pagination');
         ajaxPaginate('hpp-table-wrapper', 'hpp-pagination');
     </script>

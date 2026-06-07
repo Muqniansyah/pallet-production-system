@@ -3,23 +3,32 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\View\View;
+
+// enkripsi dan urusan login, logout, cek user
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
+// redirect halaman dan menangkap data inputan form
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\View\View;
+
+// pemanggilan model
+use App\Models\User;
 
 class RegisteredUserController extends Controller
 {
+    // Menampilkan halaman register
     public function create(): View
     {
         return view('auth.register');
     }
 
+    // Memproses registrasi pengguna baru
     public function store(Request $request): RedirectResponse
     {
+        // Validasi input registrasi
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
@@ -50,6 +59,7 @@ class RegisteredUserController extends Controller
             'password.regex'     => 'Password harus mengandung huruf besar, huruf kecil, angka, dan simbol (contoh: !@#$%^&*).',
         ]);
 
+        // Buat akun pengguna baru dengan role client
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
@@ -57,10 +67,13 @@ class RegisteredUserController extends Controller
             'role'     => 'client',
         ]);
 
+        // Jalankan event Registered setelah akun berhasil dibuat
         event(new Registered($user));
 
+        // Login atau masuk otomatis setelah registrasi berhasil
         Auth::login($user);
 
+        // Redirect berdasarkan role setelah registrasi
         if ($user->role === 'admin') {
             return redirect('/admin/dashboard');
         }

@@ -1,12 +1,15 @@
 <style>
+    /* Import font Plus Jakarta Sans dari Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
+    /* Reset awal untuk semua elemen */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
+    /* Wrapper utama halaman landing */
     .lp-wrap {
         font-family: 'Plus Jakarta Sans', sans-serif;
         min-height: 580px;
@@ -16,6 +19,7 @@
         background-color: #1E0F05;
     }
 
+    /* Canvas untuk tekstur serat kayu */
     #woodCanvas {
         position: absolute;
         inset: 0;
@@ -23,6 +27,7 @@
         height: 100%;
     }
 
+    /* Efek vignette: terang di tengah, gelap di pinggir */
     .vignette {
         position: absolute;
         inset: 0;
@@ -30,6 +35,7 @@
         z-index: 1;
     }
 
+    /* Lapisan gelap untuk meningkatkan keterbacaan teks */
     .dark-overlay {
         position: absolute;
         inset: 0;
@@ -37,6 +43,7 @@
         z-index: 2;
     }
 
+    /* Nav */
     .nav {
         position: relative;
         z-index: 10;
@@ -49,6 +56,7 @@
         animation: slideDown 0.6s ease forwards 0.2s;
     }
 
+    /* Logo aplikasi */
     .logo {
         display: flex;
         align-items: center;
@@ -73,6 +81,7 @@
         box-shadow: 0 2px 12px rgba(200, 121, 65, 0.4);
     }
 
+    /* Badge tagline di pojok kanan navigasi */
     .nav-badge {
         background: rgba(200, 121, 65, 0.15);
         border: 1px solid rgba(200, 121, 65, 0.35);
@@ -84,6 +93,7 @@
         letter-spacing: 0.5px;
     }
 
+    /* Konten utama */
     .hero {
         position: relative;
         z-index: 10;
@@ -211,6 +221,7 @@
         transform: translateY(-2px);
     }
 
+    /* Strip fitur-fitur unggulan di bagian bawah */
     .feature-strip {
         display: flex;
         gap: 10px;
@@ -239,6 +250,7 @@
         margin-right: 5px;
     }
 
+    /* Animasi */
     @keyframes fadeUp {
         to {
             opacity: 1;
@@ -254,13 +266,16 @@
     }
 </style>
 
+<!-- judul dan icon -->
 <title>{{ config('app.name', 'Laravel') }}</title>
 <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
+<!-- Canvas untuk tekstur serat kayu, Efek vignette dan Lapisan gelap -->
 <canvas id="woodCanvas"></canvas>
 <div class="vignette"></div>
 <div class="dark-overlay"></div>
 
+<!-- navigasi atas -->
 <nav class="nav">
     <div class="logo">
         <div class="logo-icon">S</div>
@@ -269,6 +284,7 @@
     <div class="nav-badge">SISTEM PRODUKSI PALET</div>
 </nav>
 
+<!-- konten utama -->
 <section class="hero">
     <div class="tag-pill">
         <div class="tag-dot"></div>
@@ -285,6 +301,7 @@
     </div>
 </section>
 
+<!-- Strip fitur unggulan -->
 <div class="feature-strip">
     <div class="feat-tag"><span>✓</span>Custom Design Pallet</div>
     <div class="feat-tag"><span>✓</span>Transparansi HPP</div>
@@ -295,9 +312,11 @@
 
 <script>
     (function() {
+        // Ambil elemen canvas dan context 2D
         const canvas = document.getElementById('woodCanvas');
         const ctx = canvas.getContext('2d');
 
+        // Fungsi: Menyesuaikan ukuran canvas dengan parent element lalu menggambar ulang
         function resize() {
             const wrap = canvas.parentElement;
             canvas.width = wrap.offsetWidth || 680;
@@ -305,15 +324,20 @@
             drawWood();
         }
 
+        // Fungsi: Menghasilkan angka acak dalam rentang tertentu
         function rand(min, max) {
             return Math.random() * (max - min) + min;
         }
 
+        // Fungsi: Menggambar tekstur serat kayu pada canvas
         function drawWood() {
             const W = canvas.width,
                 H = canvas.height;
+
+            // Bersihkan canvas sebelum menggambar ulang
             ctx.clearRect(0, 0, W, H);
 
+            // Membuat gradien warna latar belakang kayu gelap
             const baseGrad = ctx.createLinearGradient(0, 0, W, H);
             baseGrad.addColorStop(0, '#2A1206');
             baseGrad.addColorStop(0.3, '#1E0D04');
@@ -322,12 +346,14 @@
             ctx.fillStyle = baseGrad;
             ctx.fillRect(0, 0, W, H);
 
+            // Variasi warna serat kayu
             const grainColors = [
                 'rgba(120,60,15,IDX)', 'rgba(90,40,8,IDX)',
                 'rgba(150,80,20,IDX)', 'rgba(70,30,5,IDX)',
                 'rgba(180,100,30,IDX)', 'rgba(100,50,12,IDX)',
             ];
 
+            // Menggambar garis serat kayu secara acak
             for (let i = 0; i < 120; i++) {
                 const x = rand(0, W);
                 const amplitude = rand(2, 18);
@@ -350,6 +376,7 @@
                 ctx.stroke();
             }
 
+            // Menggambar pola lingkaran serat kayu (annual rings)
             for (let i = 0; i < 18; i++) {
                 const cx = rand(W * 0.1, W * 0.9);
                 const cy = rand(-H * 0.3, H * 0.5);
@@ -364,6 +391,7 @@
                 }
             }
 
+            // Menggambar detail retakan/guratan kayu
             for (let i = 0; i < 40; i++) {
                 const x = rand(0, W);
                 const y = rand(0, H);
@@ -377,6 +405,7 @@
                 ctx.stroke();
             }
 
+            // Menambahkan efek kilap cahaya pada permukaan kayu
             const sheen = ctx.createLinearGradient(0, 0, W * 0.6, H * 0.4);
             sheen.addColorStop(0, 'rgba(255,200,120,0.04)');
             sheen.addColorStop(0.5, 'rgba(255,180,80,0.02)');
@@ -385,7 +414,9 @@
             ctx.fillRect(0, 0, W, H);
         }
 
+        // Jalankan resize saat pertama kali dimuat
         resize();
+        // Gambar ulang saat ukuran layar berubah
         window.addEventListener('resize', resize);
     })();
 </script>

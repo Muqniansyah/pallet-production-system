@@ -4,31 +4,38 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
+// pemanggilan model
 use App\Models\MeetingRequest;
+// pemanggilan services
 use App\Services\ZoomService;
 
 class AdminMeetingController extends Controller
 {
+    // Menampilkan semua data meeting request dengan pagination
     public function index()
     {
         $meetings = MeetingRequest::with('user')->latest()->paginate(5);
+
         return view('admin.meet', compact('meetings'));
     }
 
-    // admin approve
+    // Menyetujui meeting dan membuat meeting di Zoom
     public function approve($id, ZoomService $zoomService)
     {
         $meeting = MeetingRequest::findOrFail($id);
 
-        // format waktu ke format Zoom
+        // Format waktu ke format yang diterima Zoom API
         $startTime = date('Y-m-d\TH:i:s', strtotime($meeting->start_time));
 
+        // Buat meeting di Zoom menggunakan ZoomService
         $zoom = $zoomService->createMeeting([
             'judul' => $meeting->judul,
             'start_time' => $startTime,
             'durasi' => $meeting->durasi,
         ]);
 
+        // Simpan data meeting Zoom ke database
         $meeting->update([
             'status' => 'disetujui',
             'zoom_meeting_id' => $zoom['id'] ?? null,
@@ -39,15 +46,17 @@ class AdminMeetingController extends Controller
         return back()->with('success', 'Meeting berhasil dibuat di Zoom');
     }
 
-    // admin reject
+    // Menolak meeting berdasarkan ID beserta keterangan alasan
     public function reject(Request $request, $id)
     {
+        // Validasi keterangan penolakan wajib diisi
         $request->validate([
             'keterangan' => 'required|string'
         ]);
 
         $meeting = MeetingRequest::findOrFail($id);
 
+        // Update status meeting menjadi ditolak beserta keterangan
         $meeting->update([
             'status' => 'ditolak',
             'keterangan' => $request->keterangan,

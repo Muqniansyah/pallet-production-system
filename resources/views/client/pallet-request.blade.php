@@ -267,13 +267,6 @@
                             <p class="text-xs text-gray-400">Hand Gesture Edition — Live Preview</p>
                         </div>
                     </div>
-                    <!-- <div class="flex items-center gap-3">
-                        <button onclick="pvLaunchSecure()"
-                            class="text-xs font-medium px-4 py-2 rounded-lg text-white transition-all duration-200 hover:opacity-90 active:scale-95"
-                            style="background: linear-gradient(135deg, #1e3a5f, #2563eb);">
-                            ↗ Buka Fullscreen
-                        </button>
-                    </div> -->
                 </div>
 
                 <!-- Iframe Container -->
@@ -587,12 +580,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
+        // Fungsi utama untuk mengelola iframe PaletView 3D, sync data desain, dan tabel desain
         (function() {
+            // aktifkan mode ketat JavaScript — mencegah penggunaan variabel yang tidak dideklarasikan
             'use strict';
 
-            /* ─── Obfuscated URL ────────────────────────────── */
-            var _e = 'aHR0cHM6Ly9jb3VyYWdlb3VzLXJvbHlwb2x5LTUzMjU3MS5uZXRsaWZ5LmFwcC8=';
+            // URL iframe PaletView di-encode Base64 agar tidak terbaca langsung di source code browser
+            const _e = 'aHR0cHM6Ly9jb3VyYWdlb3VzLXJvbHlwb2x5LTUzMjU3MS5uZXRsaWZ5LmFwcC8=';
 
+            // Fungsi untuk decode Base64 kembali ke URL asli saat dibutuhkan
             function _d() {
                 try {
                     return atob(_e);
@@ -601,48 +597,63 @@
                 }
             }
 
-            var TRUSTED_ORIGIN = 'https://courageous-rolypoly-532571.netlify.app';
-            var API_SYNC = '/client/palet/sync';
-            var API_LIST = '/client/palet/designs';
+            // Origin yang dipercaya untuk menerima postMessage dari iframe
+            const TRUSTED_ORIGIN = 'https://courageous-rolypoly-532571.netlify.app';
 
-            /* ─── DOM refs ──────────────────────────────────── */
-            var _bar = document.getElementById('pv-bar');
-            var _status = document.getElementById('pv-status-text');
-            var _splash = document.getElementById('pv-splash');
-            var _frame = document.getElementById('pv-frame');
-            var _logDot = document.getElementById('pv-log-dot');
-            var _logMsg = document.getElementById('pv-log-msg');
+            // Endpoint Laravel yang akan dipanggil oleh JavaScript di halaman ini
+            const API_SYNC = '/client/palet/sync';    // untuk kirim data desain ke database
+            const API_LIST = '/client/palet/designs'; // untuk ambil data desain dari database
 
-            /* ─── Splash sequence ───────────────────────────── */
-            var _msgs = [
+            // Simpan referensi elemen HTML ke variabel agar mudah dimanipulasi
+            const _bar = document.getElementById('pv-bar');               // progress bar splash
+            const _status = document.getElementById('pv-status-text');    // teks status loading
+            const _splash = document.getElementById('pv-splash');         // overlay splash screen
+            const _frame = document.getElementById('pv-frame');           // iframe PaletView 3D
+            const _logDot = document.getElementById('pv-log-dot');        // titik indikator log
+            const _logMsg = document.getElementById('pv-log-msg');        // teks log bawah iframe
+
+            // Daftar pesan yang ditampilkan bergantian selama splash screen berjalan
+            const _msgs = [
                 'Menginisialisasi mesin 3D...', 'Memuat model geometri palet...',
                 'Mengaktifkan hand gesture ML...', 'Menyiapkan WebGL renderer...',
                 'Menghubungkan ke modul kamera...', 'Hampir selesai...'
             ];
-            var _msgIdx = 0,
-                _progress = 0,
-                _started = false;
+            let _msgIdx = 0,        // indeks pesan yang sedang ditampilkan
+                _progress = 0,      // nilai progress bar saat ini (0–100)
+                _started = false;   // penanda agar animasi splash hanya berjalan sekali
 
+            // Fungsi animasi splash — menaikkan progress bar secara bertahap dengan nilai acak
             function _step() {
+                // Jika progress sudah 100, hentikan animasi dan lanjut ke _finalize()
                 if (_progress >= 100) {
                     _finalize();
                     return;
                 }
+
+                // Naikkan progress bar secara acak antara 8–25 per langkah, maksimal 100
                 _progress = Math.min(_progress + Math.floor(Math.random() * 18) + 8, 100);
                 if (_bar) _bar.style.width = _progress + '%';
+
+                // Ganti teks status dengan pesan berikutnya dari array _msgs
                 if (_status && _msgs[_msgIdx]) {
                     _status.textContent = _msgs[_msgIdx];
                     _msgIdx = Math.min(_msgIdx + 1, _msgs.length - 1);
                 }
+                // Ulangi setelah jeda acak 350–850ms agar animasi loading terasa natural
                 setTimeout(_step, Math.floor(Math.random() * 500) + 350);
             }
 
+            // Fungsi yang dijalankan setelah progress bar selesai (100%)
             function _finalize() {
                 if (_status) _status.textContent = 'Siap!';
                 if (_bar) _bar.style.width = '100%';
-                var url = _d();
+
+                // Decode URL Netlify lalu set sebagai src iframe — iframe mulai load di sini
+                const url = _d();
                 if (url && _frame) {
                     _frame.src = url;
+
+                    // Setelah iframe selesai load, sembunyikan splash screen dengan fade out
                     _frame.onload = function() {
                         setTimeout(function() {
                             if (_splash) {
@@ -656,6 +667,8 @@
                             _setLog('hijau', '✓ PaletView terhubung — menunggu input data...');
                         }, 400);
                     };
+
+                    // Fallback: paksa sembunyikan splash setelah 6 detik, jika onload tidak terpicu (co: koneksi lambat /iframe gagal load)
                     setTimeout(function() {
                         if (_splash && _splash.style.display !== 'none') {
                             _splash.style.opacity = '0';
@@ -668,14 +681,16 @@
                 }
             }
 
-            var _container = _frame ? _frame.closest('.relative') : null;
+            // Ambil container iframe, lalu pantau apakah sudah masuk viewport
+            const _container = _frame ? _frame.closest('.relative') : null;
             if (_container && 'IntersectionObserver' in window) {
-                var _obs = new IntersectionObserver(function(entries) {
+                // Pantau posisi iframe di layar — animasi splash baru mulai saat user scroll ke bawah dan iframe terlihat minimal 20%
+                const _obs = new IntersectionObserver(function(entries) {
                     entries.forEach(function(e) {
                         if (e.isIntersecting && !_started) {
                             _started = true;
-                            setTimeout(_step, 300);
-                            _obs.disconnect();
+                            setTimeout(_step, 300);     // mulai animasi splash
+                            _obs.disconnect();          // hentikan pemantauan, cukup sekali jalan
                         }
                     });
                 }, {
@@ -683,39 +698,49 @@
                 });
                 _obs.observe(_container);
             } else {
+                // Fallback: langsung jalankan splash jika browser tidak support IntersectionObserver
                 setTimeout(_step, 500);
             }
 
-            /* ─── Log helper ────────────────────────────────── */
+            // Fungsi untuk mengubah warna indikator dot dan teks log di bawah iframe (w = nama warna, msg = teks yang ditampilkan)
             function _setLog(w, msg) {
-                var c = {
-                    hijau: '#22c55e',
-                    merah: '#ef4444',
-                    kuning: '#f59e0b',
-                    abu: '#e2e8f0'
+                const c = {
+                    hijau: '#22c55e',      // sukses
+                    merah: '#ef4444',      // error
+                    kuning: '#f59e0b',     // sedang proses
+                    abu: '#e2e8f0'         // default
                 };
                 if (_logDot) _logDot.style.background = c[w] || c.abu;
                 if (_logMsg) _logMsg.textContent = msg;
             }
 
-            /* ─── postMessage → sync ke API ─────────────────── */
-            var _syncCount = 0,
+            // Penghitung berapa kali sync berhasil & timer untuk debounce
+            let _syncCount = 0,
                 _syncTimer = null;
 
+            // Dengarkan pesan masuk dari iframe PaletView via postMessage
             window.addEventListener('message', function(event) {
+                // Abaikan pesan dari origin selain Netlify — mencegah kiriman dari sumber tidak dikenal
                 if (event.origin !== TRUSTED_ORIGIN) return;
-                var msg = event.data;
+                // ambil isi pesan dari iframe
+                const msg = event.data;
+                // Abaikan jika bukan tipe PALET_DATA_UPDATE atau tidak ada payload
                 if (!msg || msg.type !== 'PALET_DATA_UPDATE' || !msg.payload) return;
                 _setLog('kuning', '⟳ Data diterima dari PaletView — menyimpan...');
+
+                // Debounce 600ms: reset timer setiap kali ada update baru masuk
+                // agar tidak spam request ke server saat user masih aktif mengubah desain
                 clearTimeout(_syncTimer);
                 _syncTimer = setTimeout(function() {
                     _syncToLaravel(msg.payload);
                 }, 600);
             });
 
+            // Kirim data desain ke Laravel via AJAX setelah debounce selesai
             function _syncToLaravel(payload) {
-                var csrf = document.querySelector('meta[name="csrf-token"]');
-                var headers = {
+                // Ambil CSRF token dari meta tag — wajib disertakan agar Laravel tidak menolak request
+                const csrf = document.querySelector('meta[name="csrf-token"]');
+                const headers = {
                     'Content-Type': 'application/json'
                 };
                 if (csrf) headers['X-CSRF-TOKEN'] = csrf.getAttribute('content');
@@ -723,7 +748,7 @@
                 fetch(API_SYNC, {
                         method: 'POST',
                         headers: headers,
-                        credentials: 'same-origin',
+                        credentials: 'same-origin',     // kirim cookie session bersama request
                         body: JSON.stringify(payload)
                     })
                     .then(function(r) {
@@ -732,52 +757,41 @@
                     })
                     .then(function() {
                         _syncCount++;
-                        var waktu = new Date().toLocaleTimeString('id-ID');
+                        const waktu = new Date().toLocaleTimeString('id-ID');
                         _setLog('hijau', '✓ Tersimpan ke database [' + waktu + '] — total sync: ' + _syncCount);
-                        // Refresh tabel otomatis setelah data masuk
+                        // Refresh tabel desain otomatis setelah data berhasil tersimpan
                         setTimeout(pvRefreshTable, 500);
                     })
                     .catch(function(err) {
+                        // Tampilkan pesan error di log jika request gagal
                         _setLog('merah', '✗ Gagal simpan: ' + err.message);
                         console.error('[PaletSync]', err);
                     });
             }
 
-            /* ─── Fullscreen launcher ───────────────────────── */
-            window.pvLaunchSecure = function() {
-                var url = _d();
-                if (!url) return;
-                var w = window.open('about:blank', '_blank', 'noopener,noreferrer');
-                if (w) {
-                    try {
-                        w.document.open();
-                        w.document.write('<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=' + url + '"><title>Redirecting...</title></head><body></body></html>');
-                        w.document.close();
-                    } catch (ex) {
-                        w.location.href = url;
-                    }
-                }
-            };
-
-            /* ─── Anti-inspect ──────────────────────────────── */
-            var _card = document.getElementById('pv-frame');
+            // Blok ini bertujuan menyembunyikan URL iframe PaletView dari user. (Ada 3 cara pencegahan)
+            // 1. Matikan klik kanan di area iframe — mencegah user inspect element untuk melihat src iframe
+            const _card = document.getElementById('pv-frame');
             if (_card) {
                 _card.closest('.relative').addEventListener('contextmenu', function(ev) {
                     ev.preventDefault();
                     return false;
                 });
             }
+            // 2. Blokir shortcut yang bisa membuka DevTools di browser (F12/Ctrl+Shift+I/Ctrl+Shift+J/Ctrl+Shift+C/Ctrl+U)
             document.addEventListener('keydown', function(ev) {
-                var k = ev.key || '';
+                const k = ev.key || '';
                 if (ev.keyCode === 123 || (ev.ctrlKey && ev.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(k)) || (ev.ctrlKey && ['U', 'u'].includes(k))) {
                     ev.preventDefault();
                     ev.stopPropagation();
                     return false;
                 }
             }, true);
+            // 3. Deteksi jika DevTools sedang aktif menggunakan trik debugger (Pengecekan diulang setiap 3 detik.)
+            // Jika DevTools terbuka, browser akan jeda di perintah debugger. Jeda > 100ms, jika DevTools aktif → iframe dikosongkan.
             (function _hb() {
                 (function() {
-                    var d = new Date();
+                    const d = new Date();
                     debugger;
                     if (new Date() - d > 100) {
                         if (_frame) _frame.src = 'about:blank';
@@ -786,38 +800,37 @@
                 setTimeout(_hb, 3000);
             })();
 
-            /* ════════════════════════════════════════════════
-               TABEL DATA — fetch dari /api/palet/designs
-            ════════════════════════════════════════════════ */
-
+            // Ambil data desain terbaru dari server lalu perbarui tabel dan statistik
             function pvRefreshTable() {
-                var btn = document.getElementById('pv-refresh-btn');
-                var icon = document.getElementById('pv-refresh-icon');
+                const btn = document.getElementById('pv-refresh-btn');
+                const icon = document.getElementById('pv-refresh-icon');
+
+                // Tampilkan animasi spin dan nonaktifkan tombol selama proses fetch
                 if (icon) {
                     icon.className = 'pv-spin';
                     icon.textContent = '⟳';
                 }
                 if (btn) btn.disabled = true;
 
-                fetch(API_LIST, {
-                        credentials: 'same-origin'
-                    })
+                fetch(API_LIST, {credentials: 'same-origin'}) // ambil data desain dari /client/palet/designs
                     .then(function(r) {
                         if (!r.ok) throw new Error('HTTP ' + r.status);
                         return r.json();
                     })
                     .then(function(data) {
-                        pvRenderTable(data);
-                        pvRenderStats(data);
-                        var now = new Date().toLocaleTimeString('id-ID');
-                        var info = document.getElementById('pv-last-fetch');
+                        pvRenderTable(data);    // render baris tabel
+                        pvRenderStats(data);    // update angka statistik
+                        const now = new Date().toLocaleTimeString('id-ID');
+                        const info = document.getElementById('pv-last-fetch');
                         if (info) info.textContent = 'Diperbarui: ' + now;
                     })
                     .catch(function(err) {
-                        var tbody = document.getElementById('pv-table-body');
+                        // Tampilkan pesan error di dalam tabel jika fetch gagal
+                        const tbody = document.getElementById('pv-table-body');
                         if (tbody) tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-6 text-center text-red-400 text-sm">Gagal memuat data: ' + err.message + '</td></tr>';
                     })
                     .finally(function() {
+                        // Kembalikan tombol dan ikon ke kondisi normal setelah fetch selesai
                         if (icon) {
                             icon.className = '';
                             icon.textContent = '⟳';
@@ -826,25 +839,31 @@
                     });
             }
 
+            // Hitung dan tampilkan angka statistik di atas tabel
             function pvRenderStats(data) {
-                var total = data.length;
-                var today = data.filter(function(d) {
+                const total = data.length;        // total semua data desain
+
+                // Hitung berapa data yang diperbarui hari ini
+                const today = data.filter(function(d) {
                     if (!d.last_updated_at) return false;
                     return new Date(d.last_updated_at).toDateString() === new Date().toDateString();
                 }).length;
-                var latest = data[0];
-                var dim = latest && latest.dimensi_panjang ?
+
+                // Ambil dimensi dan waktu update dari data terbaru (index 0)
+                const latest = data[0];
+                const dim = latest && latest.dimensi_panjang ?
                     (latest.dimensi_panjang * 10) + ' × ' + (latest.dimensi_lebar * 10) + ' mm' :
                     '—';
-                var lastTime = latest && latest.last_updated_at ?
+                const lastTime = latest && latest.last_updated_at ?
                     new Date(latest.last_updated_at).toLocaleTimeString('id-ID', {
                         hour: '2-digit',
                         minute: '2-digit'
                     }) :
                     '—';
 
-                var el = function(id, v) {
-                    var e = document.getElementById(id);
+                // Tampilkan semua nilai ke elemen statistik di halaman
+                const el = function(id, v) {
+                    const e = document.getElementById(id);
                     if (e) e.textContent = v;
                 };
                 el('pv-stat-total', total);
@@ -853,14 +872,16 @@
                 el('pv-stat-last', lastTime);
             }
 
-            /* ─── Tracking baris terbaru ─────────────────────── */
-            var _lastTopId = null;
+            // Simpan id+waktu baris pertama dari render sebelumnya untuk mendeteksi data baru
+            let _lastTopId = null;
 
+            // Render data desain ke dalam tabel
             function pvRenderTable(data) {
-                var tbody = document.getElementById('pv-table-body');
-                var info = document.getElementById('pv-table-info');
+                const tbody = document.getElementById('pv-table-body');
+                const info = document.getElementById('pv-table-info');
                 if (!tbody) return;
 
+                // Jika data kosong, tampilkan pesan kosong dan reset tracker
                 if (!data || data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm"><div class="flex flex-col items-center gap-2"><span style="font-size:24px;">📭</span><span>Belum ada data — mulai input di PaletView di atas</span></div></td></tr>';
                     if (info) info.textContent = 'Menampilkan 0 data';
@@ -868,17 +889,20 @@
                     return;
                 }
 
-                // Gunakan kombinasi id + last_updated_at agar lebih sensitif terhadap perubahan
-                var currentTopId = data[0] ?
+                // Deteksi apakah ada baris baru dengan membandingkan id + last_updated_at dari baris pertama render sekarang vs render sebelumnya
+                const currentTopId = data[0] ?
                     (data[0].id + '|' + data[0].last_updated_at) :
                     null;
-                var isNewRow = _lastTopId !== null && currentTopId !== _lastTopId;
+                const isNewRow = _lastTopId !== null && currentTopId !== _lastTopId;
+                // simpan untuk perbandingan berikutnya
                 _lastTopId = currentTopId;
 
-                var rows = data.map(function(d, idx) {
-                    var isNewest = idx === 0 && isNewRow;
+                const rows = data.map(function(d, idx) {
+                    // tandai baris pertama jika ada data baru
+                    const isNewest = idx === 0 && isNewRow;
 
-                    var waktu = d.last_updated_at ?
+                    // Format waktu update
+                    const waktu = d.last_updated_at ?
                         new Date(d.last_updated_at).toLocaleString('id-ID', {
                             day: '2-digit',
                             month: 'short',
@@ -886,34 +910,40 @@
                             minute: '2-digit'
                         }) : '—';
 
-                    var dim = (d.dimensi_panjang && d.dimensi_lebar) ?
+                    // Format dimensi panjang × lebar dalam mm
+                    const dim = (d.dimensi_panjang && d.dimensi_lebar) ?
                         '<span class="pv-dim-cell">' + (d.dimensi_panjang * 10) + ' × ' + (d.dimensi_lebar * 10) + '</span>' :
                         '<span class="text-gray-300">—</span>';
 
-                    var pa = (d.papan_atas_jumlah) ?
+                    // Format data papan atas: jumlah, tebal, lebar, dan arah
+                    const pa = (d.papan_atas_jumlah) ?
                         '<span class="font-medium">' + d.papan_atas_jumlah + ' pcs</span>' +
                         '<div class="pv-sub">' + pvNullDash(d.papan_atas_tebal) + '×' + pvNullDash(d.papan_atas_lebar) + ' cm' +
                         (d.papan_atas_arah ? ' · ' + (d.papan_atas_arah === 'x' ? '↔' : '↕') : '') + '</div>' :
                         '<span class="text-gray-300">—</span>';
 
-                    var lt = (d.lapisan_tengah_jumlah) ?
+                    // Format data lapisan tengah: jumlah balok, tinggi, lebar, dan tipe
+                    const lt = (d.lapisan_tengah_jumlah) ?
                         '<span class="font-medium">' + d.lapisan_tengah_jumlah + ' balok</span>' +
                         '<div class="pv-sub">' + pvNullDash(d.lapisan_tengah_tinggi) + '×' + pvNullDash(d.lapisan_tengah_lebar) + ' cm' +
                         (d.lapisan_tengah_tipe ? ' · ' + d.lapisan_tengah_tipe : '') + '</div>' :
                         '<span class="text-gray-300">—</span>';
 
-                    var pb = (d.papan_bawah_jumlah) ?
+                    // Format data papan bawah: jumlah, tebal, lebar, dan pola
+                    const pb = (d.papan_bawah_jumlah) ?
                         '<span class="font-medium">' + d.papan_bawah_jumlah + ' pcs</span>' +
                         '<div class="pv-sub">' + pvNullDash(d.papan_bawah_tebal) + '×' + pvNullDash(d.papan_bawah_lebar) + ' cm' +
                         (d.papan_bawah_pola ? ' · ' + d.papan_bawah_pola : '') + '</div>' :
                         '<span class="text-gray-300">—</span>';
 
-                    var gest = (d.gesture_x || d.gesture_y || d.gesture_z) ?
+                    // Format hasil deteksi dimensi dari hand gesture ML (sumbu X, Y, Z)
+                    const gest = (d.gesture_x || d.gesture_y || d.gesture_z) ?
                         '<span style="font-family:monospace;font-size:11px;">X:' + pvNullDash(d.gesture_x) +
                         ' Y:' + pvNullDash(d.gesture_y) + ' Z:' + pvNullDash(d.gesture_z) + '</span>' :
                         '<span class="text-gray-300">—</span>';
 
-                    var hk = d.hasil_kalkulasi;
+                    // Ambil total tinggi dari hasil kalkulasi — parse JSON jika masih berupa string
+                    let hk = d.hasil_kalkulasi;
                     if (typeof hk === 'string') {
                         try {
                             hk = JSON.parse(hk);
@@ -921,22 +951,22 @@
                             hk = null;
                         }
                     }
-                    var tinggi = (hk && hk.total_tinggi_cm) ?
+                    const tinggi = (hk && hk.total_tinggi_cm) ?
                         '<span class="font-semibold text-blue-700">' + (hk.total_tinggi_cm * 10).toFixed(0) + ' mm</span>' :
                         '<span class="text-gray-300">—</span>';
 
-                    var modeBadge = d.mode_tracking ?
+                    // Badge mode input: Gestur (mode1) atau Virtual Keyboard (mode2)
+                    const modeBadge = d.mode_tracking ?
                         '<span class="pv-badge ' + (d.mode_tracking === 'mode1' ? 'pv-badge-blue' : 'pv-badge-green') + '">' +
                         (d.mode_tracking === 'mode1' ? '✌ Gestur' : '⌨ VKB') + '</span>' :
                         '<span class="pv-badge pv-badge-gray">—</span>';
 
-                    // Badge "BARU" + class highlight untuk baris terbaru
-                    var newBadge = isNewest ?
-                        '<span class="pv-new-badge">✦ BARU</span>' : '';
+                    // Tampilkan badge "BARU" dan highlight kuning hanya pada baris terbaru
+                    const newBadge = isNewest ? '<span class="pv-new-badge">✦ BARU</span>' : '';
+                    const rowClass = isNewest ? 'pv-row-new' : '';
+                    const rowId = isNewest ? 'id="pv-newest-row"' : '';
 
-                    var rowClass = isNewest ? 'pv-row-new' : '';
-                    var rowId = isNewest ? 'id="pv-newest-row"' : '';
-
+                    // Susun satu baris tabel dengan semua kolom dan tombol ekspor PDF
                     return '<tr ' + rowId + ' class="' + rowClass + ' hover:bg-gray-50/50 transition-colors">' +
                         '<td class="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">' + newBadge + waktu + '</td>' +
                         '<td class="px-4 py-3">' + dim + '</td>' +
@@ -957,9 +987,9 @@
                 tbody.innerHTML = rows;
                 if (info) info.textContent = 'Menampilkan ' + data.length + ' data';
 
-                // Scroll ke baris baru & hilangkan highlight setelah 5 detik
+                // Jika ada baris baru, scroll otomatis ke baris baru & hilangkan highlight setelah 5 detik
                 if (isNewRow) {
-                    var newestRow = document.getElementById('pv-newest-row');
+                    const newestRow = document.getElementById('pv-newest-row');
                     if (newestRow) {
                         newestRow.scrollIntoView({
                             behavior: 'smooth',
@@ -967,32 +997,36 @@
                         });
                         setTimeout(function() {
                             newestRow.classList.remove('pv-row-new');
-                            var badge = newestRow.querySelector('.pv-new-badge');
+                            const badge = newestRow.querySelector('.pv-new-badge');
                             if (badge) badge.style.opacity = '0';
                         }, 5000);
                     }
                 }
             }
 
+            // Jika nilai ada, tampilkan apa adanya. Jika null/undefined/kosong, tampilkan '—'
             function pvNullDash(v) {
                 return (v !== null && v !== undefined && v !== '') ? v : '—';
             }
 
-            /* ─── Ekspor PDF per baris ───────────────────────── */
+            // Generate dan unduh PDF dari data desain satu baris — dikerjakan murni di browser (jsPDF)
             window.pvExportPDF = function(d) {
-                var jspdf = window.jspdf;
+                // Pastikan library jsPDF sudah ter-load sebelum digunakan
+                const jspdf = window.jspdf;
                 if (!jspdf || !jspdf.jsPDF) {
                     alert('Library PDF belum siap, coba beberapa detik lagi.');
                     return;
                 }
-                var doc = new jspdf.jsPDF({
+
+                // Buat dokumen PDF ukuran A4 portrait
+                const doc = new jspdf.jsPDF({
                     orientation: 'portrait',
                     unit: 'mm',
                     format: 'a4'
                 });
-                var W = doc.internal.pageSize.getWidth();
+                const W = doc.internal.pageSize.getWidth();
 
-                // Header biru
+                // Header biru di bagian atas PDF berisi judul, waktu cetak, dan session ID
                 doc.setFillColor(30, 58, 95);
                 doc.rect(0, 0, W, 28, 'F');
                 doc.setTextColor(255, 255, 255);
@@ -1002,7 +1036,7 @@
                 doc.setFontSize(7.5);
                 doc.setFont('helvetica', 'normal');
                 doc.setTextColor(148, 163, 184);
-                var waktuStr = d.last_updated_at ?
+                const waktuStr = d.last_updated_at ?
                     new Date(d.last_updated_at).toLocaleString('id-ID', {
                         dateStyle: 'long',
                         timeStyle: 'short'
@@ -1010,12 +1044,15 @@
                 doc.text('Dicetak: ' + new Date().toLocaleString('id-ID') + '   |   Update: ' + waktuStr, 14, 19);
                 doc.text('Session ID: ' + (d.session_id || '\u2014'), 14, 25);
 
-                var y = 36;
+                // posisi vertikal awal konten, di bawah header
+                let y = 36;
 
+                // Jika nilai ada tampilkan apa adanya, jika kosong/null tampilkan '—' (hasil selalu string untuk jsPDF)
                 function nd(v) {
                     return (v !== null && v !== undefined && v !== '') ? String(v) : '\u2014';
                 }
 
+                // Cetak judul bagian dengan latar biru muda
                 function sectionTitle(title) {
                     doc.setFillColor(239, 246, 255);
                     doc.rect(14, y - 4, W - 28, 8, 'F');
@@ -1026,6 +1063,7 @@
                     y += 9;
                 }
 
+                // Cetak satu baris data dengan label dan nilai — bisa dua kolom sekaligus
                 function row(lbl, val, lbl2, val2) {
                     doc.setFontSize(8);
                     doc.setFont('helvetica', 'bold');
@@ -1045,12 +1083,14 @@
                     y += 6;
                 }
 
+                // Cetak garis pemisah antar bagian
                 function divider() {
                     doc.setDrawColor(229, 231, 235);
                     doc.line(14, y, W - 14, y);
                     y += 5;
                 }
 
+                // Isi konten PDF per bagian sesuai struktur desain palet
                 // 1. Dimensi Utama
                 sectionTitle('1. DIMENSI UTAMA PALET');
                 row('Panjang', d.dimensi_panjang ? (d.dimensi_panjang * 10) + ' mm (' + d.dimensi_panjang + ' cm)' : null,
@@ -1097,8 +1137,8 @@
                 row('Z \u2014 Tinggi', d.gesture_z ? d.gesture_z + ' mm' : null, '', null);
                 divider();
 
-                // 7. Hasil Kalkulasi
-                var hk = d.hasil_kalkulasi;
+                // 7. Hasil Kalkulasi  — parse JSON jika masih string, lalu cetak jika ada datanya
+                let hk = d.hasil_kalkulasi;
                 if (typeof hk === 'string') {
                     try {
                         hk = JSON.parse(hk);
@@ -1121,7 +1161,7 @@
                         y += 5;
                         doc.setFont('helvetica', 'normal');
                         doc.setTextColor(55, 65, 81);
-                        var lines = doc.splitTextToSize(hk.rekap_material.replace(/<[^>]+>/g, ''), W - 32);
+                        const lines = doc.splitTextToSize(hk.rekap_material.replace(/<[^>]+>/g, ''), W - 32);
                         doc.text(lines, 16, y);
                         y += lines.length * 5;
                     }
@@ -1129,7 +1169,7 @@
                 }
 
                 // Footer
-                var pH = doc.internal.pageSize.getHeight();
+                const pH = doc.internal.pageSize.getHeight();
                 doc.setFillColor(248, 250, 252);
                 doc.rect(0, pH - 12, W, 12, 'F');
                 doc.setDrawColor(226, 232, 240);
@@ -1140,25 +1180,25 @@
                 doc.text('PaletView\u2122 3D \u2014 PT. Kemas Kayu Indonesia \u00b7 Dokumen digenerate otomatis dari dashboard', 14, pH - 5);
                 doc.text('Hal. 1', W - 18, pH - 5);
 
-                // Nama file
-                var dimLbl = (d.dimensi_panjang && d.dimensi_lebar) ?
+                // Simpan PDF dengan nama file yang menyertakan dimensi dan tanggal cetak
+                const dimLbl = (d.dimensi_panjang && d.dimensi_lebar) ?
                     '_' + (d.dimensi_panjang * 10) + 'x' + (d.dimensi_lebar * 10) + 'mm' : '';
                 doc.save('DesainPalet' + dimLbl + '_' + new Date().toISOString().slice(0, 10) + '.pdf');
             };
 
+            // Jalankan pvRefreshTable sekali saat halaman pertama kali selesai di-load
             document.addEventListener('DOMContentLoaded', function() {
                 pvRefreshTable();
             });
 
-            /* Auto-refresh tabel setiap 30 detik */
+            // Refresh tabel otomatis setiap 30 detik tanpa perlu reload halaman
             setInterval(pvRefreshTable, 30000);
 
-            /* Expose ke global supaya tombol Refresh bisa memanggil */
+            // Daftarkan pvRefreshTable ke global agar tombol Refresh di blade bisa memanggil fungsi ini
             window.pvRefreshTable = pvRefreshTable;
-
         })();
 
-        // upload gambar
+        // Menampilkan nama file saat file desain dipilih
         const fileInput = document.getElementById('fileInput');
         const dropzone = document.getElementById('dropzone');
         const uploadIcon = document.getElementById('uploadIcon');
@@ -1169,20 +1209,20 @@
             if (this.files && this.files.length > 0) {
                 const fileName = this.files[0].name;
 
-                // Ubah Tampilan saat file terpilih
+                // Ubah tampilan dropzone menjadi aktif saat file dipilih
                 dropzone.classList.remove('border-gray-200');
                 dropzone.classList.add('border-blue-400', 'bg-blue-50/50');
 
                 uploadIcon.classList.remove('text-gray-300');
                 uploadIcon.classList.add('text-blue-500');
 
-                // Tampilkan Nama File
+                // Tampilkan nama file yang dipilih
                 statusText.innerHTML = `<span class="text-blue-600 font-black uppercase text-[10px] italic">File Terpilih:</span><br><span class="text-slate-800 font-bold">${fileName}</span>`;
                 statusText.classList.remove('text-gray-400', 'italic');
 
                 subText.innerText = "Klik kembali jika ingin mengganti file";
             } else {
-                // Reset ke tampilan awal jika batal pilih
+                // Reset tampilan dropzone jika file dibatalkan
                 dropzone.classList.add('border-gray-200');
                 dropzone.classList.remove('border-blue-400', 'bg-blue-50/50');
 
@@ -1196,17 +1236,21 @@
             }
         });
 
-        // pagination not refresh
+        // Pagination AJAX tanpa refresh halaman untuk tabel pengajuan palet
         document.addEventListener('click', function(e) {
             const wrapper = document.getElementById('requests-table-wrapper');
             const link = e.target.closest('#requests-table-wrapper .requests-pagination a');
 
+            // Abaikan klik jika bukan tombol pagination
             if (!link) return;
 
             e.preventDefault();
+
+            // Nonaktifkan tabel saat memuat data baru
             wrapper.style.opacity = '0.5';
             wrapper.style.pointerEvents = 'none';
 
+            // Ambil konten halaman berikutnya via AJAX
             fetch(link.href, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -1214,53 +1258,57 @@
                 })
                 .then(r => r.text())
                 .then(html => {
+                    // Parse HTML response dan ambil wrapper baru
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
                     const newWrapper = doc.getElementById('requests-table-wrapper');
+
+                    // Update konten tabel dengan data baru
                     if (newWrapper) {
                         wrapper.innerHTML = newWrapper.innerHTML;
                     }
+                    // Update URL tanpa refresh halaman
                     history.pushState({}, '', link.href);
+                    // Aktifkan kembali tabel setelah selesai
                     wrapper.style.opacity = '1';
                     wrapper.style.pointerEvents = 'auto';
                 })
                 .catch(() => {
+                    // Aktifkan kembali tabel jika terjadi error
                     wrapper.style.opacity = '1';
                     wrapper.style.pointerEvents = 'auto';
                 });
         });
 
-        // form pengajuan (produk dan stok)
+        // Inisialisasi form pengajuan palet setelah halaman selesai dimuat
         document.addEventListener('DOMContentLoaded', () => {
-
             const produk = document.getElementById('produkSelect');
             const qty = document.getElementById('qtyInput');
             const info = document.getElementById('stokInfo');
 
+            // Tampilkan info stok dan set batas qty saat jenis palet dipilih
             produk.addEventListener('change', function() {
-
                 let stok =
                     this.options[this.selectedIndex]
                     .dataset.stok;
 
+                // Tampilkan jumlah stok yang tersedia
                 info.innerHTML =
                     `Stok tersedia : ${stok} PCS`;
 
+                // Set batas maksimal qty sesuai stok yang tersedia
                 qty.max = stok;
             });
 
+            // Validasi qty agar tidak melebihi stok tersedia
             qty.addEventListener('input', function() {
+                if (parseInt(this.value) > parseInt(this.max)) {
+                    alert('Jumlah melebihi stok tersedia');
 
-                if (parseInt(this.value) >
-                    parseInt(this.max)) {
-                    alert(
-                        'Jumlah melebihi stok tersedia');
-
+                    // Reset qty ke nilai maksimal stok
                     this.value = this.max;
                 }
-
             });
-
         });
     </script>
 </x-app-layout>

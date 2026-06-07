@@ -2,33 +2,39 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\PaletDesign;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+
+// pemanggilan model
+use App\Models\PaletDesign;
 
 class PaletDesignController extends Controller
 {
+    // Menerima dan menyimpan data desain palet dari Netlify secara real-time
     public function sync(Request $request): JsonResponse
     {
+        // Ambil origin dari header request
         $origin = $request->headers->get('Origin') ?? '';
+
+        // Daftar origin yang diizinkan mengakses endpoint ini
         $allowedOrigins = [
             'https://courageous-rolypoly-532571.netlify.app',
             'http://localhost:8000',
             'http://127.0.0.1:8000',
         ];
 
-        // Kalau ada origin tapi tidak diizinkan, baru tolak
-        // Kalau tidak ada origin (Postman, server-to-server) → izinkan
+        // Tolak request jika origin tidak diizinkan
+        // Jika tidak ada origin (Postman, server-to-server) tetap diizinkan
         if ($origin && !in_array($origin, $allowedOrigins)) {
             return response()->json(['error' => 'Origin tidak diizinkan'], 403);
         }
 
-
+        // Ambil seluruh data dari request
         $payload = $request->all();
 
-        // Ambil atau buat session_id
+        // Ambil session_id dari payload atau gunakan session Laravel
         $sessionId = $payload['session_id'] ?? session()->getId();
 
         // Map payload dari netlify ke kolom database
@@ -80,12 +86,13 @@ class PaletDesignController extends Controller
             'raw_payload'              => $payload,
         ];
 
-        // Upsert: update jika session_id sudah ada, insert jika belum
+        // Update data jika session_id sudah ada, insert baru jika belum
         $record = PaletDesign::updateOrCreate(
             ['session_id' => $sessionId],
             $data
         );
 
+        // Kembalikan response sukses beserta ID dan waktu update
         return response()->json([
             'status'  => 'ok',
             'id'      => $record->id,
@@ -93,12 +100,14 @@ class PaletDesignController extends Controller
         ], 200);
     }
 
+    // Mengambil 100 data desain palet terbaru
     public function index(): JsonResponse
     {
         $designs = PaletDesign::orderBy('last_updated_at', 'desc')
             ->limit(100)
             ->get();
 
+        // Kembalikan data desain dalam format JSON
         return response()->json($designs);
     }
 }

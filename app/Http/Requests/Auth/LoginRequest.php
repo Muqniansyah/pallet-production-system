@@ -12,19 +12,13 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    // Mengizinkan semua pengguna untuk mengakses request ini
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
+    // Aturan validasi input login
     public function rules(): array
     {
         return [
@@ -33,10 +27,7 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    /**
-     * Pesan validasi dalam bahasa Indonesia
-     * (DITAMBAHKAN — tidak ada di versi asli Breeze)
-     */
+    // Pesan validasi dalam bahasa Indonesia (DITAMBAHKAN — tidak ada di versi asli Breeze)
     public function messages(): array
     {
         return [
@@ -48,51 +39,48 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    /**
-     * Attempt to authenticate the request's credentials.
-     *
-     * @throws ValidationException
-     */
+    // Memproses autentikasi login dengan email dan password
     public function authenticate(): void
     {
+        // Pastikan belum melebihi batas percobaan login
         $this->ensureIsNotRateLimited();
 
+        // Gagalkan login jika email atau password salah
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+            // Tambah hitungan percobaan login yang gagal
             RateLimiter::hit($this->throttleKey());
 
-            // DIUBAH: dari trans('auth.failed') → pesan bahasa Indonesia
+            // Tampilkan pesan error jika email atau password salah
             throw ValidationException::withMessages([
                 'email' => 'Email atau password yang Anda masukkan salah.',
             ]);
         }
 
+        // Reset hitungan percobaan login setelah berhasil
         RateLimiter::clear($this->throttleKey());
     }
 
-    /**
-     * Ensure the login request is not rate limited.
-     *
-     * @throws ValidationException
-     */
+    // Memastikan login tidak melebihi batas percobaan (maksimal 5 kali)
     public function ensureIsNotRateLimited(): void
     {
+        // Lanjutkan jika belum melebihi batas percobaan
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
+        // Jalankan event Lockout saat batas percobaan terlampaui
         event(new Lockout($this));
 
+        // Ambil sisa waktu tunggu dalam detik
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
-        // DIUBAH: dari trans('auth.throttle') → pesan bahasa Indonesia
+        // Tampilkan pesan error beserta sisa waktu tunggu
         throw ValidationException::withMessages([
             'email' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $seconds . ' detik.',
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
+    // Membuat kunci unik untuk rate limiter berdasarkan email dan IP
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());

@@ -1,12 +1,15 @@
 <x-guest-layout>
     <div class="relative min-h-screen overflow-hidden flex items-center justify-center bg-[#1E0F05]">
-
+        <!-- Background Utama Tekstur/Animasi Kayu (via JavaScript) -->
         <canvas id="woodCanvas" class="absolute inset-0 w-full h-full"></canvas>
+        <!-- Efek Cahaya Fokus terang di tengah, gelap di pinggir (Vignette) -->
         <div class="absolute inset-0 z-[1]" style="background:radial-gradient(ellipse at center,transparent 40%,rgba(10,4,1,0.75) 100%)"></div>
+        <!-- Lapisan Gelap Menurunkan kontras background agar teks mudah dibaca -->
         <div class="absolute inset-0 z-[2] bg-black/50"></div>
 
+        <!-- kontainer judul dan form -->
         <div class="relative z-10 w-full max-w-sm mx-auto px-4 py-10">
-
+            <!-- judul -->
             <div class="flex flex-col items-center mb-7">
                 <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg font-extrabold text-[#FDF0E0] mb-3"
                     style="background:linear-gradient(135deg,#C87941,#7B3A10);box-shadow:0 4px 16px rgba(200,121,65,0.4)">S</div>
@@ -14,11 +17,11 @@
                 <p class="text-sm text-[#A07850] mt-1">Buat akun baru Anda</p>
             </div>
 
+            <!-- form daftar -->
             <div class="rounded-2xl p-6 border border-[#C87941]/15 bg-white/[0.04] backdrop-blur-sm">
                 <form method="POST" action="{{ route('register') }}" novalidate>
                     @csrf
-
-                    {{-- Nama --}}
+                    <!-- nama -->
                     <div class="mb-4">
                         <x-input-label for="name" :value="__('Nama Lengkap')"
                             class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
@@ -29,7 +32,7 @@
                         <x-input-error :messages="$errors->get('name')" class="mt-1.5 text-xs text-red-400" />
                     </div>
 
-                    {{-- Email --}}
+                    <!-- email -->
                     <div class="mb-4">
                         <x-input-label for="email" :value="__('Alamat Email')"
                             class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
@@ -40,7 +43,7 @@
                         <x-input-error :messages="$errors->get('email')" class="mt-1.5 text-xs text-red-400" />
                     </div>
 
-                    {{-- Password --}}
+                    <!-- password -->
                     <div class="mb-4">
                         <x-input-label for="password" :value="__('Password')"
                             class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
@@ -84,7 +87,7 @@
                         <x-input-error :messages="$errors->get('password')" class="mt-1.5 text-xs text-red-400" />
                     </div>
 
-                    {{-- Konfirmasi Password --}}
+                    <!-- konfirmasi password -->
                     <div class="mb-6">
                         <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')"
                             class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
@@ -106,6 +109,7 @@
                         <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1.5 text-xs text-red-400" />
                     </div>
 
+                    <!-- tombol -->
                     <button type="submit"
                         class="w-full text-[#FDF0E0] font-bold text-sm py-2.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-[0.98]"
                         style="background:linear-gradient(135deg,#A0522D,#7B3A10);box-shadow:0 4px 16px rgba(120,50,10,0.5)">
@@ -114,6 +118,7 @@
                 </form>
             </div>
 
+            <!-- redirect tombol masuk -->
             <p class="text-center text-sm text-[#7A5C3A] mt-5">
                 Sudah punya akun?
                 <a href="{{ route('login') }}" class="text-[#C87941] hover:text-[#D4956A] font-semibold">Masuk</a>
@@ -122,6 +127,7 @@
     </div>
 
     <style>
+        /* animasi */
         @keyframes fadeUp {
             to {
                 opacity: 1;
@@ -129,28 +135,35 @@
             }
         }
 
+        /* Status syarat password terpenuhi */
         .req-met {
             color: #4ade80 !important;
         }
 
+        /* Status syarat password belum terpenuhi */
         .req-fail {
             color: rgba(255, 255, 255, 0.25) !important;
         }
     </style>
 
     <script>
-        /* ── Canvas wood grain ── */
+        // Membuat efek tekstur serat kayu pada canvas
         (function() {
             const canvas = document.getElementById('woodCanvas');
             const ctx = canvas.getContext('2d');
 
+            // fungsi: Menghasilkan angka acak dalam rentang tertentu
             function rand(a, b) {
                 return Math.random() * (b - a) + a;
             }
 
+            // fungsi: Menggambar latar belakang dan pola serat kayu
             function draw() {
+                // Menyesuaikan ukuran canvas dengan ukuran parent element
                 const W = canvas.width = canvas.parentElement.offsetWidth;
                 const H = canvas.height = canvas.parentElement.offsetHeight;
+
+                // Membuat gradien warna latar belakang kayu gelap
                 const g = ctx.createLinearGradient(0, 0, W, H);
                 g.addColorStop(0, '#2A1206');
                 g.addColorStop(0.3, '#1E0D04');
@@ -158,6 +171,8 @@
                 g.addColorStop(1, '#180A02');
                 ctx.fillStyle = g;
                 ctx.fillRect(0, 0, W, H);
+
+                // Menggambar garis serat kayu secara acak
                 for (let i = 0; i < 120; i++) {
                     const x = rand(0, W),
                         amp = rand(2, 18),
@@ -171,6 +186,8 @@
                     ctx.lineWidth = rand(0.4, 2.8);
                     ctx.stroke();
                 }
+
+                // Menggambar pola lingkaran serat kayu (annual rings)
                 for (let i = 0; i < 18; i++) {
                     const cx = rand(W * 0.1, W * 0.9),
                         cy = rand(-H * 0.3, H * 0.5),
@@ -184,30 +201,40 @@
                     }
                 }
             }
+
+            // Jalankan draw saat pertama kali dimuat
             draw();
+            // Gambar ulang saat ukuran layar berubah
             window.addEventListener('resize', draw);
         })();
 
-        /* ── Toggle show/hide password ── */
+        // fungsi: Menampilkan atau menyembunyikan password
         function togglePassword(fieldId, iconId) {
             const field = document.getElementById(fieldId);
             const icon = document.getElementById(iconId);
+
+            // Cek apakah password sedang disembunyikan
             const isHidden = field.type === 'password';
+            // Ubah tipe input antara password dan text
             field.type = isHidden ? 'text' : 'password';
+            // Ganti ikon mata sesuai kondisi
             icon.innerHTML = isHidden ?
                 `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>` :
                 `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`;
         }
 
-        /* ── Cek kekuatan password ── */
+        // fungsi: Cek kekuatan password
         function checkPasswordStrength(val) {
             const box = document.getElementById('strengthBox');
+
+            // Sembunyikan indikator jika password kosong
             if (!val) {
                 box.style.display = 'none';
                 return;
             }
             box.style.display = 'block';
 
+            // Aturan validasi kekuatan password
             const rules = {
                 len: val.length >= 8,
                 upper: /[A-Z]/.test(val),
@@ -216,7 +243,7 @@
                 sym: /[^A-Za-z0-9]/.test(val),
             };
 
-            // Update checklist
+            // Update tampilan checklist sesuai aturan yang terpenuhi
             Object.keys(rules).forEach(function(key) {
                 const el = document.getElementById('req-' + key);
                 const icon = el.querySelector('.req-icon');
@@ -229,11 +256,12 @@
                 }
             });
 
-            // Hitung skor
+            // Hitung skor berdasarkan jumlah aturan yang terpenuhi
             const score = Object.values(rules).filter(Boolean).length;
             const bars = ['bar1', 'bar2', 'bar3', 'bar4'];
             const label = document.getElementById('strengthLabel');
 
+            // Konfigurasi warna dan label berdasarkan skor
             const config = [{
                     color: '#ef4444',
                     text: 'Sangat Lemah',
@@ -263,24 +291,30 @@
 
             const cfg = config[Math.max(0, score - 1)] || config[0];
 
+            // Update warna bar indikator kekuatan password
             bars.forEach(function(id, i) {
                 const bar = document.getElementById(id);
                 bar.style.background = i < score ? cfg.color : 'rgba(255,255,255,0.1)';
             });
 
+            // Update teks label kekuatan password
             label.textContent = cfg.text;
             label.style.color = cfg.textColor;
         }
 
-        /* ── Cek konfirmasi password ── */
+        // fungsi: Cek konfirmasi password
         function checkConfirm(val) {
             const original = document.getElementById('password').value;
             const msg = document.getElementById('confirmMsg');
+
+            // Sembunyikan pesan jika konfirmasi password kosong
             if (!val) {
                 msg.classList.add('hidden');
                 return;
             }
             msg.classList.remove('hidden');
+
+            // Tampilkan pesan sesuai hasil pengecekan
             if (val === original) {
                 msg.textContent = '✓ Password cocok';
                 msg.style.color = '#4ade80';

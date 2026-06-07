@@ -1,4 +1,5 @@
 <section>
+    <!-- Judul informasi profile -->
     <header class="mb-6">
         <h2 class="text-xl font-black text-slate-800 dark:text-white flex items-center">
             <span class="bg-slate-100 p-2 rounded-lg mr-3">👤</span>
@@ -9,10 +10,11 @@
         </p>
     </header>
 
+    <!-- form update informasi profile -->
     <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
         @csrf
         @method('patch')
-
+        <!-- input nama dan email -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
                 <x-input-label for="name" :value="__('Nama Lengkap')" class="text-slate-700 font-bold" />
@@ -27,6 +29,7 @@
             </div>
         </div>
 
+        <!-- tombol simpan perubahan -->
         <div class="flex items-center gap-4 pt-4 border-t">
             <x-primary-button class="rounded-xl px-8 py-3 bg-slate-800 hover:bg-black transition-all">
                 {{ __('Simpan Perubahan') }}

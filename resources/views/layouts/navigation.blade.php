@@ -1,12 +1,14 @@
 <nav x-data="{ open: false }" class="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-40">
     <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-
+            <!-- kiri: logo & brand -->
             <div class="flex items-center">
+                <!-- Logo untuk tampilan mobile -->
                 <div class="flex-shrink-0 flex items-center lg:hidden">
                     <x-application-logo class="block h-8 w-auto fill-current text-blue-600" />
                 </div>
 
+                <!-- nama aplikasi & tagline -->
                 <div class="hidden sm:flex sm:items-center sm:ms-4">
                     <div class="flex items-center space-x-3 group">
                         <h1 class="text-xl font-black text-slate-800 dark:text-white leading-none tracking-tighter italic">
@@ -22,9 +24,12 @@
                 </div>
             </div>
 
+            <!-- kanan: informasi pengguna -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <div class="flex items-center space-x-4">
+                    <!-- Dropdown akun pengguna -->
                     <x-dropdown align="right" width="48">
+                        <!-- Tombol dropdown -->
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-1 border border-gray-200 text-sm leading-4 font-bold rounded-full text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition ease-in-out duration-150 shadow-sm">
                                 <div class="h-7 w-7 rounded-full flex items-center justify-center mr-2 {{ request()->is('admin/*') ? 'bg-blue-600' : 'bg-emerald-600' }} text-white text-[10px]">
@@ -41,15 +46,19 @@
                             </button>
                         </x-slot>
 
+                        <!-- Menu dropdown -->
                         <x-slot name="content">
+                            <!-- Judul -->
                             <div class="block px-4 py-2 text-xs text-gray-400 uppercase tracking-widest font-bold border-b border-gray-100">
                                 Kelola Akun
                             </div>
 
+                            <!-- Akses profil pengguna -->
                             <x-dropdown-link :href="route('profile.edit')" class="hover:bg-gray-50">
                                 {{ __('Profil Saya') }}
                             </x-dropdown-link>
 
+                            <!-- Form logout -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')"
@@ -63,6 +72,7 @@
                 </div>
             </div>
 
+            <!-- Tombol menu hamburger untuk tampilan mobile -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-gray-100 focus:outline-none transition duration-150">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">

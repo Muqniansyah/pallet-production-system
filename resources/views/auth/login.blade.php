@@ -1,12 +1,14 @@
 <x-guest-layout>
     <div class="relative min-h-screen overflow-hidden flex items-center justify-center bg-[#1E0F05]">
-
+        <!-- Background Utama Tekstur/Animasi Kayu (via JavaScript) -->
         <canvas id="woodCanvas" class="absolute inset-0 w-full h-full"></canvas>
+        <!-- Efek Cahaya Fokus terang di tengah, gelap di pinggir (Vignette) -->
         <div class="absolute inset-0 z-[1]" style="background:radial-gradient(ellipse at center,transparent 40%,rgba(10,4,1,0.75) 100%)"></div>
+        <!-- Lapisan Gelap Menurunkan kontras background agar teks mudah dibaca -->
         <div class="absolute inset-0 z-[2] bg-black/50"></div>
 
         <div class="relative z-10 w-full max-w-sm mx-auto px-4 py-10">
-
+            <!-- judul -->
             <div class="flex flex-col items-center mb-7">
                 <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg font-extrabold text-[#FDF0E0] mb-3"
                     style="background:linear-gradient(135deg,#C87941,#7B3A10);box-shadow:0 4px 16px rgba(200,121,65,0.4)">S</div>
@@ -14,13 +16,14 @@
                 <p class="text-sm text-[#A07850] mt-1">Selamat datang kembali</p>
             </div>
 
+            <!-- form masuk -->
             <div class="rounded-2xl p-6 border border-[#C87941]/15 bg-white/[0.04] backdrop-blur-sm">
+                <!-- Menampilkan pesan status/error dari Laravel -->
                 <x-auth-session-status class="mb-4 text-center text-sm text-[#C87941]" :status="session('status')" />
 
                 <form method="POST" action="{{ route('login') }}" novalidate>
                     @csrf
-
-                    {{-- Email --}}
+                    <!-- email -->
                     <div class="mb-4">
                         <x-input-label for="email" :value="__('Alamat Email')"
                             class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
@@ -31,7 +34,7 @@
                         <x-input-error :messages="$errors->get('email')" class="mt-1.5 text-xs text-red-400" />
                     </div>
 
-                    {{-- Password --}}
+                    <!-- password -->
                     <div class="mb-4">
                         <x-input-label for="password" :value="__('Password')"
                             class="block text-xs font-semibold text-[#C8A882] mb-1.5 uppercase tracking-wide" />
@@ -51,20 +54,7 @@
                         <x-input-error :messages="$errors->get('password')" class="mt-1.5 text-xs text-red-400" />
                     </div>
 
-                    <!-- {{-- Remember + Lupa Password --}} -->
-                    <!-- <div class="flex items-center justify-between mb-6">
-                        <label class="flex items-center gap-2 text-sm text-[#A07850] cursor-pointer select-none">
-                            <input type="checkbox" name="remember"
-                                class="w-4 h-4 rounded border-[#C87941]/30 bg-white/5 text-[#C87941]" />
-                            <span>Ingat saya</span>
-                        </label>
-                        @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-sm text-[#C87941] hover:text-[#D4956A] transition">
-                            Lupa password?
-                        </a>
-                        @endif
-                    </div> -->
-
+                    <!-- tombol -->
                     <button type="submit"
                         class="w-full text-[#FDF0E0] font-bold text-sm py-2.5 rounded-xl transition-all hover:-translate-y-0.5 active:scale-[0.98]"
                         style="background:linear-gradient(135deg,#A0522D,#7B3A10);box-shadow:0 4px 16px rgba(120,50,10,0.5)">
@@ -73,6 +63,7 @@
                 </form>
             </div>
 
+            <!-- redirect tombol daftar -->
             <p class="text-center text-sm text-[#7A5C3A] mt-5">
                 Belum punya akun?
                 <a href="{{ route('register') }}" class="text-[#C87941] hover:text-[#D4956A] font-semibold">Daftar</a>
@@ -81,6 +72,7 @@
     </div>
 
     <style>
+        /* animasi */
         @keyframes fadeUp {
             to {
                 opacity: 1;
@@ -90,18 +82,23 @@
     </style>
 
     <script>
-        /* ── Canvas wood grain ── */
+        // Membuat efek tekstur serat kayu pada canvas
         (function() {
             const canvas = document.getElementById('woodCanvas');
             const ctx = canvas.getContext('2d');
 
+            // fungsi: Menghasilkan angka acak dalam rentang tertentu
             function rand(a, b) {
                 return Math.random() * (b - a) + a;
             }
 
+            // fungsi: Menggambar latar belakang dan pola serat kayu
             function draw() {
+                // Menyesuaikan ukuran canvas dengan ukuran parent element
                 const W = canvas.width = canvas.parentElement.offsetWidth;
                 const H = canvas.height = canvas.parentElement.offsetHeight;
+
+                // Membuat gradien warna latar belakang kayu gelap
                 const g = ctx.createLinearGradient(0, 0, W, H);
                 g.addColorStop(0, '#2A1206');
                 g.addColorStop(0.3, '#1E0D04');
@@ -109,6 +106,8 @@
                 g.addColorStop(1, '#180A02');
                 ctx.fillStyle = g;
                 ctx.fillRect(0, 0, W, H);
+
+                // Menggambar garis serat kayu secara acak
                 for (let i = 0; i < 120; i++) {
                     const x = rand(0, W),
                         amp = rand(2, 18),
@@ -122,6 +121,8 @@
                     ctx.lineWidth = rand(0.4, 2.8);
                     ctx.stroke();
                 }
+
+                // Menggambar pola lingkaran serat kayu (annual rings)
                 for (let i = 0; i < 18; i++) {
                     const cx = rand(W * 0.1, W * 0.9),
                         cy = rand(-H * 0.3, H * 0.5),
@@ -135,16 +136,24 @@
                     }
                 }
             }
+
+            // Jalankan draw saat pertama kali dimuat
             draw();
+            // Gambar ulang saat ukuran layar berubah
             window.addEventListener('resize', draw);
         })();
 
-        /* ── Toggle show/hide password ── */
+        // fungsi: Menampilkan atau menyembunyikan password
         function togglePassword() {
+            // Mengambil field password dan ikon mata
             const field = document.getElementById('password');
             const icon = document.getElementById('eyeIcon');
+
+            // Mengecek status password saat ini
             const isHidden = field.type === 'password';
+            // Mengubah tipe input menjadi text/password
             field.type = isHidden ? 'text' : 'password';
+            // Mengubah ikon sesuai status tampilan password
             icon.innerHTML = isHidden ?
                 `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>` :
                 `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`;

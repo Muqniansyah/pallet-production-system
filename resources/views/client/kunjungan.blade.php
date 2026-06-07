@@ -146,17 +146,21 @@
     </div>
 
     <script>
-        // pagination
+        // Pagination AJAX tanpa refresh halaman untuk tabel kunjungan
         document.addEventListener('click', function(e) {
             const wrapper = document.getElementById('visits-wrapper');
             const link = e.target.closest('#visits-wrapper .visits-pagination a');
 
+            // Abaikan klik jika bukan tombol pagination
             if (!link) return;
 
             e.preventDefault();
+
+            // Nonaktifkan tabel saat memuat data baru
             wrapper.style.opacity = '0.5';
             wrapper.style.pointerEvents = 'none';
 
+            // Ambil konten halaman berikutnya via AJAX
             fetch(link.href, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -164,15 +168,20 @@
                 })
                 .then(r => r.text())
                 .then(html => {
+                    // Parse HTML response dan ambil wrapper baru
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
                     const newWrapper = doc.getElementById('visits-wrapper');
+                    // Update konten tabel dengan data baru
                     if (newWrapper) wrapper.innerHTML = newWrapper.innerHTML;
+                    // Update URL tanpa refresh halaman
                     history.pushState({}, '', link.href);
+                    // Aktifkan kembali tabel setelah selesai
                     wrapper.style.opacity = '1';
                     wrapper.style.pointerEvents = 'auto';
                 })
                 .catch(() => {
+                    // Aktifkan kembali tabel jika terjadi error
                     wrapper.style.opacity = '1';
                     wrapper.style.pointerEvents = 'auto';
                 });

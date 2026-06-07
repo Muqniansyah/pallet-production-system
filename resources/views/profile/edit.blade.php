@@ -1,5 +1,6 @@
 <x-app-layout>
     <div class="py-8 px-4 sm:px-6 lg:px-8">
+        <!-- judul -->
         <div class="max-w-7xl mx-auto mb-8">
             <h2 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">
                 {{ __('Pengaturan Akun') }}
@@ -7,7 +8,9 @@
             <p class="text-sm text-slate-500 mt-1">Kelola informasi profil, keamanan sandi, dan privasi akun Anda.</p>
         </div>
 
+        <!-- form -->
         <div class="max-w-7xl mx-auto space-y-8">
+            <!-- form update informasi profile -->
             <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 sm:rounded-3xl transition-all duration-300">
                 <div class="p-6 sm:p-10">
                     <div class="max-w-2xl">
@@ -16,6 +19,7 @@
                 </div>
             </div>
 
+            <!-- form ubah sandi -->
             <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 sm:rounded-3xl transition-all duration-300">
                 <div class="p-6 sm:p-10">
                     <div class="max-w-2xl">
@@ -24,6 +28,7 @@
                 </div>
             </div>
 
+            <!-- form hapus akun -->
             <div class="bg-rose-50/50 dark:bg-rose-950/20 overflow-hidden border border-rose-100 dark:border-rose-900/30 sm:rounded-3xl transition-all duration-300">
                 <div class="p-6 sm:p-10">
                     <div class="max-w-2xl">
@@ -34,6 +39,7 @@
         </div>
     </div>
 
+    <!-- toast notifikasi berhasil (otomatis hilang setelah 4 detik) -->
     @if (session('status'))
     <div x-data="{ show: true }"
         x-show="show"
@@ -45,15 +51,21 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         class="fixed bottom-5 right-5 z-[100] max-w-sm w-full bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border-l-4 border-slate-800 dark:border-slate-500 p-4 flex items-center">
+
+        <!-- icon centang -->
         <div class="flex-shrink-0 bg-slate-100 dark:bg-slate-700 p-2 rounded-xl">
             <svg class="h-5 w-5 text-slate-800 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
         </div>
+
+        <!-- pesan notifikasi -->
         <div class="ml-3">
             <p class="text-sm font-bold text-slate-800 dark:text-white">Berhasil!</p>
             <p class="text-xs text-slate-500 dark:text-slate-400">{{ session('status') }}</p>
         </div>
+
+        <!-- tombol tutup notifikasi -->
         <button @click="show = false" class="ml-auto text-slate-400 hover:text-slate-600">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M6 18L18 6M6 6l12 12" stroke-width="2" />

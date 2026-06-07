@@ -1,5 +1,5 @@
 - untuk refresh tabel dari awal
-php artisan migrate:fresh --seed 
+php artisan migrate:fresh --seed
 
 - development
 php artisan serve
@@ -10,3 +10,12 @@ views/auth/confirm-password
 views/auth/forgot-password
 views/auth/reset-password
 views/auth/verify-email
+
+
+1. app.blade.php
+
+Layout utama untuk user yang sudah login (authenticated).
+
+2. guest.blade.php
+
+Layout untuk pengunjung atau pengguna yang belum login.

@@ -1,23 +1,29 @@
+{{-- Props dropdown: posisi, lebar, dan class konten --}}
 @props(['align' => 'right', 'width' => '48', 'contentClasses' => 'py-1 bg-white dark:bg-gray-700'])
 
 @php
+// Menentukan posisi dropdown berdasarkan prop align
 $alignmentClasses = match ($align) {
     'left' => 'ltr:origin-top-left rtl:origin-top-right start-0',
     'top' => 'origin-top',
     default => 'ltr:origin-top-right rtl:origin-top-left end-0',
 };
 
+// Menentukan lebar dropdown berdasarkan prop width
 $width = match ($width) {
     '48' => 'w-48',
     default => $width,
 };
 @endphp
 
+{{-- Kontainer dropdown dengan Alpine.js untuk toggle buka/tutup --}}
 <div class="relative" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false">
+    {{-- Tombol trigger untuk membuka/menutup dropdown --}}
     <div @click="open = ! open">
         {{ $trigger }}
     </div>
 
+    {{-- Konten dropdown dengan animasi buka/tutup --}}
     <div x-show="open"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 scale-95"

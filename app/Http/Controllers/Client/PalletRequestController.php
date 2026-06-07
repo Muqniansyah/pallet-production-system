@@ -4,17 +4,21 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
+// pemanggilan model
 use App\Models\PalletRequest;
 use App\Models\ProdukKayu;
 
 class PalletRequestController extends Controller
 {
+    // Menampilkan riwayat pengajuan palet milik client yang sedang login
     public function index()
     {
         $requests = PalletRequest::where('client_id', auth()->id())
             ->latest()
             ->paginate(5);
 
+        // Ambil semua produk kayu beserta stok untuk pilihan jenis palet
         $produk = ProdukKayu::with('stok')->get();
 
         return view('client.pallet-request', compact(
@@ -23,8 +27,10 @@ class PalletRequestController extends Controller
         ));
     }
 
+    // Menyimpan pengajuan palet baru
     public function store(Request $request)
     {
+        // Validasi input pengajuan palet
         $request->validate([
             'jenis_palet'  => 'required',
             'qty'          => 'required|integer|min:1',
@@ -42,13 +48,13 @@ class PalletRequestController extends Controller
             'file_desain.max'       => 'Ukuran file desain maksimal 5MB.',
         ]);
 
-        // upload file (kalau ada)
+        // Upload file desain ke storage jika ada
         $filePath = null;
         if ($request->hasFile('file_desain')) {
             $filePath = $request->file('file_desain')->store('desain', 'public');
         }
 
-        // simpan ke database
+        // Simpan pengajuan palet ke database
         PalletRequest::create([
             'client_id' => auth()->id(),
             'jenis_palet' => $request->jenis_palet,

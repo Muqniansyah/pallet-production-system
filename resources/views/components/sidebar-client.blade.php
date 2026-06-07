@@ -1,12 +1,14 @@
 <div x-data="{ open: true }" class="flex">
+    <!-- kontainer sidebar dengan lebar dinamis -->
     <div :class="open ? 'w-72' : 'w-20'" class="bg-[#064e3b] text-emerald-100 p-5 transition-all duration-300 ease-in-out relative flex flex-col shadow-2xl">
-
+        <!-- tombol toogle buka/tutup sidebar -->
         <button @click="open = !open" class="absolute -right-3 top-10 bg-emerald-500 text-white rounded-full p-1 shadow-lg hover:bg-emerald-600 transition-colors z-50 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" :class="open ? 'rotate-0' : 'rotate-180'" class="h-4 w-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
 
+        <!-- logo & nama panel -->
         <div class="flex items-center mb-10 overflow-hidden px-1">
             <div class="h-10 w-10 flex-shrink-0 bg-gradient-to-tr from-emerald-400 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
                 <span class="text-white font-black text-xl">K</span>
@@ -14,6 +16,7 @@
             <h2 x-show="open" x-transition.opacity class="ml-4 text-xl font-black tracking-tighter text-white italic truncate uppercase">KLIEN PANEL</h2>
         </div>
 
+        <!-- navigasi menu -->
         <nav class="flex-1 space-y-2">
             @php
             $clientMenus = [
@@ -27,21 +30,25 @@
             ];
             @endphp
 
+            <!-- loop setiap menu dan tandai aktif kika route cocok -->
             @foreach($clientMenus as $menu)
             <a href="/{{ $menu['route'] }}"
                 class="group flex items-center p-3 rounded-xl transition-all duration-200
                    {{ request()->is($menu['route']) ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' : 'hover:bg-emerald-900/50 hover:text-white' }}">
 
+                <!-- icon menu -->
                 <div class="flex-shrink-0">
                     <svg class="h-6 w-6 {{ request()->is($menu['route']) ? 'text-white' : 'text-emerald-300 group-hover:text-emerald-100' }} transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $menu['icon'] }}" />
                     </svg>
                 </div>
 
+                <!-- label menu saat sidebar terbuka -->
                 <span x-show="open" x-transition.opacity class="ml-4 font-bold text-sm tracking-wide whitespace-nowrap">
                     {{ $menu['label'] }}
                 </span>
 
+                <!-- tooltip label menu saat sidebar tertutup -->
                 <div x-show="!open" class="absolute left-20 bg-emerald-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[60]">
                     {{ $menu['label'] }}
                 </div>
@@ -49,6 +56,7 @@
             @endforeach
         </nav>
 
+        <!-- informasi pengguna yang sedang masuk -->
         <div class="pt-5 border-t border-emerald-800/50 mt-5">
             <div class="flex items-center overflow-hidden px-1">
                 <div class="h-8 w-8 rounded-full bg-emerald-700 flex-shrink-0 border-2 border-emerald-500 flex items-center justify-center text-[10px] font-bold text-white uppercase">
@@ -62,6 +70,7 @@
         </div>
     </div>
 
+    <!-- Konten halaman yang menggunakan sidebar client -->
     <div class="flex-1">
         {{ $slot ?? '' }}
     </div>

@@ -380,7 +380,7 @@
     </div>
 
     <script>
-        // unggah gambar
+        // Menampilkan preview gambar saat file dipilih
         document.getElementById('input-gambar').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const wrapperPanduan = document.getElementById('wrapper-panduan');
@@ -388,13 +388,14 @@
             const previewGambar = document.getElementById('preview-gambar');
 
             if (file) {
+                // Baca file gambar sebagai URL base64
                 const reader = new FileReader();
 
                 reader.onload = function(event) {
                     // Pasang src gambar ke elemen img preview
                     previewGambar.src = event.target.result;
 
-                    // Sembunyikan teks panduan, tampilkan gambar
+                    // Sembunyikan teks panduan dan tampilkan preview gambar
                     wrapperPanduan.classList.add('hidden');
                     wrapperPreview.classList.remove('hidden');
                 }

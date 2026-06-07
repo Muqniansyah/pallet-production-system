@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+// pemanggilan model
 use App\Models\ProdukKayu;
 use App\Models\StokKayu;
 
 class StokKayuController extends Controller
 {
+    // Menampilkan semua data produk kayu beserta stok dengan pagination
     public function index()
     {
         $stocks = ProdukKayu::with('stok')
@@ -19,8 +21,10 @@ class StokKayuController extends Controller
         return view('admin.stok', compact('stocks'));
     }
 
+    // Menambahkan produk kayu baru beserta stok awal
     public function store(Request $request)
     {
+        // Validasi input produk baru
         $request->validate([
             'nama_produk' => 'required|string|max:255|unique:produk_kayu,nama_produk',
             'stok'        => 'required|integer|min:0',
@@ -36,15 +40,14 @@ class StokKayuController extends Controller
             'keterangan.required'  => 'Keterangan wajib diisi.',
         ]);
 
-        // upload gambar
+        // Upload gambar ke storage jika ada
         $gambar = null;
-
         if ($request->hasFile('gambar')) {
             $gambar = $request->file('gambar')
                 ->store('produk-kayu', 'public');
         }
 
-        // simpan produk
+        // Simpan data produk baru ke database
         $produk = ProdukKayu::create([
             'nama_produk' => $request->nama_produk,
             'gambar' => $gambar,
@@ -52,7 +55,7 @@ class StokKayuController extends Controller
             'keterangan' => $request->keterangan,
         ]);
 
-        // simpan stok
+        // Simpan stok awal produk ke database
         StokKayu::create([
             'produk_kayu_id' => $produk->id,
             'stok' => $request->stok,
@@ -61,18 +64,19 @@ class StokKayuController extends Controller
         return back()->with('success', 'Produk berhasil ditambahkan');
     }
 
+    // Memperbarui data produk kayu berdasarkan ID
     public function update(Request $request, $id)
     {
+        // Validasi input update produk
         $request->validate([
             'nama_produk' => 'required|string|max:255',
             'stok' => 'required|integer|min:0',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $produk = ProdukKayu::with('stok')
-            ->findOrFail($id);
+        $produk = ProdukKayu::with('stok')->findOrFail($id);
 
-        // update gambar baru
+        // Update gambar jika ada file baru yang diunggah
         if ($request->hasFile('gambar')) {
             $gambar = $request->file('gambar')
                 ->store('produk-kayu', 'public');
@@ -80,13 +84,13 @@ class StokKayuController extends Controller
             $produk->gambar = $gambar;
         }
 
-        // update produk
+        // Update data produk
         $produk->update([
             'nama_produk' => $request->nama_produk,
             'keterangan' => $request->keterangan,
         ]);
 
-        // update stok
+        // Update stok produk jika sudah ada
         if ($produk->stok) {
             $produk->stok->update([
                 'stok' => $request->stok
@@ -96,18 +100,21 @@ class StokKayuController extends Controller
         return back()->with('success', 'Produk berhasil diupdate');
     }
 
+    // Menghapus produk kayu berdasarkan ID
     public function destroy($id)
     {
         $produk = ProdukKayu::findOrFail($id);
 
+        // Hapus produk dari database
         $produk->delete();
 
         return back()->with('success', 'Produk berhasil dihapus');
     }
 
-    // TAMBAH STOK
+    // Menambah jumlah stok produk yang sudah ada
     public function tambahStok(Request $request)
     {
+        // Validasi input penambahan stok
         $request->validate([
             'produk_kayu_id' => 'required|exists:produk_kayu,id',
             'jumlah'         => 'required|integer|min:1',
@@ -117,18 +124,17 @@ class StokKayuController extends Controller
             'jumlah.min'              => 'Jumlah stok minimal 1.',
         ]);
 
-        $stok = StokKayu::where('produk_kayu_id', $request->produk_kayu_id)
-            ->first();
+        // Cari stok produk berdasarkan produk_kayu_id
+        $stok = StokKayu::where('produk_kayu_id', $request->produk_kayu_id)->first();
 
-        // kalau stok belum ada
+        // Buat stok baru jika belum ada
         if (!$stok) {
             StokKayu::create([
                 'produk_kayu_id' => $request->produk_kayu_id,
                 'stok' => $request->jumlah,
             ]);
         } else {
-
-            // tambah stok lama
+            // Tambah jumlah stok yang sudah ada
             $stok->increment('stok', $request->jumlah);
         }
 

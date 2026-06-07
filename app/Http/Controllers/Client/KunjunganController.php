@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
+// pemanggilan model
 use App\Models\Kunjungan;
 
 class KunjunganController extends Controller
 {
+    // Menampilkan riwayat kunjungan milik client yang sedang login
     public function index()
     {
         $kunjungan = Kunjungan::where('client_id', auth()->id())
@@ -17,8 +20,10 @@ class KunjunganController extends Controller
         return view('client.kunjungan', compact('kunjungan'));
     }
 
+    // Menyimpan pengajuan kunjungan baru
     public function store(Request $request)
     {
+        // Validasi input pengajuan kunjungan
         $request->validate([
             'judul'             => 'required|string|max:255',
             'tanggal_kunjungan' => 'required|date|after:now',
@@ -28,13 +33,15 @@ class KunjunganController extends Controller
             'tanggal_kunjungan.after'    => 'Waktu kunjungan tidak boleh di hari/jam yang sudah lewat.',
         ]);
 
-        // Cek maksimal 3 kunjungan per hari untuk client yang sama
+        // Ambil tanggal kunjungan yang dipilih
         $tanggal = \Carbon\Carbon::parse($request->tanggal_kunjungan);
 
+        // Hitung jumlah kunjungan client pada tanggal yang sama
         $jumlahHariIni = Kunjungan::where('client_id', auth()->id())
             ->whereDate('tanggal_kunjungan', $tanggal->toDateString())
             ->count();
 
+        // Tolak pengajuan jika sudah mencapai batas 3 kunjungan per hari
         if ($jumlahHariIni >= 3) {
             return back()
                 ->withInput()
@@ -43,6 +50,7 @@ class KunjunganController extends Controller
                 ]);
         }
 
+        // Simpan pengajuan kunjungan ke database
         Kunjungan::create([
             'client_id'         => auth()->id(),
             'judul'             => $request->judul,
