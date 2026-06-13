@@ -10,6 +10,7 @@ class ProdukKayu extends Model
 
     // daftar kolom yang diizinkan untuk diisi data
     protected $fillable = [
+        'admin_id',
         'nama_produk',
         'gambar',
         'satuan',
@@ -20,5 +21,11 @@ class ProdukKayu extends Model
     public function stok()
     {
         return $this->hasOne(StokKayu::class);
+    }
+
+    // menghubungkan tabel produk_kayu dengan users sebagai admin (relasi m:1)
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
     }
 }

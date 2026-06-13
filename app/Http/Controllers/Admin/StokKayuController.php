@@ -49,6 +49,7 @@ class StokKayuController extends Controller
 
         // Simpan data produk baru ke database
         $produk = ProdukKayu::create([
+            'admin_id'    => auth()->id(),
             'nama_produk' => $request->nama_produk,
             'gambar' => $gambar,
             'satuan' => 'PCS',
@@ -58,6 +59,7 @@ class StokKayuController extends Controller
         // Simpan stok awal produk ke database
         StokKayu::create([
             'produk_kayu_id' => $produk->id,
+            'admin_id'       => auth()->id(),
             'stok' => $request->stok,
         ]);
 
@@ -93,6 +95,7 @@ class StokKayuController extends Controller
         // Update stok produk jika sudah ada
         if ($produk->stok) {
             $produk->stok->update([
+                'admin_id' => auth()->id(),
                 'stok' => $request->stok
             ]);
         }
@@ -131,11 +134,15 @@ class StokKayuController extends Controller
         if (!$stok) {
             StokKayu::create([
                 'produk_kayu_id' => $request->produk_kayu_id,
+                'admin_id'       => auth()->id(),
                 'stok' => $request->jumlah,
             ]);
         } else {
             // Tambah jumlah stok yang sudah ada
-            $stok->increment('stok', $request->jumlah);
+            $stok->update([
+                'admin_id' => auth()->id(),
+                'stok'     => $stok->stok + $request->jumlah,
+            ]);
         }
 
         return back()->with('success', 'Stok berhasil ditambahkan');

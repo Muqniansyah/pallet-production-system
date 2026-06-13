@@ -37,9 +37,9 @@ class AdminKunjunganController extends Controller
     public function reject(Request $request, $id)
     {
         // Validasi keterangan penolakan wajib diisi
-        $request->validate([
-            'keterangan' => 'required|string|max:500'
-        ]);
+        if (!$request->filled('keterangan')) {
+            return back()->with('error', 'Alasan penolakan wajib diisi.');
+        }
 
         $kunjungan = Kunjungan::findOrFail($id);
 
@@ -50,5 +50,14 @@ class AdminKunjunganController extends Controller
         ]);
 
         return back()->with('success', 'Kunjungan ditolak dengan alasan');
+    }
+
+    // Menghapus data kunjungan berdasarkan ID
+    public function destroy($id)
+    {
+        $kunjungan = Kunjungan::findOrFail($id);
+        $kunjungan->delete();
+
+        return back()->with('success', 'Data kunjungan berhasil dihapus.');
     }
 }

@@ -16,9 +16,9 @@ class MeetingRequestController extends Controller
     {
         $meetings = MeetingRequest::where('client_id', auth()->user()->id)
             ->latest()
-            ->get();
+            ->paginate(3);
 
-        return view('client.meeting-request.index', compact('meetings'));
+        return view('client.meet', compact('meetings'));
     }
 
     // Menyimpan pengajuan meeting request baru

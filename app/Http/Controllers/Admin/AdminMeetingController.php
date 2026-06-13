@@ -50,9 +50,9 @@ class AdminMeetingController extends Controller
     public function reject(Request $request, $id)
     {
         // Validasi keterangan penolakan wajib diisi
-        $request->validate([
-            'keterangan' => 'required|string'
-        ]);
+        if (!$request->filled('keterangan')) {
+            return back()->with('error', 'Alasan penolakan wajib diisi.');
+        }
 
         $meeting = MeetingRequest::findOrFail($id);
 
@@ -63,5 +63,14 @@ class AdminMeetingController extends Controller
         ]);
 
         return back()->with('success', 'Meeting ditolak');
+    }
+
+    // Menghapus data meeting berdasarkan ID
+    public function destroy($id)
+    {
+        $meeting = MeetingRequest::findOrFail($id);
+        $meeting->delete();
+
+        return back()->with('success', 'Data meeting berhasil dihapus.');
     }
 }

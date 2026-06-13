@@ -12,6 +12,7 @@ return new class extends Migration
     {
         Schema::create('produk_kayu', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('admin_id')->constrained('users')->cascadeOnDelete();
             $table->string('nama_produk');
             $table->string('gambar')->nullable();
             $table->string('satuan')->default('PCS');

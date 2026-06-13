@@ -23,10 +23,10 @@ class Pesanan extends Model
         return $this->belongsTo(User::class, 'client_id');
     }
 
-    // menghubungkan tabel pesanan dengan pallet request (relasi 1:1)
+    // menghubungkan tabel pesanan dengan pallet request sebagai pallet_request_id (relasi 1:1)
     public function palletRequest()
     {
-        return $this->belongsTo(PalletRequest::class);
+        return $this->belongsTo(PalletRequest::class, 'pallet_request_id');
     }
 
     // menghubungkan tabel pesanan dengan HPP sebagai pesanan_id (relasi 1:1)

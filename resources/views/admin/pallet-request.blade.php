@@ -69,13 +69,13 @@
                             </td>
                             <!-- catatan -->
                             <td class="px-3 py-4">
-                                <div class="text-[11px] text-gray-600 max-w-[100px] truncate" title="{{ $req->catatan }}">
+                                <div class="text-[11px] text-gray-600 max-w-[100px]" title="{{ $req->catatan }}">
                                     {{ $req->catatan ?? '-' }}
                                 </div>
                             </td>
                             <!-- alamat kirim -->
                             <td class="px-3 py-4">
-                                <p class="text-[11px] text-gray-500 max-w-[110px] truncate" title="{{ $req->alamat_kirim }}">
+                                <p class="text-[11px] text-gray-500 max-w-[110px]" title="{{ $req->alamat_kirim }}">
                                     {{ $req->alamat_kirim }}
                                 </p>
                             </td>
@@ -116,11 +116,25 @@
                                         </form>
                                     </div>
                                     @else
-                                    <div class="flex flex-col items-center opacity-40">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        <span class="text-[8px] font-black uppercase tracking-widest mt-1 text-gray-400">Diproses</span>
+                                    <div class="flex flex-col items-center gap-2">
+                                        <!-- keterangan diproses -->
+                                        <div class="flex flex-col items-center opacity-40">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span class="text-[8px] font-black uppercase tracking-widest mt-1 text-gray-400">Diproses</span>
+                                        </div>
+
+                                        <!-- tombol hapus -->
+                                        <form action="{{ route('admin.pallet.destroy', $req->id) }}" method="POST"
+                                            onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="px-2 py-1 text-[8px] font-black rounded-lg bg-rose-50 text-rose-400 border border-rose-200 hover:bg-rose-100 uppercase tracking-wider transition">
+                                                Hapus
+                                            </button>
+                                        </form>
                                     </div>
                                     @endif
                                 </div>

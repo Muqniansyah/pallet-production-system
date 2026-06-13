@@ -174,13 +174,13 @@
                             </td>
                             <!-- alamat kirim -->
                             <td class="px-8 py-5">
-                                <p class="text-xs text-gray-500 max-w-[180px] truncate" title="{{ $req->alamat_kirim }}">
+                                <p class="text-xs text-gray-500 max-w-[180px]" title="{{ $req->alamat_kirim }}">
                                     {{ $req->alamat_kirim }}
                                 </p>
                             </td>
                             <!-- catatan -->
                             <td class="px-8 py-5">
-                                <p class="text-xs text-gray-400 max-w-[150px] truncate" title="{{ $req->catatan }}">
+                                <p class="text-xs text-gray-400 max-w-[150px]" title="{{ $req->catatan }}">
                                     {{ $req->catatan ?? '-' }}
                                 </p>
                             </td>

@@ -89,7 +89,6 @@
                                             type="text"
                                             name="keterangan"
                                             placeholder="Alasan..."
-                                            required
                                             class="w-full bg-white border border-slate-200 text-[10px] text-slate-700 rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2 outline-none placeholder:text-slate-300">
                                         <button type="submit" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black py-2 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
                                             Ditolak
@@ -97,8 +96,22 @@
                                     </form>
                                 </div>
                                 @else
-                                <div class="text-center">
-                                    <span class="text-[10px] font-bold text-slate-300 uppercase italic">Selesai</span>
+                                <div class="flex flex-col items-center gap-2">
+                                    <!-- keterangan selesai -->
+                                    <div class="text-center">
+                                        <span class="text-[10px] font-bold text-slate-300 uppercase italic">Selesai</span>
+                                    </div>
+
+                                    <!-- tombol hapus -->
+                                    <form action="{{ route('admin.kunjungan.destroy', $item->id) }}" method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="px-2 py-1 text-[8px] font-black rounded-lg bg-rose-50 text-rose-400 border border-rose-200 hover:bg-rose-100 uppercase tracking-wider transition">
+                                            Hapus
+                                        </button>
+                                    </form>
                                 </div>
                                 @endif
                             </td>

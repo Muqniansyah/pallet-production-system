@@ -31,6 +31,7 @@
                             <tr class="bg-slate-50/50">
                                 <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Request ID</th>
                                 <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Project</th>
+                                <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Jenis Palet</th>
                                 <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Qty</th>
                                 <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                                 <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Aksi</th>
@@ -49,6 +50,10 @@
                                 <td class="px-8 py-5 text-xs font-bold text-slate-800 uppercase italic">
                                     {{ $p->nama_project }}
                                 </td>
+                                <!-- jenis palet -->
+                                <td class="px-8 py-5 text-xs text-slate-500 uppercase italic">
+                                    {{ $p->palletRequest->jenis_palet ?? '-' }}
+                                </td>
                                 <!-- qty -->
                                 <td class="px-8 py-5 text-xs font-medium text-slate-600 text-center">
                                     {{ number_format($p->qty) }} pcs
@@ -64,7 +69,7 @@
                                     <div class="flex items-center gap-3">
                                         @if($p->status == 'pending')
                                         <!-- tombol ajukan meet -->
-                                        <a href="{{ url('client/meet') }}" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 border border-slate-200 text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
+                                        <a href="{{ url('client/meeting-request') }}" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 border border-slate-200 text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
                                             Ajukan Meeting
                                         </a>
 
@@ -98,7 +103,7 @@
                             @empty
                             <!-- Baris 2: tampilan jika data kosong -->
                             <tr>
-                                <td colspan="5" class="px-8 py-12 text-center text-slate-400 italic text-xs">Belum ada pesanan aktif.</td>
+                                <td colspan="6" class="px-8 py-12 text-center text-slate-400 italic text-xs">Belum ada pesanan aktif.</td>
                             </tr>
                             @endforelse
                         </tbody>

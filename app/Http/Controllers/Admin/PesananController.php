@@ -7,23 +7,10 @@ use Illuminate\Http\Request;
 
 // pemanggilan model
 use App\Models\Pesanan;
-use App\Models\User;
 use App\Models\PalletRequest;
 
 class PesananController extends Controller
 {
-    // Menampilkan halaman kelola pesanan dan HPP
-    public function index()
-    {
-        // Ambil semua data client
-        $clients = User::where('role', 'client')->get();
-
-        // Ambil semua pesanan beserta data client
-        $pesanan = Pesanan::with('client')->latest()->get();
-
-        return view('admin.hpp.index', compact('clients', 'pesanan'));
-    }
-
     // Membuat pesanan baru dari pengajuan palet
     public function store(Request $request)
     {

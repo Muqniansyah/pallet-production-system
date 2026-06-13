@@ -13,6 +13,7 @@ return new class extends Migration
         Schema::create('stok_kayu', function (Blueprint $table) {
             $table->id();
             $table->foreignId('produk_kayu_id')->constrained('produk_kayu')->onDelete('cascade');
+            $table->foreignId('admin_id')->constrained('users')->cascadeOnDelete();
             $table->integer('stok')->default(0);
             $table->timestamps();
         });

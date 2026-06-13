@@ -3,29 +3,22 @@
         <div class="flex justify-between h-16">
             <!-- kiri: logo & brand -->
             <div class="flex items-center">
-                <!-- Logo untuk tampilan mobile -->
-                <div class="flex-shrink-0 flex items-center lg:hidden">
-                    <x-application-logo class="block h-8 w-auto fill-current text-blue-600" />
-                </div>
-
                 <!-- nama aplikasi & tagline -->
-                <div class="hidden sm:flex sm:items-center sm:ms-4">
-                    <div class="flex items-center space-x-3 group">
-                        <h1 class="text-xl font-black text-slate-800 dark:text-white leading-none tracking-tighter italic">
-                            SI<span class="text-slate-400 font-light uppercase">PALET</span>
-                        </h1>
+                <div class="flex items-center space-x-3">
+                    <h1 class="text-xl font-black text-slate-800 leading-none tracking-tighter italic">
+                        SI<span class="text-slate-400 font-light uppercase">PALET</span>
+                    </h1>
 
-                        <div class="h-5 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
+                    <div class="hidden sm:block h-5 w-[1px] bg-slate-200"></div>
 
-                        <span class="text-[10px] font-medium text-slate-400 uppercase tracking-[0.15em] leading-none">
-                            Solusi Kayu Berkualitas
-                        </span>
-                    </div>
+                    <span class="hidden sm:block text-[10px] font-medium text-slate-400 uppercase tracking-[0.15em] leading-none">
+                        Solusi Kayu Berkualitas
+                    </span>
                 </div>
             </div>
 
             <!-- kanan: informasi pengguna -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="flex sm:items-center sm:ms-6">
                 <div class="flex items-center space-x-4">
                     <!-- Dropdown akun pengguna -->
                     <x-dropdown align="right" width="48">
@@ -70,16 +63,6 @@
                         </x-slot>
                     </x-dropdown>
                 </div>
-            </div>
-
-            <!-- Tombol menu hamburger untuk tampilan mobile -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-gray-100 focus:outline-none transition duration-150">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
             </div>
         </div>
     </div>

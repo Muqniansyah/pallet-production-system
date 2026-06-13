@@ -34,10 +34,10 @@ class PalletRequestController extends Controller
     // Menolak pengajuan palet berdasarkan ID beserta keterangan alasan
     public function reject(Request $request, $id)
     {
-        // Validasi keterangan penolakan (opsional)
-        $request->validate([
-            'keterangan' => 'nullable|string|max:500',
-        ]);
+        // Validasi keterangan penolakan wajib diisi
+        if (!$request->filled('keterangan')) {
+            return back()->with('error', 'Alasan penolakan wajib diisi.');
+        }
 
         $palletRequest = PalletRequest::findOrFail($id);
 
@@ -48,5 +48,14 @@ class PalletRequestController extends Controller
         ]);
 
         return back()->with('success', 'Pengajuan palet berhasil ditolak.');
+    }
+
+    // Menghapus pengajuan palet berdasarkan ID
+    public function destroy($id)
+    {
+        $palletRequest = PalletRequest::findOrFail($id);
+        $palletRequest->delete();
+
+        return back()->with('success', 'Pengajuan palet berhasil dihapus.');
     }
 }

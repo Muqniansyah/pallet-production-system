@@ -18,7 +18,6 @@ use App\Http\Controllers\Admin\StokKayuController;
 // Client Controllers
 use App\Http\Controllers\Client\DashboardController;
 use App\Http\Controllers\Client\InformasiController;
-use App\Http\Controllers\Client\MeetController;
 use App\Http\Controllers\Client\MeetingRequestController;
 use App\Http\Controllers\Client\PesananController;
 use App\Http\Controllers\Client\PaletDesignController;
@@ -58,6 +57,8 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
     Route::get('/meeting', [AdminMeetingController::class, 'index']);
     Route::post('/meeting/{id}/approve', [AdminMeetingController::class, 'approve']);
     Route::post('/meeting/{id}/reject', [AdminMeetingController::class, 'reject']);
+    Route::delete('/meeting/{id}', [AdminMeetingController::class, 'destroy'])
+        ->name('admin.meeting.destroy');
 
     // hpp
     Route::get('/hpp', [HppController::class, 'index'])->name('admin.hpp');
@@ -75,6 +76,8 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
 
     Route::post('/pallet-request/{id}/approve', [AdminPalletRequestController::class, 'approve']);
     Route::post('/pallet-request/{id}/reject', [AdminPalletRequestController::class, 'reject']);
+    Route::delete('/pallet-request/{id}', [AdminPalletRequestController::class, 'destroy'])
+        ->name('admin.pallet.destroy');
 
     // jadwal kunjungan
     Route::get('/kunjungan', [AdminKunjunganController::class, 'index'])
@@ -85,6 +88,9 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
 
     Route::post('/kunjungan/{id}/reject', [AdminKunjunganController::class, 'reject'])
         ->name('admin.kunjungan.reject');
+
+    Route::delete('/kunjungan/{id}', [AdminKunjunganController::class, 'destroy'])
+        ->name('admin.kunjungan.destroy');
 
     // stok kayu
     Route::get('/stok', [StokKayuController::class, 'index'])
@@ -109,7 +115,6 @@ Route::middleware(['auth'])->prefix('client')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     // meet
-    Route::get('/meet', [MeetController::class, 'index']);
     Route::get('/meeting-request', [MeetingRequestController::class, 'index']);
     Route::post('/meeting-request', [MeetingRequestController::class, 'store']);
 

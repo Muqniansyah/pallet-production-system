@@ -143,6 +143,7 @@
                         <tr>
                             <th class="px-6 py-4">Klien</th>
                             <th class="px-6 py-4">Project</th>
+                            <th class="px-6 py-4">Jenis Palet</th>
                             <th class="px-6 py-4">Qty</th>
                             <th class="px-6 py-4">Status</th>
                             <th class="px-6 py-4 text-right">Tanggal</th>
@@ -160,6 +161,10 @@
                             <!-- nama project -->
                             <td class="px-6 py-4">
                                 {{ $p->nama_project }}
+                            </td>
+                            <!-- jenis palet -->
+                            <td class="px-6 py-4">
+                                {{ $p->palletRequest->jenis_palet ?? '-' }}
                             </td>
                             <!-- qty -->
                             <td class="px-6 py-4">
@@ -189,7 +194,7 @@
                         @empty
                         <!-- Baris 2: tampilan jika data kosong -->
                         <tr>
-                            <td colspan="5" class="text-center py-6 text-gray-400">
+                            <td colspan="6" class="text-center py-6 text-gray-400">
                                 Belum ada data pesanan
                             </td>
                         </tr>

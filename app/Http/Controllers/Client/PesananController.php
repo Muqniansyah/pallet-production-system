@@ -14,7 +14,7 @@ class PesananController extends Controller
     // Menampilkan riwayat pesanan milik client yang sedang login
     public function index()
     {
-        $pesanan = Pesanan::with('hpp')
+        $pesanan = Pesanan::with(['hpp', 'palletRequest'])
             ->where('client_id', auth()->id())
             ->latest()
             ->paginate(5, ['*'], 'pesanan_page');

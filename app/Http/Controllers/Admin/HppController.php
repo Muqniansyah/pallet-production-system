@@ -27,7 +27,7 @@ class HppController extends Controller
             ->get();
 
         // Semua pesanan untuk tabel riwayat dengan pagination
-        $pesanan = Pesanan::with('client')->latest()->paginate(5, ['*'], 'pesanan_page');
+        $pesanan = Pesanan::with(['client', 'palletRequest'])->latest()->paginate(5, ['*'], 'pesanan_page');
 
         // Semua HPP untuk tabel riwayat dengan pagination
         $hpps = Hpp::with('pesanan.client')->latest()->paginate(5, ['*'], 'hpps_page');
