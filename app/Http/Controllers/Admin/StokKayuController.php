@@ -42,9 +42,10 @@ class StokKayuController extends Controller
 
         // Upload gambar ke storage jika ada
         $gambar = null;
+        // penyesuaian environment
+        $disk = app()->environment('production') ? 's3' : 'public';
         if ($request->hasFile('gambar')) {
-            $gambar = $request->file('gambar')
-                ->store('produk-kayu', 'public');
+            $gambar = $request->file('gambar')->store('produk-kayu', $disk);
         }
 
         // Simpan data produk baru ke database
@@ -78,10 +79,11 @@ class StokKayuController extends Controller
 
         $produk = ProdukKayu::with('stok')->findOrFail($id);
 
+        // penyesuaian environment
+        $disk = app()->environment('production') ? 's3' : 'public';
         // Update gambar jika ada file baru yang diunggah
         if ($request->hasFile('gambar')) {
-            $gambar = $request->file('gambar')
-                ->store('produk-kayu', 'public');
+            $gambar = $request->file('gambar')->store('produk-kayu', $disk);
 
             $produk->gambar = $gambar;
         }

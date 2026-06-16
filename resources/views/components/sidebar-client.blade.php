@@ -1,6 +1,6 @@
 <div x-data="{ open: true }" class="flex">
     <!-- kontainer sidebar dengan lebar dinamis -->
-    <div :class="open ? 'w-72' : 'w-20'" class="bg-[#064e3b] text-emerald-100 p-5 transition-all duration-300 ease-in-out fixed md:static top-0 left-0 h-screen md:h-auto flex flex-col shadow-2xl">
+    <div :class="open ? 'w-72' : 'w-20'" class="bg-[#064e3b] text-emerald-100 p-5 transition-all duration-300 ease-in-out relative flex flex-col shadow-2xl">
         <!-- tombol toogle buka/tutup sidebar -->
         <button @click="open = !open" class="absolute -right-3 top-10 bg-emerald-500 text-white rounded-full p-1 shadow-lg hover:bg-emerald-600 transition-colors z-50 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" :class="open ? 'rotate-0' : 'rotate-180'" class="h-4 w-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -71,7 +71,7 @@
     </div>
 
     <!-- Konten halaman yang menggunakan sidebar client -->
-    <div  class="flex-1 md:ml-0" :class="open ? 'ml-72 md:ml-0' : 'ml-20 md:ml-0'">
+    <div  class="flex-1">
         {{ $slot ?? '' }}
     </div>
 </div>
