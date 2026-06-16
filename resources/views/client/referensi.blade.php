@@ -1,6 +1,8 @@
 <x-app-layout>
     <!-- mengimport class Storage -->
-    @use('Illuminate\Support\Facades\Storage')
+    @php
+    use Illuminate\Support\Facades\Storage;
+    @endphp
     <div class="max-w-7xl mx-auto py-10 px-6">
         <!-- judul -->
         <div class="mb-10">
