@@ -1,8 +1,4 @@
 <x-app-layout>
-    <!-- mengimport class Storage -->
-    @php
-    use Illuminate\Support\Facades\Storage;
-    @endphp
     <div class="max-w-7xl mx-auto py-10 px-6">
         <!-- judul -->
         <div class="mb-10">
@@ -22,7 +18,7 @@
                 <!-- gambar -->
                 <div class="h-52 bg-slate-100">
                     @if($item->gambar)
-                    <img src="{{ app()->environment('production') ? Storage::disk('s3')->url($item->gambar) : asset('storage/' . $item->gambar) }}"
+                    <img src="{{ app()->environment('production') ? \Illuminate\Support\Facades\Storage::disk('s3')->url($item->gambar) : asset('storage/' . $item->gambar) }}"
                         class="w-full h-full object-cover">
                     @endif
                 </div>
