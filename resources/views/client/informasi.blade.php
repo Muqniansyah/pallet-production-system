@@ -125,7 +125,7 @@
                     <div class="mb-12 bg-white p-4 rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
                         <div class="bg-slate-50 rounded-[2rem] border border-slate-100 p-8 flex items-center justify-center min-h-[300px] md:min-h-[400px]">
                             <img
-                                src="{{ asset('storage/sipalet.png') }}"
+                                src="{{ asset('images/sipalet.png') }}"
                                 alt="SIPALET Full Workflow"
                                 class="max-w-full max-h-full object-contain hover:scale-[1.02] transition-transform duration-700 ease-in-out">
                         </div>
