@@ -15,6 +15,11 @@ class PaletDesignController extends Controller
     // Menerima dan menyimpan data desain palet dari Netlify secara real-time
     public function sync(Request $request): JsonResponse
     {
+        // Tolak request jika user belum login
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         // Ambil origin dari header request
         $origin = $request->headers->get('Origin') ?? '';
 
@@ -101,10 +106,11 @@ class PaletDesignController extends Controller
         ], 200);
     }
 
-    // Mengambil 100 data desain palet terbaru
+    // Mengambil 100 data desain palet milik klien yang sedang login
     public function index(): JsonResponse
     {
-        $designs = PaletDesign::orderBy('last_updated_at', 'desc')
+        $designs = PaletDesign::where('user_id', Auth::id())
+            ->orderBy('last_updated_at', 'desc')
             ->limit(100)
             ->get();
 

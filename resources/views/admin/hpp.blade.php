@@ -130,7 +130,7 @@
             </div>
 
             <!-- Kontainer row2: Tabel Pesanan -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" id="orders-table-wrapper">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-x-auto" id="orders-table-wrapper">
                 <!-- Judul -->
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h3 class="font-bold text-gray-800">Riwayat Pesanan</h3>
@@ -211,7 +211,7 @@
             </div>
 
             <!-- Kontainer row3: Tabel HPP -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" id="hpps-table-wrapper">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-x-auto" id="hpps-table-wrapper">
                 <!-- judul -->
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h3 class="font-bold text-gray-800">Riwayat Data HPP</h3>

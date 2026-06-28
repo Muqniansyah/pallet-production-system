@@ -264,6 +264,59 @@
             transform: translateY(0);
         }
     }
+
+    /* Responsif mobile */
+    @media (max-width: 640px) {
+        /* Wrapper utama halaman landing */
+        .lp-wrap {
+            min-height: auto;
+        }
+
+        /* nav */
+        .nav {
+            padding: 16px 20px;
+        }
+
+        /* Konten utama */
+        .hero {
+            padding: 28px 20px 32px;
+        }
+
+        .hero-title {
+            font-size: 28px;
+            letter-spacing: -0.8px;
+        }
+
+        .hero-sub {
+            font-size: 28px;
+            letter-spacing: -0.8px;
+        }
+
+        .hero-desc {
+            font-size: 13px;
+        }
+
+        .cta-row {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-primary,
+        .btn-ghost {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Strip fitur-fitur unggulan di bagian bawah */
+        .feature-strip {
+            padding: 16px 20px 24px;
+        }
+
+        .feat-tag {
+            font-size: 11px;
+            padding: 4px 10px;
+        }
+}
 </style>
 
 <!-- judul dan icon -->

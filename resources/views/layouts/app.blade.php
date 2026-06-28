@@ -40,7 +40,7 @@
             @endauth
 
             <!-- menampilkan konten halaman yang menggunakan layout app -->
-            <main class="flex-1 p-6">
+            <main class="flex-1 p-6 min-w-0 overflow-hidden">
                 {{ $slot }}
             </main>
         </div>

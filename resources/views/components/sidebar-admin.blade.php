@@ -1,9 +1,9 @@
-<div x-data="{ open: true }" class="flex">
+<div x-data class="flex">
     <!-- kontainer sidebar dengan lebar dinamis -->
-    <div :class="open ? 'w-72' : 'w-20'" class="min-h-screen bg-[#1e293b] text-slate-300 p-5 transition-all duration-300 ease-in-out relative flex flex-col shadow-2xl">
+    <div :class="$store.sidebar.open ? 'w-72 translate-x-0' : '-translate-x-full md:translate-x-0 md:w-20'" class="min-h-screen bg-[#1e293b] text-slate-300 p-5 transition-all duration-300 ease-in-out fixed md:relative z-50 md:z-auto flex-col flex">
         <!-- tombol toogle buka/tutup sidebar -->
-        <button @click="open = !open" class="absolute -right-3 top-10 bg-blue-600 text-white rounded-full p-1 shadow-lg hover:bg-blue-700 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" :class="open ? 'rotate-0' : 'rotate-180'" class="h-4 w-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <button @click="$store.sidebar.open = !$store.sidebar.open" class="hidden md:block absolute -right-3 top-10 bg-blue-600 text-white rounded-full p-1 shadow-lg hover:bg-blue-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" :class="$store.sidebar.open ? 'rotate-0' : 'rotate-180'" class="h-4 w-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
@@ -13,7 +13,7 @@
             <div class="h-10 w-10 flex-shrink-0 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <span class="text-white font-black text-xl">A</span>
             </div>
-            <h2 x-show="open" x-transition.opacity class="ml-4 text-xl font-black tracking-tighter text-white italic truncate">ADMIN PANEL</h2>
+            <h2 x-show="$store.sidebar.open" x-transition.opacity class="ml-4 text-xl font-black tracking-tighter text-white italic truncate">ADMIN PANEL</h2>
         </div>
 
         <!-- navigasi menu -->
@@ -44,12 +44,12 @@
                 </div>
 
                 <!-- label menu saat sidebar terbuka -->
-                <span x-show="open" x-transition.opacity class="ml-4 font-bold text-sm tracking-wide whitespace-nowrap">
+                <span x-show="$store.sidebar.open" x-transition.opacity class="ml-4 font-bold text-sm tracking-wide whitespace-nowrap">
                     {{ $menu['label'] }}
                 </span>
 
                 <!-- tooltip label menu saat sidebar tertutup -->
-                <div x-show="!open" class="absolute left-20 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <div x-show="!$store.sidebar.open" class="absolute left-20 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                     {{ $menu['label'] }}
                 </div>
             </a>
@@ -60,7 +60,7 @@
         <div class="pt-5 border-t border-slate-700/50 mt-5">
             <div class="flex items-center overflow-hidden">
                 <div class="h-8 w-8 rounded-full bg-slate-600 flex-shrink-0 border-2 border-slate-500"></div>
-                <div x-show="open" x-transition.opacity class="ml-3 truncate">
+                <div x-show="$store.sidebar.open" x-transition.opacity class="ml-3 truncate">
                     <p class="text-xs font-bold text-white leading-none">Admin</p>
                     <p class="text-[10px] text-slate-500 mt-1">Administrator</p>
                 </div>

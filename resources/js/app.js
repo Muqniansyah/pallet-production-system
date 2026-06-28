@@ -10,5 +10,8 @@ import Alpine from "alpinejs";
 // Mendaftarkan Alpine.js ke window agar bisa diakses global
 window.Alpine = Alpine;
 
+// Menyimpan status buka/tutup sidebar agar bisa diakses oleh navbar dan sidebar
+Alpine.store("sidebar", { open: false });
+
 // Menjalankan Alpine.js
 Alpine.start();

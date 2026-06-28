@@ -3,6 +3,14 @@
         <div class="flex justify-between h-16">
             <!-- kiri: logo & brand -->
             <div class="flex items-center">
+                <!-- Tombol hamburger mobile -->
+                <button @click="$store.sidebar.open = !$store.sidebar.open"
+                        class="md:hidden ml-3 p-2 rounded-lg text-slate-500 hover:bg-gray-100">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+
                 <!-- nama aplikasi & tagline -->
                 <div class="flex items-center space-x-3">
                     <h1 class="text-xl font-black text-slate-800 leading-none tracking-tighter italic">
