@@ -26,7 +26,7 @@ class PaletDesignController extends Controller
         // Daftar origin yang diizinkan mengakses endpoint ini
         $allowedOrigins = [
             'https://courageous-rolypoly-532571.netlify.app',
-            'https://pallet-production-system-production.up.railway.app',
+            'https://pallet-production-system-production-1ddf.up.railway.app',
             'http://localhost:8000',
             'http://127.0.0.1:8000',
         ];
