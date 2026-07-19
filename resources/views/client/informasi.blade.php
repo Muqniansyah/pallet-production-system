@@ -74,20 +74,20 @@
                 <div class="space-y-6">
                     <div class="flex justify-between items-center">
                         <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Lokasi Perusahaan</h2>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=Cimuning+Bekasi" target="_blank" class="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-800 transition-colors">
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=PT.+Menara+Bekasi+Lestari&destination_place_id=0x2e6991ea6fcbece5:0x9d249930d6e7b48c" target="_blank" class="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-800 transition-colors">
                             Petunjuk Arah →
                         </a>
                     </div>
 
                     <div class="rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200 border-[12px] border-slate-50 h-[380px] relative">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15862.083!2d107.031!3d-6.303!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e699196!2sCimuning%2C+Bekasi+City%2C+West+Java!5e0!3m2!1sen!2sid!4v1"
-                            width="100%"
-                            height="100%"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.6514170509695!2d107.02489307020532!3d-6.309443147751638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6991ea6fcbece5%3A0x9d249930d6e7b48c!2sPT.%20Menara%20Bekasi%20Lestari!5e0!3m2!1sid!2sid!4v1784448536800!5m2!1sid!2sid"
+                            width="600"
+                            height="450"
                             style="border:0;"
                             allowfullscreen=""
                             loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade">
+                            referrerpolicy="strict-origin-when-cross-origin">
                         </iframe>
                     </div>
                     <p class="text-xs text-slate-400 text-center font-medium italic">
@@ -112,9 +112,9 @@
             </div>
         </div>
         <!-- alur produksi-->
-        <div class="py-12">
+        <div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="mt-20 border-t border-slate-100 pt-16">
+                <div class="mt-8 border-t border-slate-100 pt-8">
                     <!-- judul -->
                     <div class="mb-10 text-center">
                         <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-3">Alur Kerja Sistem</h2>
@@ -138,9 +138,9 @@
                         <!-- kontainer langkah -->
                         <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-8 relative z-10">
                             <!-- Lngkah 1: Klien melihat referensi -->
-                            <div class="flex flex-col items-center text-center group">
-                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
-                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke-width="2" stroke-linecap="round" />
                                     </svg>
                                 </div>
@@ -149,9 +149,9 @@
                             </div>
 
                             <!-- Langkah 2: Klien membuat desain & pengajuan -->
-                            <div class="flex flex-col items-center text-center group">
-                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
-                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2" />
                                     </svg>
                                 </div>
@@ -160,9 +160,9 @@
                             </div>
 
                             <!-- Langkah 3: Admin konfirmasi & buat pesanan -->
-                            <div class="flex flex-col items-center text-center group">
-                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
-                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="2" />
                                     </svg>
                                 </div>
@@ -171,9 +171,9 @@
                             </div>
 
                             <!-- Langkah 4: Klien ajukan Zoom untuk HPP -->
-                            <div class="flex flex-col items-center text-center group">
-                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
-                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-width="2" />
                                     </svg>
                                 </div>
@@ -182,9 +182,9 @@
                             </div>
 
                             <!-- Langkah 5: Admin hitung & kirim HPP -->
-                            <div class="flex flex-col items-center text-center group">
-                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
-                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" />
                                     </svg>
                                 </div>
@@ -193,9 +193,9 @@
                             </div>
 
                             <!-- Langkah 6: Klien buat jadwal kunjungan -->
-                            <div class="flex flex-col items-center text-center group">
-                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:border-blue-400 group-hover:shadow-md transition-all mb-4">
-                                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center shadow-sm transition-all mb-4">
+                                    <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" />
                                     </svg>
                                 </div>
@@ -204,8 +204,8 @@
                             </div>
 
                             <!-- Langkah 7: Finalisasi & Admin terima jadwal -->
-                            <div class="flex flex-col items-center text-center group">
-                                <div class="w-16 h-16 bg-slate-800 border-2 border-slate-800 rounded-2xl flex items-center justify-center shadow-lg group-hover:bg-blue-600 group-hover:border-blue-600 transition-all mb-4">
+                            <div class="flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-slate-800 border-2 border-slate-800 rounded-2xl flex items-center justify-center shadow-lg transition-all mb-4">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" />
                                     </svg>

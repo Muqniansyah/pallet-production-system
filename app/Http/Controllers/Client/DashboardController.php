@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PalletRequest;
 use App\Models\MeetingRequest;
 use App\Models\Pesanan;
+use App\Models\Kunjungan;
 
 // pemanggilan pagination
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -26,8 +27,13 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // riwayat meeting 
+        // riwayat meeting
         $meetings = MeetingRequest::where('client_id', $userId)
+            ->latest()
+            ->get();
+
+        // riwayat kunjungan
+        $kunjungan = Kunjungan::where('client_id', $userId)
             ->latest()
             ->get();
 
@@ -70,10 +76,21 @@ class DashboardController extends Controller
             ];
         });
 
+        $kunjunganLogs = $kunjungan->map(function ($item) {
+            return [
+                'waktu'    => $item->created_at,
+                'kegiatan' => 'Kunjungan: ' . $item->judul,
+                'kode'     => '#KJG-' . $item->id,
+                'status'   => $item->status,
+                'icon'     => '🏙'
+            ];
+        });
+
         // gabungkan & sort
         $allLogs = collect()
             ->merge($requestLogs)
             ->merge($meetingLogs)
+            ->merge($kunjunganLogs)
             ->sortByDesc('waktu');
 
         // manual pagination

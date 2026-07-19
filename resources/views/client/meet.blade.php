@@ -111,7 +111,10 @@
                                     </td>
                                     <!-- waktu -->
                                     <td class="px-6 py-4 text-sm text-gray-600">
-                                        {{ \Carbon\Carbon::parse($meeting->start_time)->format('d M Y, H:i') }}
+                                        <div class="flex flex-col items-start gap-1">
+                                            {{ \Carbon\Carbon::parse($meeting->start_time)->format('d M Y, H:i') }}
+                                            <span class="bg-gray-100 px-2 py-0.5 rounded italic text-gray-400 text-xs">{{ $meeting->durasi }} Menit</span>
+                                        </div>
                                     </td>
                                     <!-- status -->
                                     <td class="px-6 py-4">

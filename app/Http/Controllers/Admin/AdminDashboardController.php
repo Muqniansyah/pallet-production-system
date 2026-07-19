@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pesanan;
 use App\Models\PalletRequest;
 use App\Models\MeetingRequest;
+use App\Models\Kunjungan;
 use App\Models\Hpp;
 use App\Models\User;
 
@@ -94,13 +95,30 @@ class AdminDashboardController extends Controller
                 return [
                     'waktu' => $item->created_at,
                     'kegiatan' => 'Meeting: ' .
-                        $item->title .
+                        $item->judul .
                         ' dengan ' .
                         ($item->user->name ?? 'Client Tidak Dikenal'),
 
                     'kode' => '#MTG-' . $item->id,
                     'status' => $item->status,
                     'icon' => '📅',
+                ];
+            });
+
+        // Riwayat Kunjungan
+        $kunjungan = Kunjungan::with('client')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'waktu' => $item->created_at,
+                    'kegiatan' => 'Kunjungan: ' .
+                        $item->judul .
+                        ' oleh ' .
+                        ($item->client->name ?? 'Client'),
+                    'kode' => '#KJG-' . $item->id,
+                    'status' => $item->status,
+                    'icon' => '🏙',
                 ];
             });
 
@@ -129,6 +147,7 @@ class AdminDashboardController extends Controller
             ->merge($pesanan)
             ->merge($requests)
             ->merge($meetings)
+            ->merge($kunjungan)
             ->merge($hpps)
             ->sortByDesc('waktu');
 

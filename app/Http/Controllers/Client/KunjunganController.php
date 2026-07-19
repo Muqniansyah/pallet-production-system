@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 // pemanggilan model
 use App\Models\Kunjungan;
@@ -33,26 +34,22 @@ class KunjunganController extends Controller
             'tanggal_kunjungan.after'    => 'Waktu kunjungan tidak boleh di hari/jam yang sudah lewat.',
         ]);
 
-        // Ambil tanggal kunjungan yang dipilih
-        $tanggal = \Carbon\Carbon::parse($request->tanggal_kunjungan);
+        // Ambil ID client yang sedang login
+        $userId = auth()->id();
 
-        // Hitung jumlah kunjungan client pada tanggal yang sama
-        $jumlahHariIni = Kunjungan::where('client_id', auth()->id())
-            ->whereDate('tanggal_kunjungan', $tanggal->toDateString())
+        // Hitung jumlah pengajuan kunjungan client hari ini
+        $jumlahHariIni = Kunjungan::where('client_id', $userId)
+            ->whereDate('created_at', Carbon::today())
             ->count();
 
         // Tolak pengajuan jika sudah mencapai batas 3 kunjungan per hari
         if ($jumlahHariIni >= 3) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'tanggal_kunjungan' => 'Anda sudah mengajukan 3 kunjungan pada tanggal tersebut. Maksimal 3 kunjungan per hari.',
-                ]);
+            return back()->withInput()->with('error', 'Maksimal 3 pengajuan kunjungan per hari.');
         }
 
         // Simpan pengajuan kunjungan ke database
         Kunjungan::create([
-            'client_id'         => auth()->id(),
+            'client_id'         => $userId,
             'judul'             => $request->judul,
             'tanggal_kunjungan' => $request->tanggal_kunjungan,
             'status'            => 'pending',
