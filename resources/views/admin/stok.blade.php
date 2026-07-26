@@ -110,7 +110,9 @@
                     </div>
                     <!-- tombol tambah produk -->
                     <div class="md:col-span-2">
-                        <button class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-widest transition-all">
+                        <button
+                        onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
+                        class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-widest transition-all">
                             Tambah Produk
                         </button>
                     </div>
@@ -224,7 +226,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button
-                                            onclick="return confirm('Hapus produk ini?')"
+                                            onclick="if(confirm('Hapus produk ini?')){ this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menghapus...'; this.form.submit(); } return false;"
                                             class="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-[10px] font-black uppercase tracking-widest transition-all">
                                             Hapus
                                         </button>
@@ -296,7 +298,9 @@
                                     <!-- tombol -->
                                     <div class="flex gap-3 mt-8">
                                         <!-- tombol update -->
-                                        <button type="submit"
+                                        <button
+                                            type="submit"
+                                            onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
                                             class="flex-1 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-widest">
                                             Update
                                         </button>
@@ -370,7 +374,9 @@
                 </div>
                 <!-- tombol tambah stok produk -->
                 <div class="flex items-end">
-                    <button type="submit"
+                    <button
+                        type="submit"
+                        onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
                         class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 rounded-xl transition">
                         Tambah Stok
                     </button>

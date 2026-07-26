@@ -79,7 +79,10 @@
                                     <!-- tombol disetujui -->
                                     <form action="/admin/meeting/{{ $meeting->id }}/approve" method="POST" class="w-full">
                                         @csrf
-                                        <button type="submit" class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02]">
+                                        <button
+                                            type="submit"
+                                            onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
+                                            class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02]">
                                             Disetujui
                                         </button>
                                     </form>
@@ -94,7 +97,10 @@
                                                 placeholder="Alasan penolakan..."
                                                 class="w-full bg-white border border-slate-200 text-slate-700 text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 block p-2.5 transition-all duration-200 outline-none placeholder:text-slate-400">
                                         </div>
-                                        <button type="submit" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
+                                        <button
+                                            type="submit"
+                                            onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
+                                            class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-600 text-[10px] font-black py-2.5 rounded-lg shadow-sm transition transform hover:scale-[1.02] uppercase tracking-wider">
                                             Ditolak
                                         </button>
                                     </form>
@@ -110,11 +116,12 @@
                                     </a>
 
                                     <!-- tombol hapus -->
-                                    <form action="{{ route('admin.meeting.destroy', $meeting->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                    <form action="{{ route('admin.meeting.destroy', $meeting->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
+                                        <button
+                                            type="submit"
+                                            onclick="if(confirm('Yakin ingin menghapus data ini?')){ this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menghapus...'; this.form.submit(); } return false;"
                                             class="px-2 py-1 text-[8px] font-black rounded-lg bg-rose-50 text-rose-400 border border-rose-200 hover:bg-rose-100 uppercase tracking-wider transition">
                                             Hapus
                                         </button>
@@ -127,11 +134,12 @@
                                     <span class="text-xs text-gray-400 italic font-medium">Selesai</span>
 
                                     <!-- tombol hapus -->
-                                    <form action="{{ route('admin.meeting.destroy', $meeting->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                    <form action="{{ route('admin.meeting.destroy', $meeting->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
+                                        <button
+                                            type="submit"
+                                            onclick="if(confirm('Yakin ingin menghapus data ini?')){ this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menghapus...'; this.form.submit(); } return false;"
                                             class="px-2 py-1 text-[8px] font-black rounded-lg bg-rose-50 text-rose-400 border border-rose-200 hover:bg-rose-100 uppercase tracking-wider transition">
                                             Hapus
                                         </button>
@@ -155,7 +163,7 @@
                     @empty
                     <!-- Baris 2: tampilan jika data kosong -->
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center">
+                        <td colspan="7" class="px-6 py-12 text-center">
                             <div class="flex flex-col items-center">
                                 <svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>

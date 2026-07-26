@@ -57,7 +57,9 @@
                                 <input id="qtyInput" type="number" readonly class="w-full rounded-xl border-gray-200 py-3">
                             </div>
                             <!-- tombol pesanan -->
-                            <button type="submit"
+                            <button
+                                type="submit"
+                                onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
                                 class="w-full uppercase bg-blue-600 text-white font-bold py-3 rounded-xl">
                                 Buat Pesanan
                             </button>
@@ -120,7 +122,9 @@
                             <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                             @enderror
                             <!-- tombol hpp -->
-                            <button type="submit"
+                            <button
+                                type="submit"
+                                onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Mengunggah...'; this.form.submit();"
                                 class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black py-3 rounded-xl shadow-lg shadow-indigo-100 transition transform hover:scale-[1.02] uppercase tracking-widest">
                                 Unggah HPP
                             </button>

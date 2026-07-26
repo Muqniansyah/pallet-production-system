@@ -33,14 +33,14 @@ class PalletRequestController extends Controller
         // Validasi input pengajuan palet
         $request->validate([
             'jenis_palet'  => 'required',
-            'qty'          => 'required|integer|min:1',
+            'qty'          => 'required|integer|min:50',
             'alamat_kirim' => 'required',
             'catatan'      => 'required',
             'file_desain' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ], [
             'jenis_palet.required'  => 'Jenis palet wajib dipilih.',
             'qty.required'          => 'Jumlah (qty) wajib diisi.',
-            'qty.min'               => 'Jumlah (qty) minimal 1.',
+            'qty.min'               => 'Jumlah (qty) minimal 50 PCS.',
             'alamat_kirim.required' => 'Alamat pengiriman wajib diisi.',
             'catatan.required'      => 'Catatan wajib diisi.',
             'file_desain.required'  => 'File desain wajib diunggah.',

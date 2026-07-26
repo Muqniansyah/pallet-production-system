@@ -100,7 +100,10 @@
                                         <!-- tombol disetujui -->
                                         <form action="/admin/pallet-request/{{ $req->id }}/approve" method="POST">
                                             @csrf
-                                            <button type="submit" class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold py-1.5 rounded-lg transition">
+                                            <button
+                                                type="submit"
+                                                onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
+                                                class="w-full uppercase bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold py-1.5 rounded-lg transition">
                                                 Disetujui
                                             </button>
                                         </form>
@@ -110,7 +113,10 @@
                                             @csrf
                                             <input type="text" name="keterangan" placeholder="Alasan..."
                                                 class="w-full border border-slate-200 text-[10px] rounded-lg p-1.5 outline-none placeholder:text-slate-300">
-                                            <button type="submit" class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-400 text-[9px] font-black py-1.5 rounded-lg transition uppercase">
+                                            <button
+                                                type="submit"
+                                                onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
+                                                class="w-full bg-white hover:bg-rose-50 text-rose-600 border border-rose-400 text-[9px] font-black py-1.5 rounded-lg transition uppercase">
                                                 Ditolak
                                             </button>
                                         </form>
@@ -126,11 +132,12 @@
                                         </div>
 
                                         <!-- tombol hapus -->
-                                        <form action="{{ route('admin.pallet.destroy', $req->id) }}" method="POST"
-                                            onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                        <form action="{{ route('admin.pallet.destroy', $req->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"
+                                            <button
+                                                type="submit"
+                                                onclick="if(confirm('Yakin ingin menghapus data ini?')){ this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menghapus...'; this.form.submit(); } return false;"
                                                 class="px-2 py-1 text-[8px] font-black rounded-lg bg-rose-50 text-rose-400 border border-rose-200 hover:bg-rose-100 uppercase tracking-wider transition">
                                                 Hapus
                                             </button>

@@ -19,15 +19,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- kolom kiri -->
                     <div class="space-y-6">
-                        <!-- jenis palet -->
+                        <!-- jenis kayu -->
                         <div class="group">
                             <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 group-focus-within:text-blue-600 transition-colors">
-                                Jenis Palet
+                                Jenis Kayu
                             </label>
 
                             <select id="produkSelect" name="jenis_palet" class="w-full border-gray-200 rounded-2xl shadow-sm focus:ring-blue-500 focus:border-blue-500 py-3 pl-4 pr-10">
                                 <option value="" disabled selected>
-                                    Pilih Tipe Palet...
+                                    Pilih Tipe Kayu...
                                 </option>
 
                                 @foreach($produk as $item)
@@ -122,7 +122,10 @@
 
                 <!-- tombol -->
                 <div class="mt-10 pt-6 border-t border-gray-50 flex justify-end">
-                    <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-12 rounded-2xl shadow-lg shadow-emerald-200 transition-all active:scale-95 uppercase tracking-widest text-sm">
+                    <button
+                        type="submit"
+                        onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
+                        class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-12 rounded-2xl shadow-lg shadow-emerald-200 transition-all active:scale-95 uppercase tracking-widest text-sm">
                         Ajukan Palet
                     </button>
                 </div>
@@ -143,7 +146,7 @@
                     <!-- tabel judul -->
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-100">
-                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Jenis Palet</th>
+                            <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Jenis Kayu</th>
                             <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Qty</th>
                             <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Alamat Kirim</th>
                             <th class="px-8 py-4 text-xs font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Catatan</th>
@@ -157,7 +160,7 @@
                         @forelse($requests as $req)
                         <!-- Baris 1 -->
                         <tr class="hover:bg-gray-50/50 transition-colors">
-                            <!-- jenis palet & desain -->
+                            <!-- jenis kayu & desain -->
                             <td class="px-8 py-5">
                                 <div class="text-sm font-bold text-gray-800">{{ $req->jenis_palet }}</div>
                                 @if($req->file_desain)
@@ -1286,7 +1289,7 @@
             const qty = document.getElementById('qtyInput');
             const info = document.getElementById('stokInfo');
 
-            // Tampilkan info stok dan set batas qty saat jenis palet dipilih
+            // Tampilkan info stok dan set batas qty saat jenis kayu dipilih
             produk.addEventListener('change', function() {
                 let stok =
                     this.options[this.selectedIndex]

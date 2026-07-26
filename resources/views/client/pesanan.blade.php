@@ -69,24 +69,30 @@
                                     <div class="flex items-center gap-3">
                                         @if($p->status == 'pending')
                                         <!-- tombol ajukan meet -->
-                                        <a href="{{ url('client/meeting-request') }}" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 border border-slate-200 text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
+                                        <a
+                                            href="{{ url('client/meeting-request') }}"
+                                            onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Memproses...'; this.form.submit();"
+                                            class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 border border-slate-200 text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
                                             Ajukan Meeting
                                         </a>
 
                                         <!-- tombol proses HPP -->
                                         <form action="{{ route('client.pesanan.deal', $p->id) }}" method="POST">
                                             @csrf
-                                            <button class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-[9px] font-black px-3 py-2 rounded-lg shadow-sm shadow-emerald-200 transition-all active:scale-95 uppercase tracking-tighter">
+                                            <button
+                                                onclick="this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Menyimpan...'; this.form.submit();"
+                                                class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-[9px] font-black px-3 py-2 rounded-lg shadow-sm shadow-emerald-200 transition-all active:scale-95 uppercase tracking-tighter">
                                                 Proses HPP
                                             </button>
                                         </form>
 
                                         <!-- tombol batalkan -->
-                                        <form action="{{ route('client.pesanan.cancel', $p->id) }}" method="POST"
-                                            onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?')">
+                                        <form action="{{ route('client.pesanan.cancel', $p->id) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit"
+                                            <button
+                                                type="submit"
+                                                onclick="if(confirm('Yakin ingin membatalkan pesanan ini?')){ this.disabled=true; this.innerHTML='<svg class=\'animate-spin h-4 w-4 inline mr-2\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path></svg>Membatalkan...'; this.form.submit(); } return false;"
                                                 class="bg-white hover:bg-rose-600 hover:text-white text-rose-500 border border-rose-300 text-[9px] font-black px-3 py-2 rounded-lg transition transform hover:scale-105 uppercase tracking-tighter">
                                                 Batalkan
                                             </button>
