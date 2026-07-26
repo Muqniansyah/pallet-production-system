@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/badge/Laravel-v13.4.0-red?style=for-the-badge&logo=laravel" alt="Laravel">
   <img src="https://img.shields.io/badge/PHP-v8.3.12-blue?style=for-the-badge&logo=php" alt="PHP">
   <img src="https://img.shields.io/badge/PostgreSQL-14.5-blue?style=for-the-badge&logo=postgresql" alt="PostgreSQL">
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
+  <img src="https://img.shields.io/badge/License-DJKI-green?style=for-the-badge" alt="License">
 </p>
 
 ---
