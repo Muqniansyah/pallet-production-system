@@ -1,58 +1,166 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIPALET - Sistem Informasi Manajemen Produksi dan Desain Palet
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-v13.4.0-red?style=for-the-badge&logo=laravel" alt="Laravel">
+  <img src="https://img.shields.io/badge/PHP-v8.3.12-blue?style=for-the-badge&logo=php" alt="PHP">
+  <img src="https://img.shields.io/badge/PostgreSQL-14.5-blue?style=for-the-badge&logo=postgresql" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
 </p>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 Tentang SIPALET
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**SIPALET** (Sistem Informasi Manajemen Produksi dan Desain Palet) adalah aplikasi berbasis web yang dikembangkan untuk **PT Menara Bekasi Lestari**, perusahaan yang bergerak di bidang perdagangan dan ekspor produk kayu, sebagai bagian dari penelitian skripsi yang berjudul **"Pengembangan Sistem Manajemen Produksi dan Desain Palet PT Menara Bekasi Lestari"**.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Sistem ini dirancang untuk mendigitalkan dan mengintegrasikan seluruh proses pengelolaan desain palet, pengajuan kebutuhan, pemantauan pesanan, penjadwalan koordinasi, hingga pengelolaan dokumen Harga Pokok Produksi (HPP) dalam satu platform terpusat.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ Fitur Utama
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 👨‍💼 Admin Perusahaan
+- Pengelolaan akun & hak akses pengguna
+- Peninjauan & persetujuan pengajuan desain palet
+- Pengelolaan data pesanan
+- Pengunggahan & pengelolaan dokumen HPP
+- Pengaturan & konfirmasi jadwal pertemuan (Zoom Meeting)
+- Pengaturan & konfirmasi jadwal kunjungan
+- Pengelolaan stok & referensi produk kayu
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 👤 Klien
+- Registrasi & login akun
+- Melihat referensi & spesifikasi produk kayu
+- Pembuatan desain palet (PaletView 3D)
+- Pengajuan kebutuhan & desain palet
+- Pemantauan status & rincian pesanan
+- Akses & unduh dokumen HPP
+- Pengajuan jadwal Zoom Meeting
+- Pengajuan jadwal kunjungan
+- Pusat informasi & bantuan
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🛠️ Teknologi yang Digunakan
 
+| Komponen | Teknologi |
+|---|---|
+| Backend Framework | Laravel 13.4.0 |
+| Bahasa Pemrograman | PHP 8.3.12 |
+| Database | PostgreSQL 14.5 |
+| Web Server | Apache 2.4.62 (Laragon) |
+| Frontend | Blade Template, CSS, JavaScript, Vite |
+| Code Editor | Visual Studio Code |
+| Browser | Google Chrome, Mozilla Firefox |
+
+---
+
+## ⚙️ Persyaratan Sistem
+
+### Perangkat Lunak
+- PHP >= 8.3.12
+- Composer
+- Node.js & NPM
+- PostgreSQL 14.5
+- Laravel 13.4.0
+- Laragon (web server lokal)
+
+### Perangkat Keras (Minimum)
+- Prosesor: 2.20 GHz
+- RAM: 12 GB
+- Penyimpanan: SSD 224 GB
+- Resolusi Layar: 1366 × 768 piksel
+- Koneksi Internet: 10 Mbps
+
+---
+
+## 🚀 Cara Instalasi
+
+### 1. Clone Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/Muqniansyah/pallet-production-system.git
+cd pallet-production-system
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install Dependency PHP
+```bash
+composer install
+```
 
-## Contributing
+### 3. Install Dependency Frontend
+```bash
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Salin File Environment
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+### 5. Konfigurasi Database
+Edit file `.env` dan sesuaikan konfigurasi database PostgreSQL kamu:
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=sipalet
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 6. Generate Application Key
+```bash
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+### 7. Jalankan Migrasi Database
+```bash
+php artisan migrate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 8. Jalankan Seeder (Opsional)
+```bash
+php artisan db:seed
+```
 
-## License
+### 9. Build Asset Frontend
+```bash
+# Untuk production
+npm run build
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Untuk development
+npm run dev
+```
+
+### 10. Jalankan Aplikasi
+```bash
+php artisan serve
+```
+
+Akses aplikasi di: `http://localhost:8000`
+
+---
+
+## 📁 Struktur Database
+
+Sistem ini menggunakan 9 tabel utama:
+
+- `users` — Data autentikasi dan peran pengguna
+- `palet_designs` — Parameter desain palet
+- `pallet_requests` — Pengajuan kebutuhan desain palet
+- `pesanan` — Data pesanan produksi
+- `hpps` — Dokumen Harga Pokok Produksi
+- `meeting_requests` — Jadwal pertemuan daring (Zoom Meeting)
+- `kunjungan` — Jadwal kunjungan lapangan
+- `produk_kayu` — Referensi & stok produk kayu
+- `stok_kayu` — Ketersediaan stok material
+
+---
+
+## 👨‍💻 Pengembang
+
+**Muqniansyah Arifin**
+Program Studi Informatika
+Fakultas Teknik dan Informatika
+Universitas Bina Sarana Informatika
+Kampus Kaliabang Bekasi — 2026
