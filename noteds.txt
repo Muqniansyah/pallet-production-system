@@ -19,3 +19,42 @@ Layout utama untuk user yang sudah login (authenticated).
 2. guest.blade.php
 
 Layout untuk pengunjung atau pengguna yang belum login.
+
+
+#testing playwight
+jalankan npx playwright test atau npx playwright test login --headed (tampilan browser live) untuk jalankan semua test sekaligus.
+
+- untuk jalankannya :
+1) terminal 1
+php artisan serve
+2) terminal 2 (opsional)
+npm run dev
+3) terminal 3
+npx playwright test
+
+Ya, Playwright memakan storage karena:
+Browser engine → Chromium, Firefox, WebKit yang didownload (~500MB-1GB)
+Test results → folder test-results yang menyimpan screenshot, video, trace
+HTML report → folder playwright-report
+
+Hapus test results yang tidak perlu:
+rm -rf test-results
+rm -rf playwright-report
+
+uninstall browser untuk testing playwright, caranya:
+npx playwright uninstall firefox
+npx playwright uninstall webkit
+
+testing file playwright (untuk 3 browser, jadi jumlah testing X jumlah browser)
+1. npx playwright test e2e/login.spec.js
+noted : Playwright menjalankan test secara berurutan, kalau test login admin berhasil
+tapi sesi tidak dihapus, maka test berikutnya akan terpengaruh.
+2. npx playwright test e2e/register.spec.js
+3. npx playwright test e2e/klien/kunjungan.spec.js
+npx playwright test e2e/klien/kunjungan.spec.js --project=chromium --headed (untuk spesifik yang di test hanya browser chrome saja)
+noted: data hapus dulu dikunjungan secara manual atau sistem pada aplikasi bagian admin.
+
+
+
+
+apakah jika browser dihapus untuk firefox dan webkit akan mempengaruhi package.json ataupun sistem nya? atau hanya ia berpengaruh dari lokal saja?
