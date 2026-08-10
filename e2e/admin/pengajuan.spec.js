@@ -4,11 +4,11 @@ import { test, expect } from "@playwright/test";
 // Login sebagai admin sebelum setiap test
 test.beforeEach(async ({ page }) => {
     // Tambah timeout 2 menit untuk mengantisipasi browser yang lambat
-    test.setTimeout(120000);
+    test.setTimeout(180000);
     // Hapus cookies agar sesi tidak tercampur
     await page.context().clearCookies();
     // Buka halaman login
-    await page.goto("http://localhost:8000/login", { timeout: 60000 });
+    await page.goto("http://localhost:8000/login", { timeout: 90000 });
     // Isi input email admin
     await page.fill('input[name="email"]', "admin@gmail.com");
     // Isi input password admin
@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
     // Klik tombol submit
     await page.click('button[type="submit"]');
     // Tunggu sampai berhasil login dan redirect ke dashboard admin
-    await page.waitForURL(/admin\/dashboard/, { timeout: 60000 });
+    await page.waitForURL(/admin\/dashboard/, { timeout: 90000 });
 });
 
 // Test 1: Cek apakah halaman pengajuan palet admin tampil dengan benar
@@ -99,13 +99,21 @@ test("admin menolak pengajuan palet gagal tanpa alasan", async ({ page }) => {
     // Tunggu sampai ada data pengajuan dengan status pending
     await page.locator("text=PENDING").first().waitFor({ timeout: 10000 });
     // Biarkan alasan penolakan kosong
-    // Hapus onclick handler pada tombol ditolak
+    // Hapus onclick handler hanya pada tombol di form reject
     await page.evaluate(() => {
-        const buttons = document.querySelectorAll('button[type="submit"]');
-        buttons.forEach((btn) => btn.removeAttribute("onclick"));
+        const rejectForms = Array.from(
+            document.querySelectorAll("form"),
+        ).filter((form) => form.action.includes("reject"));
+        if (rejectForms.length > 0) {
+            const btn = rejectForms[0].querySelector('button[type="submit"]');
+            if (btn) btn.removeAttribute("onclick");
+        }
     });
-    // Klik tombol DITOLAK tanpa isi alasan
-    await page.locator("text=Ditolak").first().click();
+    // Klik tombol DITOLAK pada form reject pertama
+    await page
+        .locator('form[action*="reject"] button[type="submit"]')
+        .first()
+        .click();
     // Tunggu halaman selesai load
     await page.waitForLoadState("load");
     // Cek apakah pesan error muncul

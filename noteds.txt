@@ -1,60 +1,404 @@
-- untuk refresh tabel dari awal
+================================================================
+SIPALET - DOKUMENTASI PENGEMBANGAN
+================================================================
+
+## PERINTAH DASAR
+
+# Reset database dari awal (migrate + seed ulang)
 php artisan migrate:fresh --seed
 
-- development
+# Jalankan server development
 php artisan serve
 npm run dev
 
-- views tidak terpakai dari login dan regis
+================================================================
+
+## STRUKTUR LAYOUT
+
+1. app.blade.php
+   Layout utama untuk pengguna yang sudah login (authenticated).
+
+2. guest.blade.php
+   Layout untuk pengunjung atau pengguna yang belum login.
+
+================================================================
+
+## VIEWS TIDAK TERPAKAI (Auth Bawaan Laravel)
+
 views/auth/confirm-password
 views/auth/forgot-password
 views/auth/reset-password
 views/auth/verify-email
 
+================================================================
 
-1. app.blade.php
+## TESTING DENGAN PLAYWRIGHT
 
-Layout utama untuk user yang sudah login (authenticated).
+# Cara menjalankan:
+Terminal 1 : php artisan serve
+Terminal 2 : npm run dev (opsional)
+Terminal 3 : npx playwright test
 
-2. guest.blade.php
-
-Layout untuk pengunjung atau pengguna yang belum login.
-
-
-#testing playwight
-jalankan npx playwright test atau npx playwright test login --headed (tampilan browser live) untuk jalankan semua test sekaligus.
-
-- untuk jalankannya :
-1) terminal 1
-php artisan serve
-2) terminal 2 (opsional)
-npm run dev
-3) terminal 3
+# Jalankan semua test:
 npx playwright test
 
-Ya, Playwright memakan storage karena:
-Browser engine → Chromium, Firefox, WebKit yang didownload (~500MB-1GB)
-Test results → folder test-results yang menyimpan screenshot, video, trace
-HTML report → folder playwright-report
+# Jalankan dengan tampilan browser live:
+npx playwright test login --headed
 
-Hapus test results yang tidak perlu:
+----------------------------------------------------------------
+
+## FILE TEST PLAYWRIGHT
+(Catatan: Playwright menjalankan test untuk 3 browser,
+sehingga jumlah test = jumlah file x jumlah browser)
+
+1. npx playwright test e2e/login.spec.js
+   Catatan: Pastikan sesi login dihapus setelah test admin
+   agar tidak mempengaruhi test berikutnya.
+
+2. npx playwright test e2e/register.spec.js
+
+3. npx playwright test e2e/klien/kunjungan.spec.js
+   # Khusus browser Chrome saja dengan bantuan --headed:
+   npx playwright test e2e/klien/kunjungan.spec.js --project=chromium --headed
+   # khusus browser chrome saja tanpa bantuan --headed:
+   npx playwright test e2e/klien/kunjungan.spec.js --project=chromium
+   Catatan: Hapus data kunjungan terlebih dahulu secara manual
+   melalui aplikasi bagian admin sebelum menjalankan test ini.
+
+4. npx playwright test e2e/admin/kunjungan.spec.js --project=chromium
+5. npx playwright test e2e/klien/meet.spec.js --project=chromium
+6. npx playwright test e2e/admin/meet.spec.js --project=chromium
+7. npx playwright test e2e/klien/pengajuan.spec.js --project=chromium (lakukan 3x test)
+8. npx playwright test e2e/admin/pengajuan.spec.js --project=chromium (minimal ada 3x pengajuan)
+9. npx playwright test e2e/admin/pesanan.spec.js --project=chromium (minimal 2 pengajuan disetujui)
+10. npx playwright test e2e/klien/pesanan.spec.js --project=chromium (minimal 2 pesanan dibuat)
+11. npx playwright test e2e/admin/hpp.spec.js --project=chromium (minimal 2 pesanan disetujui)
+12. npx playwright test e2e/admin/klien.spec.js --project=chromium
+13. npx playwright test e2e/admin/produk.spec.js --project=chromium (pastikan ada produk dengan nama kayu jati)
+14. npx playwright test e2e/admin/stok.spec.js --project=chromium
+
+
+Data yang perlu direset manual setelah testing:
+e2e/admin/klien.spec.js → klien yang diubah jadi admin perlu dikembalikan ke role client di database
+e2e/admin/produk.spec.js Test 7 → produk yang dihapus tidak bisa dikembalikan
+e2e/admin/produk.spec.js Test 6 → nama produk yang diupdate perlu dikembalikan ke nama semula
+
+
+Playwright	Browser	Dibuat oleh
+chromium	Chrome / Edge	Google
+firefox	Firefox	Mozilla
+webkit	Safari	Apple
+
+Tapi perlu diketahui:
+WebKit di Playwright bukan Safari asli, melainkan engine WebKit yang dipakai Playwright untuk mensimulasikan perilaku Safari.
+Jadi kalau mau test seperti di Safari, pakai --project=webkit.
+
+Kapan perlu test di WebKit?
+Kalau aplikasi akan diakses oleh pengguna iPhone/iPad (Safari default di iOS)
+Kalau klien minta support Safari
+Untuk memastikan tidak ada bug spesifik di Safari
+
+
+Perbedaan dengan dan tanpa --headed:
+	Tanpa --headed	Dengan --headed
+Mode	Headless (tanpa tampilan)	Headed (dengan tampilan browser)
+Browser	Tidak terlihat	Terlihat dan bisa dipantau
+Kecepatan	Lebih cepat	Lebih lambat
+Kegunaan	Untuk CI/CD atau production	Untuk debug dan melihat proses test
+Resource	Lebih ringan	Lebih berat
+
+Kapan pakai --headed?
+Saat test gagal dan ingin lihat apa yang terjadi di browser
+Saat debug masalah seperti timeout atau elemen tidak ditemukan
+Saat ingin memastikan flow test sudah benar
+
+Kapan tanpa --headed?
+Saat sudah yakin test benar dan hanya ingin cek hasilnya
+Saat jalankan banyak test sekaligus agar lebih cepat 👍
+
+# file test pest untuk feature
+1. php artisan test (untuk jalankan semua test)
+2. php artisan test --filter RouteMiddlewareTest (hanya file tertentu)
+3. php artisan test --filter PalletRequestTest
+noted: di Pallet Request test kita sekalian menguji:
+Controller — apakah logika controller berjalan benar
+Database — apakah data benar-benar tersimpan
+Route — apakah endpoint bisa diakses
+Middleware — apakah hak akses benar
+4. php artisan test --filter PesananTest
+5. php artisan test --filter MeetingTest
+6. php artisan test --filter KunjunganTest
+noted: Karena struktur kunjungan lebih sederhana — hanya 3 kolom wajib (client_id, judul, tanggal_kunjungan) dan tidak ada relasi kompleks,
+jadi helper function buatKunjungan() sudah cukup dan lebih simpel.
+Tapi untuk test limit 3 kunjungan per hari, saya pakai loop for bukan factory
+karena Kunjungan belum punya factory. Kalau mau konsisten dengan Meeting, bisa buat factory juga.
+7. php artisan test --filter HppTest
+8. php artisan test --filter ClientTest
+9. php artisan test --filter StokKayuTest
+
+# file test pest untuk unit
+1. php artisan test --filter ModelRelationTest
+2. php artisan test --filter ZoomServiceTest
+
+
+
+KESIMPULAN : SEMUA TESTING BERJALAN LANCAR, BAIK ITU PLAYWRIGHT DAN PEST.
+----------------------------------------------------------------
+
+## MANAJEMEN STORAGE PLAYWRIGHT
+
+Playwright memakan storage karena:
+- Browser engine (Chromium, Firefox, WebKit) ~500MB - 1GB
+- Test results (screenshot, video, trace) → folder test-results
+- HTML report → folder playwright-report
+
+# Hapus file test yang tidak diperlukan:
 rm -rf test-results
 rm -rf playwright-report
 
-uninstall browser untuk testing playwright, caranya:
+# Uninstall browser testing yang tidak diperlukan:
 npx playwright uninstall firefox
 npx playwright uninstall webkit
 
-testing file playwright (untuk 3 browser, jadi jumlah testing X jumlah browser)
-1. npx playwright test e2e/login.spec.js
-noted : Playwright menjalankan test secara berurutan, kalau test login admin berhasil
-tapi sesi tidak dihapus, maka test berikutnya akan terpengaruh.
-2. npx playwright test e2e/register.spec.js
-3. npx playwright test e2e/klien/kunjungan.spec.js
-npx playwright test e2e/klien/kunjungan.spec.js --project=chromium --headed (untuk spesifik yang di test hanya browser chrome saja)
-noted: data hapus dulu dikunjungan secara manual atau sistem pada aplikasi bagian admin.
+# bisa install ulang kapanpun dengan:
+npx playwright install firefox
+npx playwright install webkit
+
+
+Hapus manual cd "C:\Users\User\AppData\Local\ms-playwright"
+Note: Folder AppData biasanya tersembunyi. Kalau tidak kelihatan, aktifkan Show hidden items di File Explorer:
+View → Show → Hidden items
+hapus bagian:
+❌ firefox-1538
+❌ webkit-2336
+❌ ffmpeg-1011
+
+KESIMPULAN: TEST DILAKUKAN HANYA DI CHROME SAJA. KARENA BROWSER PLAYWRIGHT FIREFOX DAN WEBKIT SUDAH DIHAPUS.
+================================================================
+
+Manajemen Browser & Storage Playwright
+1. Pengaruh Uninstall Browser Firefox dan WebKit
+# Menghapus browser Firefox dan WebKit dari Playwright hanya berpengaruh di lokal saja dan tidak mempengaruhi:
+package.json
+playwright.config.js
+Kode test
+Repository/Git
+
+# Yang terpengaruh hanya file binary browser yang tersimpan di komputer lokal. Jika suatu saat dibutuhkan kembali, cukup install ulang dengan perintah:
+npx playwright install firefox
+npx playwright install webkit
+
+2. Mengapa Browser Tersimpan di AppData
+# Playwright memisahkan antara package library dan browser engine:
+Package library → tersimpan di dalam project di folder node_modules/@playwright/
+Browser engine → tersimpan secara global di C:\Users\Muni\AppData\Local\ms-playwright\
+
+# Alasan browser disimpan di AppData dan bukan di dalam project:
+Browser engine berukuran sangat besar (500MB-1GB), sehingga jika disimpan di dalam project akan membuat project sangat berat
+Semua project Playwright di komputer yang sama bisa berbagi browser yang sama tanpa perlu download ulang
+Repository Git tetap ringan karena tidak menyimpan binary browser
+
+3. Apakah Data di AppData Menghilang Setelah Testing
+Data browser engine di AppData bersifat permanen dan tidak menghilang setelah testing selesai. Browser engine akan tetap ada sampai:
+Diuninstall manual dengan npx playwright uninstall
+Dihapus manual dari folder AppData
+Dilakukan reinstall sistem operasi
+
+4. Cara Menghemat Storage Disk C
+# Beberapa cara untuk menghemat storage disk C:
+1. Hapus hasil test setelah selesai:
+rm -rf test-results
+rm -rf playwright-report
+
+2. Uninstall browser yang tidak dipakai:
+npx playwright uninstall firefox
+npx playwright uninstall webkit
+
+3. Tambahkan ke .gitignore:
+test-results/
+playwright-report/
+e2e/fixtures/
+
+# Estimasi storage yang dihemat:
+Yang dihapus	Estimasi ukuran
+Firefox engine	~200MB
+WebKit engine	~200MB
+test-results	Tergantung screenshot/video
+playwright-report	~5-10MB
+
+Dengan menguninstall Firefox dan WebKit saja sudah menghemat sekitar 400MB storage di disk C.
 
 
 
 
-apakah jika browser dihapus untuk firefox dan webkit akan mempengaruhi package.json ataupun sistem nya? atau hanya ia berpengaruh dari lokal saja?
+Pest memang lebih modern dari PHPUnit — syntaxnya lebih ringkas dan mudah dibaca.
+
+Hubungan Pest dan PHPUnit:
+Pest bukan pengganti PHPUnit, melainkan wrapper di atasnya. Di balik layar Pest tetap menjalankan PHPUnit, hanya tampilannya lebih elegan. Jadi keduanya bisa hidup berdampingan di project yang sama.
+
+gunakan Pest untuk Unit + Feature test, dan Playwright tetap untuk E2E. Ketiganya saling melengkapi dan tidak bertabrakan.
+
+
+Layer	Tool	Menguji apa
+Unit	Pest	Fungsi/logika kecil (kalkulasi HPP, validasi)
+Feature	Pest	Route, controller, database, auth
+E2E	Playwright	Alur pengguna di browser (klik, form, UI)
+
+
+
+
+
+
+
+Lebih lengkapnya feature test di Laravel/Pest menguji satu fitur secara menyeluruh dari sisi HTTP — artinya mensimulasikan request seperti yang dilakukan browser nyata, tapi tanpa browser.
+
+Yang diuji dalam satu feature test bisa mencakup sekaligus:
+
+1. Route — apakah URL bisa diakses
+get('/client/dashboard')->assertOk();
+2. Auth/Middleware — apakah hanya user yang login bisa akses :
+get('/client/dashboard')->assertRedirect('/login'); // tanpa login
+3. Controller — apakah logika controller berjalan benar :
+post('/client/pallet-request', $data)->assertRedirect();
+4. Database — apakah data benar-benar tersimpan/berubah
+assertDatabaseHas('pallet_requests', ['jenis_palet' => 'Palet Kayu Jati']);
+5. Response/View — apakah halaman menampilkan konten yang benar
+get('/client/referensi')->assertSee('Referensi Produk');
+
+
+#perbedaan
+Playwright (E2E) — yang kamu sudah buat:
+
+Membuka browser sungguhan
+Menguji dari sudut pandang pengguna nyata (klik, isi form, lihat tampilan)
+Butuh server Laravel berjalan (php artisan serve)
+Butuh data user sudah ada di database (kamu pakai email asli muqniansyah@gmail.com)
+Lambat karena menjalankan browser
+
+Pest Feature Test — yang akan kita buat:
+
+Tidak membuka browser, hanya simulasi HTTP request
+Menguji dari sudut pandang backend (route, controller, database)
+Tidak butuh server berjalan
+Membuat user secara otomatis lewat factory, lalu dihapus setelah test selesai
+Cepat
+
+
+
+#Jadi untuk Auth login misalnya:
+Playwright menguji:
+Apakah tombol "Masuk" terlihat di halaman
+Apakah setelah isi form dan klik, URL berpindah ke dashboard
+Apakah pesan error muncul di layar
+
+Pest menguji:
+Apakah request POST ke /login mengembalikan redirect yang benar
+Apakah middleware memblokir akses tanpa login
+Apakah user yang salah password tidak bisa masuk
+
+
+pest tak perlu memakai php artisan serve dan npm run dev namun tetap nyalakan laragon karena Pest butuh koneksi ke database sipalet_testing.
+Pest bekerja sepenuhnya di sisi PHP tanpa browser dan tanpa server HTTP.
+jadi cukup jalankan ./vendor/bin/pest atau php artisan test
+dan tidak masuk ke database.
+cara kerja nya:
+php artisan test dijalankan
+        ↓
+Laravel buat database SQLite di RAM (:memory:)
+        ↓
+Migrasi dijalankan otomatis di database RAM
+        ↓
+Test berjalan, data dibuat di RAM
+        ↓
+Test selesai, database RAM langsung hilang
+        ↓
+Database MySQL utama kamu tidak tersentuh sama sekali
+
+dan pest tidak memakan memori laptop karena pemakaian setelah memori dipakai akan dilepaskan lagi
+RAM    → sekitar 30-80 MB (sangat ringan)
+CPU    → spike sebentar saat test jalan, lalu kembali normal
+Waktu  → biasanya selesai dalam 2-10 detik
+Disk   → 0 (tidak nulis ke disk sama sekali)
+
+
+Cara buat database baru di HeidiSQL:
+
+Klik Open dulu dengan database sipalet yang sudah ada
+Setelah masuk, klik kanan pada koneksi Laragon.PostgreSQL di panel kiri
+Pilih Create new → Database
+Isi nama sipalet_testing
+Klik OK
+
+
+Middleware adalah penjaga/filter yang berjalan sebelum request masuk ke controller.
+Analoginya seperti satpam gedung:
+User request → Middleware (cek dulu) → Controller (proses) → Response
+
+Jadi yang kita test di RouteMiddlewareTest.php adalah memastikan kedua middleware ini bekerja benar
+Guest → coba akses /client/dashboard → middleware 'auth' blokir → redirect /login ✅
+Klien → coba akses /admin/dashboard → middleware 'isAdmin' blokir → 403 ✅
+Admin → akses /admin/dashboard → lolos semua middleware → 200 ✅
+
+
+file dalam pest
+Pest.php → konfigurasi global
+    ↓
+TestCase.php → kelas induk dengan fitur Laravel
+    ↓
+AuthTest.php, PalletRequestTest.php, dll → file test kamu
+
+kenapa tidak tampil di database sipalet_testing? Karena ada RefreshDatabase di Pest.php
+Cara kerjanya:
+Test mulai → data dibuat di sipalet_testing
+     ↓
+Test selesai → RefreshDatabase hapus semua data
+     ↓
+Database sipalet_testing kembali kosong
+
+
+Http::fake() dari Laravel yang mencegat request HTTP sebelum keluar ke internet dan menggantinya dengan response palsu yang kita definisikan sendiri.
+Cara kerjanya:
+ZoomService::getAccessToken()
+        ↓
+Http::fake() mencegat sebelum keluar
+        ↓
+Mengembalikan response palsu { "access_token": "fake-token" }
+        ↓
+API Zoom sungguhan tidak pernah dipanggil
+
+Analoginya seperti double/stunt di film — yang beraksi bukan aktornya langsung, tapi penggantinya yang dibuat seolah-olah sama.
+Kenapa tidak hit API langsung?
+❌ Butuh koneksi internet
+❌ Butuh kredensial Zoom valid
+❌ Bisa kena rate limit Zoom
+❌ Test bisa gagal bukan karena kode, tapi karena jaringan
+❌ Lambat
+Dengan Http::fake():
+✅ Tidak butuh internet
+✅ Tidak butuh kredensial asli
+✅ Selalu konsisten
+✅ Cepat
+✅ Fokus menguji logika kode kamu, bukan infrastruktur Zoom
+
+
+unit test tidak pakai database jadi ModelRelationTest tidak butuh RefreshDatabase. Pastikan tests/Pest.php hanya apply RefreshDatabase ke folder Feature saja
+Unit test tidak pakai database — itulah intinya.
+Unit test menguji logika murni sebuah fungsi/method secara terisolasi, tanpa:
+❌ Database
+❌ HTTP request
+❌ File system
+❌ External
+Contoh nyata di SIPALET:
+ModelRelationTest — menguji apakah relasi model terdefinisi dengan benar tanpa perlu data di database
+ZoomServiceTest — menguji apakah logika ZoomService mengirim request dengan benar tanpa hit API sungguhan
+Manfaat unit test:
+Sangat cepat karena tidak ada I/O
+Mudah debug karena scope kecil
+Menemukan bug di level terkecil sebelum menyebar
+
+
+Untuk JavaScript di Blade — tidak perlu di unit test Pest.
+Pest adalah testing framework untuk PHP/Laravel, bukan JavaScript. JavaScript di Blade diuji dengan tool yang berbeda:
+Jenis Kode	| Tool Testing
+PHP (controller, model, service)	Pest
+JavaScript di Blade (DOM, AJAX, event)	Playwright / Jest

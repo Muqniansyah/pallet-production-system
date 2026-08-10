@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+// untuk testing pest
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MeetingRequest extends Model
 {
+    // mengaktifkan factory untuk keperluan testing
+    use HasFactory;
+
     // daftar kolom yang diizinkan untuk diisi data
     protected $fillable = [
         'client_id',

@@ -4,11 +4,11 @@ import { test, expect } from "@playwright/test";
 // Login sebagai client sebelum setiap test
 test.beforeEach(async ({ page }) => {
     // Tambah timeout 2 menit untuk mengantisipasi browser yang lambat seperti Firefox
-    test.setTimeout(120000);
+    test.setTimeout(180000);
     // Hapus cookies agar sesi tidak tercampur
     await page.context().clearCookies();
     // Buka halaman login
-    await page.goto("http://localhost:8000/login", { timeout: 60000 });
+    await page.goto("http://localhost:8000/login", { timeout: 90000 });
     // Isi input email client
     await page.fill('input[name="email"]', "muqniansyah@gmail.com");
     // Isi input password client
@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
     // Klik tombol submit
     await page.click('button[type="submit"]');
     // Tunggu sampai berhasil login dan redirect ke dashboard
-    await page.waitForURL(/client\/dashboard/, { timeout: 60000 });
+    await page.waitForURL(/client\/dashboard/, { timeout: 90000 });
 });
 
 // Test 1: Cek apakah halaman pengajuan palet tampil dengan benar

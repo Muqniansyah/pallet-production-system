@@ -18,6 +18,10 @@ pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
 
+// Unit pakai TestCase tapi tanpa RefreshDatabase
+pest()->extend(TestCase::class)
+    ->in('Unit');
+
 /*
 |--------------------------------------------------------------------------
 | Expectations

@@ -28,7 +28,9 @@ test("halaman admin HPP dan pesanan tampil dengan benar", async ({ page }) => {
     // Cek judul halaman mengandung "SIPALET"
     await expect(page).toHaveTitle(/SIPALET/);
     // Cek judul halaman DATA HPP & MANAGEMENT PESANAN terlihat
-    await expect(page.locator("text=DATA HPP")).toBeVisible();
+    await expect(
+        page.getByRole("heading", { name: "Data HPP & Management Pesanan" }),
+    ).toBeVisible();
     // Cek tombol "BUAT PESANAN" terlihat
     await expect(
         page.getByRole("button", { name: "BUAT PESANAN" }),
@@ -41,14 +43,7 @@ test("admin membuat pesanan berhasil", async ({ page }) => {
     test.setTimeout(120000);
     // Buka halaman HPP dan pesanan admin
     await page.goto("http://localhost:8000/admin/hpp", { timeout: 60000 });
-    // Tunggu dropdown pengajuan palet tersedia
-    await page
-        .locator('select[name="pallet_request_id"]')
-        .waitFor({ timeout: 10000 });
     // Pilih pengajuan pertama yang tersedia di dropdown
-    await page
-        .locator('select[name="pallet_request_id"] option:nth-child(2)')
-        .waitFor();
     const firstOption = await page
         .locator('select[name="pallet_request_id"] option:nth-child(2)')
         .getAttribute("value");
@@ -63,7 +58,7 @@ test("admin membuat pesanan berhasil", async ({ page }) => {
         buttons.forEach((btn) => btn.removeAttribute("onclick"));
     });
     // Klik tombol BUAT PESANAN
-    await page.locator("text=Buat Pesanan").click();
+    await page.getByRole("button", { name: "Buat Pesanan" }).click();
     // Tunggu halaman selesai load
     await page.waitForLoadState("load");
     // Cek apakah pesan sukses muncul
@@ -89,7 +84,7 @@ test("admin membuat pesanan gagal pengajuan tidak dipilih", async ({
         buttons.forEach((btn) => btn.removeAttribute("onclick"));
     });
     // Klik tombol BUAT PESANAN
-    await page.locator("text=Buat Pesanan").click();
+    await page.getByRole("button", { name: "Buat Pesanan" }).click();
     // Tunggu halaman selesai load
     await page.waitForLoadState("load");
     // Cek apakah pesan error muncul
@@ -119,7 +114,7 @@ test("admin membuat pesanan gagal nama project kosong", async ({ page }) => {
         buttons.forEach((btn) => btn.removeAttribute("onclick"));
     });
     // Klik tombol BUAT PESANAN
-    await page.locator("text=Buat Pesanan").click();
+    await page.getByRole("button", { name: "Buat Pesanan" }).click();
     // Tunggu halaman selesai load
     await page.waitForLoadState("load");
     // Cek apakah pesan error muncul
@@ -152,7 +147,7 @@ test("admin membuat pesanan gagal nama project sudah dipakai", async ({
         buttons.forEach((btn) => btn.removeAttribute("onclick"));
     });
     // Klik tombol BUAT PESANAN
-    await page.locator("text=Buat Pesanan").click();
+    await page.getByRole("button", { name: "Buat Pesanan" }).click();
     // Tunggu halaman selesai load
     await page.waitForLoadState("load");
     // Cek apakah pesan error muncul
