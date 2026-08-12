@@ -1,0 +1,133 @@
+Redis itu penyimpanan data di memori (RAM) yang sangat cepat.
+Contoh penggunaan sederhana di sistem sipalet adalah cache data produk kayu yang sering diakses client.
+
+cara gunakan:
+1. install redis server (Redis instalasi ini dijalankan sebagai Windows Service, sehingga otomatis aktif ketika Windows menyala.)
+https://github.com/tporadowski/redis/releases (Download file .msi lalu install)
+Setelah install, Redis otomatis berjalan sebagai Windows Service di port 6379.
+Cek apakah Redis berjalan buka Command Prompt: redis-cli ping (Kalau muncul PONG berarti Redis sudah berjalan.)
+noted : Kalau Redis tidak dijalankan maka Redis tidak memakai RAM untuk proses Redis, karena redis-server.exe tidak aktif.
+Saat Redis kamu sekarang 'STATE: RUNNING' barulah proses Redis menggunakan RAM.
+Kalau Redis dihentikan, RAM yang digunakan proses Redis akan dilepas. File dump.rdb di disk tetap ada, tetapi itu bukan pemakaian RAM.
+2. install package redis di dalam project : composer require predis/predis
+noted: Keduanya harus ada, Redis server sebagai mesinnya dan predis sebagai jembatan Laravel ke Redis.
+3. update env
+CACHE_STORE=redis (terutama yang ini diupdate)
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+4. jadikan redis clientnya predis dari yang awalnya phpredis
+REDIS_CLIENT=predis
+5. di config/cache.php ubah dari false ke true, seperti ini:
+'serializable_classes' => true,
+noted :pakai Laravel 13.4, dan Laravel 13 punya pengaturan keamanan serializable_classes.
+Kalau object seperti Eloquent Collection tidak diizinkan, saat diambil dari cache bisa berubah menjadi __PHP_Incomplete_Class.
+Jadi kita tetap pakai object, tidak perlu mengubah Blade. karena 'true' akan mengembalikan perilaku caching object seperti versi Laravel sebelumnya.
+6. jalankan php artisan optimize:clear
+7. lalu php artisan serve dan npm run dev
+
+
+#Cara kerjanya dari redis:
+Pertama kali client buka halaman referensi:
+→ Cache kosong
+→ Ambil dari database
+→ Simpan ke Redis selama 10 menit
+
+Client lain buka halaman referensi dalam 10 menit:
+→ Ambil dari Redis (lebih cepat, tidak query database)
+
+Admin update/tambah/hapus produk:
+→ Cache dihapus
+→ Client berikutnya akan ambil data baru dari database
+→ Disimpan lagi ke Redis
+kesimpulan : , client buka halaman referensi sebelum 10 menit maka data diambil dari Redis bukan dari database sehingga lebih cepat.
+
+#phpredis vs predis
+Keduanya sama-sama berfungsi sebagai Redis client, yaitu penghubung antara PHP/Laravel dengan Redis Server.
+PhpRedis maupun Predis sama-sama membutuhkan Redis Server. Yang membedakan adalah cara PHP/Laravel berkomunikasi dengan Redis Server.
+1. phpredis adalah extension PHP. -> Kalau menggunakan ini : REDIS_CLIENT=phpredis
+gambarannya:
+Laravel
+   ↓
+PHP
+   ↓
+PhpRedis Extension
+   ↓
+Redis Server
+
+2. Predis adalah library/package PHP yang diinstal melalui Composer. -> Kalau menggunakan ini : REDIS_CLIENT=predis
+Tidak bergantung pada extension PHP redis.
+gambarannya:
+Laravel
+   ↓
+Predis
+   ↓
+Redis Server
+
+
+# menggunakan Cache::forget()
+Misalnya admin mengubah stok:
+Admin
+ ↓
+Update stok PostgreSQL
+ ↓
+Cache::forget('produk_kayu')
+ ↓
+Cache lama dihapus
+Kemudian client membuka referensi:
+Client
+ ↓
+Cache::remember()
+ ↓
+Cache tidak ditemukan
+ ↓
+Ambil data terbaru dari PostgreSQL
+ ↓
+Simpan kembali ke Redis
+ ↓
+Tampilkan
+Jadi kamu tidak menampilkan stok lama kepada client.
+
+#php artisan tinker adalah console interaktif Laravel. Fungsinya untuk mencoba atau menguji kode Laravel secara langsung tanpa harus membuat route/controller baru.
+
+
+Redis hanya aktif ketika sedang mengerjakan SIPALET, kamu bisa mengubah Redis Service agar tidak otomatis start saat Windows menyala.
+jadi intinya kalau hanya menjalankan laptop biasa ia tidak memakan banyak ram, karena Untuk kondisi Redis kamu sekarang, saat laptop dipakai biasa tanpa SIPALET:
+-Redis memang tetap berjalan sebagai Windows Service.
+-Tapi penggunaan memory-nya sangat kecil.
+-Dari pengecekan kita tadi, Redis hanya menggunakan sekitar 736 KB untuk data Redis.
+-File dump.rdb juga hanya 1.677 byte.
+Jadi tidak akan tiba-tiba memakan RAM besar hanya karena Redis sedang aktif.
+
+Pilihan yang saya sarankan untuk kamu yaitu Ubah Redis menjadi Manual, bukan otomatis.
+1. Buka Win + R
+2. ketik services.msc
+3. Cari Redis
+4. Klik kanan → Properties → bagian: Startup type
+5. ubah dari Automatic menjadi Manual
+6. Lalu ketika ingin mengerjakan SIPALET, jalankan: net start Redis
+7. Setelah selesai: net stop Redis
+Dengan begitu:
+Laptop biasa
+↓
+Redis tidak jalan
+↓
+RAM tidak dipakai oleh proses Redis
+
+Saat mengerjakan SIPALET:
+net start Redis
+↓
+Redis aktif
+↓
+SIPALET menggunakan caching Redis
+namun membuat menjadi manual tidak wajib dilakukan, karena Redis kamu sekarang sangat ringan. Namun kalau tujuanmu memang menghemat RAM ketika tidak sedang development, mengubah ke Manual adalah pilihan yang masuk akal.
+
+bedanya file dengan database untk cache storenya:
+Cache Store	    Disimpan di	                    Kelebihan	                                Kekurangan
+file	        File di storage/framework/cache	Sederhana, tidak butuh service tambahan	    Lebih lambat jika cache banyak
+database	    Tabel database	                Tidak perlu Redis	                        Membebani database
+redis	        RAM Redis	                    Sangat cepat	                            Perlu Redis Server
+
+
+# Kalau cache sudah banyak, bisa dihapus dengan :
+php artisan cache:clear

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 // pemanggilan model
 use App\Models\ProdukKayu;
@@ -64,6 +65,9 @@ class StokKayuController extends Controller
             'stok' => $request->stok,
         ]);
 
+        // Hapus cache produk kayu karena data sudah berubah
+        Cache::forget('produk_kayu');
+
         return back()->with('success', 'Produk berhasil ditambahkan');
     }
 
@@ -102,6 +106,9 @@ class StokKayuController extends Controller
             ]);
         }
 
+        // Hapus cache produk kayu karena data sudah berubah
+        Cache::forget('produk_kayu');
+
         return back()->with('success', 'Produk berhasil diupdate');
     }
 
@@ -112,6 +119,9 @@ class StokKayuController extends Controller
 
         // Hapus produk dari database
         $produk->delete();
+
+        // Hapus cache produk kayu karena data sudah berubah
+        Cache::forget('produk_kayu');
 
         return back()->with('success', 'Produk berhasil dihapus');
     }
@@ -146,6 +156,9 @@ class StokKayuController extends Controller
                 'stok'     => $stok->stok + $request->jumlah,
             ]);
         }
+
+        // Hapus cache produk kayu karena data sudah berubah
+        Cache::forget('produk_kayu');
 
         return back()->with('success', 'Stok berhasil ditambahkan');
     }

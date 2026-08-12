@@ -249,7 +249,10 @@
             <h1 class="text-3xl font-black text-[#1F2937] italic uppercase tracking-tighter">
                 Desain <span class="text-slate-400 font-light">Palet</span>
             </h1>
-            <p class="text-slate-500 text-sm mt-1">Sesuaikan ukuran dimensi, papan atas, lapisan tengah, dan papan bawah palet kayu sesuai dengan kebutuhan Anda.</p>
+            <p class="text-slate-500 text-sm mt-1">
+                Sesuaikan ukuran dimensi, papan atas, lapisan tengah, dan papan bawah palet kayu sesuai dengan kebutuhan Anda.
+                Apabila sistem desain mengalami gangguan, silakan unggah dokumen sketsa atau file rincian kebutuhan palet Anda.
+            </p>
         </div>
 
         <!-- PaletView 3D Card Box -->
