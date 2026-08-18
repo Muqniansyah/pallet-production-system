@@ -402,3 +402,6 @@ Pest adalah testing framework untuk PHP/Laravel, bukan JavaScript. JavaScript di
 Jenis Kode	| Tool Testing
 PHP (controller, model, service)	Pest
 JavaScript di Blade (DOM, AJAX, event)	Playwright / Jest
+
+
+catatan : untuk sipalet.yaml adalah dokumentasi api dari sipalet.

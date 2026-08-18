@@ -1,0 +1,1102 @@
+openapi: 3.0.4
+info:
+  title: SIPALET API
+  description: |
+    Dokumentasi API Sistem Manajemen Produksi dan Desain Palet PT Menara Bekasi Lestari (SIPALET).
+
+    Sistem ini menggunakan autentikasi berbasis **Session Cookie** dan **CSRF Token** (Laravel Breeze).
+
+    **Catatan Penting:**
+    - Sebelum melakukan request POST/PATCH/DELETE, lakukan GET ke halaman login terlebih dahulu untuk mendapatkan cookie dan CSRF token.
+    - Sertakan cookie `laravel_session` dan header `X-XSRF-TOKEN` pada setiap request.
+    - Jika terkendala, lakukan GET halaman terlebih dahulu untuk menyegarkan cookie/token.
+  version: 1.0.0
+  contact:
+    name: SIPALET Support
+
+servers:
+  - url: https://pallet-production-system-production-1ddf.up.railway.app
+    description: Production Server (Railway)
+  - url: http://localhost:8000
+    description: Local Development Server
+
+tags:
+  - name: Auth
+    description: Autentikasi pengguna (Login, Register, Logout)
+  - name: Admin - Pengajuan
+    description: Kelola pengajuan palet oleh admin
+  - name: Admin - Kunjungan
+    description: Kelola jadwal kunjungan oleh admin
+  - name: Admin - Meeting
+    description: Kelola jadwal pertemuan oleh admin
+  - name: Admin - Pesanan & HPP
+    description: Kelola pesanan dan dokumen HPP oleh admin
+  - name: Admin - Produk & Stok
+    description: Kelola produk kayu dan stok oleh admin
+  - name: Admin - Klien
+    description: Kelola data klien oleh admin
+  - name: Klien - Pengajuan
+    description: Pengajuan palet oleh klien
+  - name: Klien - Meeting
+    description: Jadwal pertemuan oleh klien
+  - name: Klien - Kunjungan
+    description: Jadwal kunjungan oleh klien
+  - name: Klien - Pesanan
+    description: Manajemen pesanan oleh klien
+
+paths:
+  # ==================== AUTH ====================
+  /login:
+    get:
+      tags:
+        - Auth
+      summary: Tampilkan halaman login
+      description: Menampilkan halaman login dan mendapatkan CSRF token
+      responses:
+        "200":
+          description: Halaman login berhasil ditampilkan
+    post:
+      tags:
+        - Auth
+      summary: Login pengguna
+      description: Memproses login dan redirect berdasarkan role (admin/client)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - _token
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: admin@gmail.com
+                password:
+                  type: string
+                  example: password
+                _token:
+                  type: string
+                  description: CSRF Token
+      responses:
+        "302":
+          description: Redirect ke dashboard sesuai role
+        "422":
+          description: Email atau password salah
+
+  /register:
+    get:
+      tags:
+        - Auth
+      summary: Tampilkan halaman register
+      responses:
+        "200":
+          description: Halaman register berhasil ditampilkan
+    post:
+      tags:
+        - Auth
+      summary: Registrasi pengguna baru
+      description: Membuat akun baru dengan role client
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+                - password_confirmation
+                - _token
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  format: email
+                  example: john@gmail.com
+                password:
+                  type: string
+                  description: Min 8 karakter, huruf besar, huruf kecil, angka, dan simbol
+                  example: Password123!
+                password_confirmation:
+                  type: string
+                  example: Password123!
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Registrasi berhasil, redirect ke dashboard client
+        "422":
+          description: Validasi gagal
+
+  /logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout pengguna
+      description: Menghapus sesi login dan redirect ke halaman utama
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Logout berhasil, redirect ke halaman utama
+
+  # ==================== ADMIN - PENGAJUAN ====================
+  /admin/pallet-request:
+    get:
+      tags:
+        - Admin - Pengajuan
+      summary: Tampilkan semua pengajuan palet
+      description: Menampilkan semua pengajuan palet dengan pagination (5 per halaman)
+      responses:
+        "200":
+          description: Halaman pengajuan berhasil ditampilkan
+
+  /admin/pallet-request/{id}/approve:
+    post:
+      tags:
+        - Admin - Pengajuan
+      summary: Setujui pengajuan palet
+      description: Mengubah status pengajuan menjadi disetujui
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 15
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Pengajuan berhasil disetujui
+        "404":
+          description: Pengajuan tidak ditemukan
+
+  /admin/pallet-request/{id}/reject:
+    post:
+      tags:
+        - Admin - Pengajuan
+      summary: Tolak pengajuan palet
+      description: Mengubah status pengajuan menjadi ditolak beserta keterangan alasan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 15
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - keterangan
+                - _token
+              properties:
+                keterangan:
+                  type: string
+                  example: Desain tidak sesuai standar
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Pengajuan berhasil ditolak
+        "302 (error)":
+          description: Alasan penolakan wajib diisi
+
+  /admin/pallet-request/{id}:
+    delete:
+      tags:
+        - Admin - Pengajuan
+      summary: Hapus pengajuan palet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+                _method:
+                  type: string
+                  example: DELETE
+      responses:
+        "302":
+          description: Pengajuan berhasil dihapus
+        "404":
+          description: Pengajuan tidak ditemukan
+
+  # ==================== ADMIN - KUNJUNGAN ====================
+  /admin/kunjungan:
+    get:
+      tags:
+        - Admin - Kunjungan
+      summary: Tampilkan semua jadwal kunjungan
+      responses:
+        "200":
+          description: Halaman kunjungan berhasil ditampilkan
+
+  /admin/kunjungan/{id}/approve:
+    post:
+      tags:
+        - Admin - Kunjungan
+      summary: Setujui jadwal kunjungan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Kunjungan berhasil disetujui
+
+  /admin/kunjungan/{id}/reject:
+    post:
+      tags:
+        - Admin - Kunjungan
+      summary: Tolak jadwal kunjungan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - keterangan
+                - _token
+              properties:
+                keterangan:
+                  type: string
+                  example: Jadwal tidak tersedia
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Kunjungan berhasil ditolak
+        "302 (error)":
+          description: Alasan penolakan wajib diisi
+
+  /admin/kunjungan/{id}:
+    delete:
+      tags:
+        - Admin - Kunjungan
+      summary: Hapus data kunjungan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+                _method:
+                  type: string
+                  example: DELETE
+      responses:
+        "302":
+          description: Data kunjungan berhasil dihapus
+        "404":
+          description: Data kunjungan tidak ditemukan
+
+  # ==================== ADMIN - MEETING ====================
+  /admin/meeting:
+    get:
+      tags:
+        - Admin - Meeting
+      summary: Tampilkan semua jadwal meeting
+      responses:
+        "200":
+          description: Halaman meeting berhasil ditampilkan
+
+  /admin/meeting/{id}/approve:
+    post:
+      tags:
+        - Admin - Meeting
+      summary: Setujui jadwal meeting dan buat di Zoom
+      description: Menyetujui meeting dan otomatis membuat meeting di Zoom API
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Meeting berhasil dibuat di Zoom
+
+  /admin/meeting/{id}/reject:
+    post:
+      tags:
+        - Admin - Meeting
+      summary: Tolak jadwal meeting
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - keterangan
+                - _token
+              properties:
+                keterangan:
+                  type: string
+                  example: Jadwal tidak tersedia
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Meeting berhasil ditolak
+        "302 (error)":
+          description: Alasan penolakan wajib diisi
+
+  /admin/meeting/{id}:
+    delete:
+      tags:
+        - Admin - Meeting
+      summary: Hapus data meeting
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+                _method:
+                  type: string
+                  example: DELETE
+      responses:
+        "302":
+          description: Data meeting berhasil dihapus
+        "404":
+          description: Data meeting tidak ditemukan
+
+  # ==================== ADMIN - PESANAN & HPP ====================
+  /admin/hpp:
+    get:
+      tags:
+        - Admin - Pesanan & HPP
+      summary: Tampilkan halaman HPP dan manajemen pesanan
+      responses:
+        "200":
+          description: Halaman HPP berhasil ditampilkan
+
+  /admin/pesanan:
+    post:
+      tags:
+        - Admin - Pesanan & HPP
+      summary: Buat pesanan baru dari pengajuan palet
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - pallet_request_id
+                - nama_project
+                - _token
+              properties:
+                pallet_request_id:
+                  type: integer
+                  description: ID pengajuan palet yang sudah disetujui
+                  example: 15
+                nama_project:
+                  type: string
+                  example: Project Gudang Bekasi
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Pesanan berhasil dibuat
+        "422":
+          description: Validasi gagal
+
+  /admin/pesanan/{id}/{status}:
+    post:
+      tags:
+        - Admin - Pesanan & HPP
+      summary: Update status pesanan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: status
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [pending, deal, batal]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Status pesanan berhasil diperbarui
+
+  /admin/hpp/upload:
+    post:
+      tags:
+        - Admin - Pesanan & HPP
+      summary: Upload dokumen HPP
+      description: Mengunggah file HPP untuk pesanan yang sudah berstatus deal
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - pesanan_id
+                - file_hpp
+                - _token
+              properties:
+                pesanan_id:
+                  type: integer
+                  description: ID pesanan dengan status deal
+                file_hpp:
+                  type: string
+                  format: binary
+                  description: File HPP (PDF/Excel, maksimal 5MB)
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: HPP berhasil diunggah
+        "422":
+          description: Validasi gagal
+
+  # ==================== ADMIN - PRODUK & STOK ====================
+  /admin/stok:
+    get:
+      tags:
+        - Admin - Produk & Stok
+      summary: Tampilkan halaman produk dan stok
+      responses:
+        "200":
+          description: Halaman produk berhasil ditampilkan
+    post:
+      tags:
+        - Admin - Produk & Stok
+      summary: Tambah produk baru
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - nama_produk
+                - stok
+                - gambar
+                - keterangan
+                - _token
+              properties:
+                nama_produk:
+                  type: string
+                  example: Kayu Jati
+                stok:
+                  type: integer
+                  example: 100
+                gambar:
+                  type: string
+                  format: binary
+                  description: Gambar produk (PNG/JPG/JPEG, maksimal 2MB)
+                keterangan:
+                  type: string
+                  example: Kayu jati berkualitas tinggi
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Produk berhasil ditambahkan
+        "422":
+          description: Validasi gagal
+
+  /admin/stok/{id}:
+    put:
+      tags:
+        - Admin - Produk & Stok
+      summary: Update produk
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                nama_produk:
+                  type: string
+                stok:
+                  type: integer
+                gambar:
+                  type: string
+                  format: binary
+                keterangan:
+                  type: string
+                _token:
+                  type: string
+                _method:
+                  type: string
+                  example: PUT
+      responses:
+        "302":
+          description: Produk berhasil diupdate
+    delete:
+      tags:
+        - Admin - Produk & Stok
+      summary: Hapus produk
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+                _method:
+                  type: string
+                  example: DELETE
+      responses:
+        "302":
+          description: Produk berhasil dihapus
+
+  /admin/stok/tambah:
+    post:
+      tags:
+        - Admin - Produk & Stok
+      summary: Tambah stok produk
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - produk_kayu_id
+                - jumlah
+                - _token
+              properties:
+                produk_kayu_id:
+                  type: integer
+                  example: 1
+                jumlah:
+                  type: integer
+                  example: 50
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Stok berhasil ditambahkan
+        "422":
+          description: Validasi gagal
+
+  # ==================== ADMIN - KLIEN ====================
+  /admin/client:
+    get:
+      tags:
+        - Admin - Klien
+      summary: Tampilkan semua data klien
+      responses:
+        "200":
+          description: Halaman klien berhasil ditampilkan
+
+  /admin/client/{id}/role:
+    patch:
+      tags:
+        - Admin - Klien
+      summary: Update role klien
+      description: Mengubah role pengguna menjadi admin atau client. Menggunakan method spoofing karena HTML form hanya support GET dan POST.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - role
+                - _token
+                - _method
+              properties:
+                role:
+                  type: string
+                  enum: [admin, client]
+                  example: admin
+                _token:
+                  type: string
+                _method:
+                  type: string
+                  example: PATCH
+                  description: Method spoofing untuk PATCH via form HTML
+      responses:
+        "302":
+          description: Role berhasil diubah
+        "422":
+          description: Validasi gagal
+
+  # ==================== KLIEN - PENGAJUAN ====================
+  /client/pallet-request:
+    get:
+      tags:
+        - Klien - Pengajuan
+      summary: Tampilkan halaman pengajuan palet klien
+      responses:
+        "200":
+          description: Halaman pengajuan berhasil ditampilkan
+    post:
+      tags:
+        - Klien - Pengajuan
+      summary: Buat pengajuan palet baru
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - jenis_palet
+                - qty
+                - alamat_kirim
+                - catatan
+                - file_desain
+                - _token
+              properties:
+                jenis_palet:
+                  type: string
+                  example: kayu jati
+                qty:
+                  type: integer
+                  minimum: 50
+                  example: 50
+                alamat_kirim:
+                  type: string
+                  example: Jl. Sudirman No. 1, Jakarta
+                catatan:
+                  type: string
+                  example: Kayu harus kering
+                file_desain:
+                  type: string
+                  format: binary
+                  description: File desain (PDF/JPG/PNG, maksimal 5MB)
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Pengajuan palet berhasil dikirim
+        "422":
+          description: Validasi gagal
+
+  # ==================== KLIEN - MEETING ====================
+  /client/meeting-request:
+    get:
+      tags:
+        - Klien - Meeting
+      summary: Tampilkan halaman jadwal meeting klien
+      responses:
+        "200":
+          description: Halaman meeting berhasil ditampilkan
+    post:
+      tags:
+        - Klien - Meeting
+      summary: Buat pengajuan meeting baru
+      description: Maksimal 3 pengajuan meeting per hari
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - judul
+                - deskripsi
+                - start_time
+                - durasi
+                - _token
+              properties:
+                judul:
+                  type: string
+                  example: Konsultasi Proyek Palet
+                deskripsi:
+                  type: string
+                  example: Diskusi detail spesifikasi palet
+                start_time:
+                  type: string
+                  format: date-time
+                  example: "2026-08-20T10:00"
+                  description: Tanggal & waktu tidak boleh di hari/jam yang sudah lewat
+                durasi:
+                  type: integer
+                  enum: [15, 30, 40]
+                  example: 30
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Jadwal Pertemuan berhasil dikirim
+        "422":
+          description: Validasi gagal
+
+  # ==================== KLIEN - KUNJUNGAN ====================
+  /client/kunjungan:
+    get:
+      tags:
+        - Klien - Kunjungan
+      summary: Tampilkan halaman jadwal kunjungan klien
+      responses:
+        "200":
+          description: Halaman kunjungan berhasil ditampilkan
+    post:
+      tags:
+        - Klien - Kunjungan
+      summary: Buat pengajuan kunjungan baru
+      description: Maksimal 3 pengajuan kunjungan per hari
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - judul
+                - tanggal_kunjungan
+                - _token
+              properties:
+                judul:
+                  type: string
+                  example: Peninjauan Palet
+                tanggal_kunjungan:
+                  type: string
+                  format: date-time
+                  example: "2026-08-20T10:00"
+                  description: Waktu kunjungan tidak boleh di hari/jam yang sudah lewat
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Jadwal kunjungan berhasil dibuat
+        "422":
+          description: Validasi gagal
+
+  # ==================== KLIEN - PESANAN ====================
+  /client/pesanan:
+    get:
+      tags:
+        - Klien - Pesanan
+      summary: Tampilkan riwayat pesanan klien
+      responses:
+        "200":
+          description: Halaman pesanan berhasil ditampilkan
+
+  /client/pesanan/{id}/deal:
+    post:
+      tags:
+        - Klien - Pesanan
+      summary: Konfirmasi pesanan (deal)
+      description: Mengubah status pesanan menjadi deal dan mengurangi stok produk
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+      responses:
+        "302":
+          description: Pesanan siap diproses HPP
+        "302 (error)":
+          description: Stok produk tidak mencukupi
+
+  /client/pesanan/{id}/cancel:
+    patch:
+      tags:
+        - Klien - Pesanan
+      summary: Batalkan pesanan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                _token:
+                  type: string
+                _method:
+                  type: string
+                  example: PATCH
+      responses:
+        "302":
+          description: Pesanan berhasil dibatalkan
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [admin, client]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    PalletRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        client_id:
+          type: integer
+        jenis_palet:
+          type: string
+        qty:
+          type: integer
+        file_desain:
+          type: string
+        alamat_kirim:
+          type: string
+        catatan:
+          type: string
+        status:
+          type: string
+          enum: [pending, disetujui, ditolak]
+        keterangan:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    Pesanan:
+      type: object
+      properties:
+        id:
+          type: integer
+        client_id:
+          type: integer
+        pallet_request_id:
+          type: integer
+        nama_project:
+          type: string
+        qty:
+          type: integer
+        status:
+          type: string
+          enum: [pending, deal, batal]
+        created_at:
+          type: string
+          format: date-time
+
+    MeetingRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        client_id:
+          type: integer
+        judul:
+          type: string
+        deskripsi:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        durasi:
+          type: integer
+          enum: [15, 30, 40]
+        status:
+          type: string
+          enum: [pending, disetujui, ditolak]
+        zoom_meeting_id:
+          type: string
+        join_url:
+          type: string
+        start_url:
+          type: string
+        keterangan:
+          type: string
+
+    Kunjungan:
+      type: object
+      properties:
+        id:
+          type: integer
+        client_id:
+          type: integer
+        judul:
+          type: string
+        tanggal_kunjungan:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [pending, disetujui, ditolak]
+        keterangan:
+          type: string
+
+    ProdukKayu:
+      type: object
+      properties:
+        id:
+          type: integer
+        nama_produk:
+          type: string
+        gambar:
+          type: string
+        keterangan:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    Hpp:
+      type: object
+      properties:
+        id:
+          type: integer
+        pesanan_id:
+          type: integer
+        file_hpp:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: laravel_session
+    csrfToken:
+      type: apiKey
+      in: header
+      name: X-XSRF-TOKEN
+
+security:
+  - cookieAuth: []
+    csrfToken: []
